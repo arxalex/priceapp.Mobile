@@ -12,7 +12,15 @@ namespace priceapp
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            var login = false;
+            if (login == false)
+            {
+                MainPage = new Login();
+            }
+            else
+            {
+                MainPage = new MainPage();
+            }
         }
 
         protected override void OnStart()
