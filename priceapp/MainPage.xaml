@@ -1,14 +1,37 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:priceapp"
-             x:Class="priceapp.MainPage">
+﻿<?xml version="1.0" encoding="utf-8"?>
 
-    <StackLayout>
-        <!-- Place new controls here -->
-        <Label Text="Welcome to Xamarin.Forms!" 
-           HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
-    </StackLayout>
-
-</ContentPage>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+       xmlns:local="clr-namespace:priceapp"
+       x:Class="priceapp.MainPage"
+       Visual="Material"
+       NavBarIsVisible="False"
+       TabBarIsVisible="True">
+    <TabBar>
+        <Tab Title="Товари">
+            <Tab.Icon>
+                <FontImageSource FontFamily="MaterialOutlined"
+                                 Glyph="&#xe8b6;">
+                </FontImageSource>
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate local:CatalogAndSearchPage}"></ShellContent>
+        </Tab>
+        <Tab Title="Список покупок">
+            <Tab.Icon>
+                <FontImageSource FontFamily="MaterialOutlined"
+                                 Glyph="&#xe0ee;">
+                </FontImageSource>
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate local:ShoppingListPage}"></ShellContent>
+        </Tab>
+        <Tab Title="Кошик">
+            <Tab.Icon>
+                <FontImageSource FontFamily="MaterialOutlined"
+                                 Glyph="&#xe8cc;">
+                </FontImageSource>
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate local:CartPage}"></ShellContent>
+        </Tab>
+    </TabBar>
+</Shell>

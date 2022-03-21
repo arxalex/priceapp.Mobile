@@ -2,12 +2,29 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="priceapp.Login">
+             xmlns:local="clr-namespace:priceapp.UI;assembly=priceapp"
+             x:Class="priceapp.LoginPage"
+             Title="Login page"
+             Padding="10, 20">
     <ContentPage.Content>
         <StackLayout>
-            <Label>Hello!</Label>
-            <Label>Let`s start</Label>
-            <Button><![CDATA[Start]]></Button>
+            <Label Text="Hello!"
+                   Style="{StaticResource PageTitle}"
+                   Margin="0, 50"/>
+            <local:RdEntryOutlined Keyboard="Email"
+                                   Placeholder="E-mail"
+                                   ClearButtonVisibility="WhileEditing"
+                                   BackgroundColor="Transparent"
+                                   x:Name="EntryEmail" />
+            <local:RdEntryOutlined Keyboard="Default"
+                                   Placeholder="Password"
+                                   IsPassword="True"
+                                   ClearButtonVisibility="WhileEditing"
+                                   BackgroundColor="Transparent"
+                                   x:Name="EntryPassword" />
+            <Button Style="{StaticResource ButtonStyle}"
+                    Text="Login"
+                    Clicked="Button_OnClicked"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

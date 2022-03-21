@@ -10,6 +10,27 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Xamarin.Forms" Version="4.4.0.991640" />
+      <None Remove="Fonts\MaterialIconsOutlinedRegular.otf" />
+      <None Remove="Fonts\MaterialIconsRegular.ttf" />
+      <None Remove="Fonts\MaterialIconsRoundRegular.otf" />
+      <None Remove="Fonts\MaterialIconsSharpRegular.otf" />
+      <None Remove="Fonts\MaterialIconsTwoToneRegular.otf" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Fonts\MaterialIconsOutlinedRegular.otf" />
+      <EmbeddedResource Include="Fonts\MaterialIconsRegular.ttf" />
+      <EmbeddedResource Include="Fonts\MaterialIconsRoundRegular.otf" />
+      <EmbeddedResource Include="Fonts\MaterialIconsSharpRegular.otf" />
+      <EmbeddedResource Include="Fonts\MaterialIconsTwoToneRegular.otf" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" />
+        <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2337" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Views" />
     </ItemGroup>
 </Project>

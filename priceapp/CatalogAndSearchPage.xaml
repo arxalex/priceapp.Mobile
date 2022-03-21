@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:priceapp.UI;assembly=priceapp"
+             x:Class="priceapp.CatalogAndSearchPage"
+             Padding="10, 20">
+    <ContentPage.Content>
+        <StackLayout>
+            <local:RdEntryOutlined Keyboard="Default"
+                                   Placeholder="Пошук"
+                                   ReturnType="Search"
+                                   VerticalOptions="CenterAndExpand">
+            </local:RdEntryOutlined>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="priceapp.UI.RdEntryOutlined"
+             xmlns:local="clr-namespace:priceapp.UI;assembly=priceapp"
+             Margin="{OnPlatform Android='2,8,2,5', iOS='2,8,2,5'}"
+             x:Name="this">
+    <ContentView.Content>
+        <StackLayout>
+            <Grid>
+                <Frame HasShadow="False"
+                       BorderColor="{Binding BorderColor, Source={x:Reference this}}"
+                       CornerRadius="{OnPlatform Android=3}"
+                       Padding="1"
+                       Margin="0"
+                       BackgroundColor="White">
+                    <Frame HasShadow="False"
+                           x:Name="EntryFrame"
+                           BorderColor="{Binding BorderColor, Source={x:Reference this}}"
+                           CornerRadius="{OnPlatform Android=3}"
+                           Padding="{OnPlatform Android='5, 30', iOS='8,30'}"
+                           Margin="0"
+                           BackgroundColor="White">
+                    </Frame>
+                </Frame>
+
+                <Label x:Name="PlaceHolderLabel"
+                       BackgroundColor="White" HorizontalOptions="Start"
+                       TextColor="{Binding PlaceholderColor, Source={x:Reference this}}"
+                       Text="{Binding Placeholder,Source={x:Reference this}}"
+                       Margin="10,0,0,0"
+                       Padding="4, 0"
+                       VerticalOptions="Center"
+                       FontSize="{Binding FontSize, Source={x:Reference this}}" />
+                <local:RdEntryBorderless
+                    HeightRequest="{OnPlatform iOS=40}"
+                    x:Name="TextBox" VerticalOptions="FillAndExpand"
+                    Text="{Binding Text,Source={x:Reference this},Mode=TwoWay}"
+                    Margin="9,2,9,0"
+                    FontSize="{Binding FontSize, Source={x:Reference this}}"
+                    Keyboard="{Binding Keyboard, Source={x:Reference this}}"
+                    ClearButtonVisibility="{Binding ClearButtonVisibility, Source={x:Reference this}}"
+                    IsPassword="{Binding IsPassword, Source={x:Reference this}}"
+                    ReturnType="{Binding ReturnType, Source={x:Reference this}}"
+                    BackgroundColor="Transparent"
+                    Focused="TextBox_Focused"
+                    Unfocused="TextBox_Unfocused"
+                    TextChanged="OnTextChanged" />
+            </Grid>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

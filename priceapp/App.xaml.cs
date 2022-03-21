@@ -1,21 +1,31 @@
 ﻿using System;
+using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
+[assembly: ExportFont("MaterialIconsRegular.ttf", Alias = "Material")]
+[assembly: ExportFont("MaterialIconsOutlinedRegular.otf", Alias = "MaterialOutlined")]
+[assembly: ExportFont("MaterialIconsRoundRegular.otf", Alias = "MaterialRound")]
+[assembly: ExportFont("MaterialIconsSharpRegular.otf", Alias = "MaterialSharp")]
+[assembly: ExportFont("MaterialIconsTwoToneRegular.otf", Alias = "MaterialTwoTone")]
 namespace priceapp
 {
     public partial class App : Application
     {
+        private ILoginVM _login;
         public App()
         {
             InitializeComponent();
+            
+            _login = DependencyService.Get<ILoginVM>();
 
-            var login = false;
-            if (login == false)
+            var isLoggedIn = _login.IsUserLoggedIn();
+            if (isLoggedIn == false)
             {
-                MainPage = new Login();
+                Current.Properties["isLoggedIn"] = false;
+                MainPage = new LoginPage();
             }
             else
             {

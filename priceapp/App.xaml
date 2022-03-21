@@ -3,6 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="priceapp.App">
     <Application.Resources>
-
+        <ResourceDictionary>
+            <Color x:Key="ColorPrimary">#4BB53F</Color>
+            <Color x:Key="ColorPrimaryDark">#4BB53F</Color>
+            <Style x:Key="ButtonStyle" TargetType="Button">
+                <Setter Property="TextColor" Value="#fff"></Setter>
+                <Setter Property="BackgroundColor" Value="{StaticResource ColorPrimary}"></Setter>
+            </Style>
+            <Style x:Key="PageTitle" TargetType="Label">
+                <Setter Property="FontSize" Value="58"></Setter>
+                <Setter Property="FontAttributes" Value="Bold"></Setter>
+                <Setter Property="HorizontalOptions" Value="Center"></Setter>
+            </Style>
+            <Style x:Key="EntryStyle" TargetType="Entry">
+                <Setter Property="Margin" Value="0, 0, 0, 0"></Setter>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
