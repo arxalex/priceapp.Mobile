@@ -14,14 +14,14 @@ namespace priceapp
 {
     public partial class App : Application
     {
-        private ILoginVM _login;
+        private ILoginViewModel _loginViewModel;
         public App()
         {
             InitializeComponent();
             
-            _login = DependencyService.Get<ILoginVM>();
+            _loginViewModel = DependencyService.Get<ILoginViewModel>();
 
-            var isLoggedIn = _login.IsUserLoggedIn();
+            var isLoggedIn = _loginViewModel.IsUserLoggedIn();
             if (isLoggedIn == false)
             {
                 Current.Properties["isLoggedIn"] = false;
@@ -29,7 +29,8 @@ namespace priceapp
             }
             else
             {
-                MainPage = new MainPage();
+                //MainPage = new MainPage();
+                MainPage = new LoginPage();
             }
         }
 

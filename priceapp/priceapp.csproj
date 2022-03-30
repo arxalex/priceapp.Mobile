@@ -26,6 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="RestSharp" Version="107.3.1-alpha.0.18" />
         <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" />
         <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2337" />
     </ItemGroup>

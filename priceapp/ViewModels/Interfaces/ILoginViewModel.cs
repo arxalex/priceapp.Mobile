@@ -1,6 +1,6 @@
 namespace priceapp.ViewModels.Interfaces
 {
-    public interface ILoginVM
+    public interface ILoginViewModel
     {
         bool LoginUser(string email, string password);
         bool IsUserLoggedIn();

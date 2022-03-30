@@ -12,16 +12,16 @@ namespace priceapp
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginPage : ContentPage
     {
-        private ILoginVM _loginVM;
+        private ILoginViewModel _loginViewModel;
         public LoginPage()
         {
             InitializeComponent();
-            _loginVM = DependencyService.Get<ILoginVM>();
+            _loginViewModel = DependencyService.Get<ILoginViewModel>();
         }
 
         private void Button_OnClicked(object sender, EventArgs e)
         {
-            if (_loginVM.LoginUser(EntryEmail.Text, EntryPassword.Text))
+            if (_loginViewModel.LoginUser(EntryEmail.Text, EntryPassword.Text))
             {
                 Application.Current.MainPage = new MainPage();
             }
