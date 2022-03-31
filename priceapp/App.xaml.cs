@@ -14,7 +14,7 @@ namespace priceapp
 {
     public partial class App : Application
     {
-        private ILoginViewModel _loginViewModel;
+        private readonly ILoginViewModel _loginViewModel;
         public App()
         {
             InitializeComponent();
@@ -29,8 +29,7 @@ namespace priceapp
             }
             else
             {
-                //MainPage = new MainPage();
-                MainPage = new LoginPage();
+                MainPage = new MainPage();
             }
         }
 

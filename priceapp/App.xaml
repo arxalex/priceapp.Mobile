@@ -7,13 +7,14 @@
             <Color x:Key="ColorPrimary">#4BB53F</Color>
             <Color x:Key="ColorPrimaryDark">#4BB53F</Color>
             <Style x:Key="ButtonStyle" TargetType="Button">
-                <Setter Property="TextColor" Value="#fff"></Setter>
-                <Setter Property="BackgroundColor" Value="{StaticResource ColorPrimary}"></Setter>
+                <Setter Property="TextColor" Value="White"></Setter>
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark=DarkGreen, Light=Accent}"></Setter>
             </Style>
             <Style x:Key="PageTitle" TargetType="Label">
                 <Setter Property="FontSize" Value="58"></Setter>
                 <Setter Property="FontAttributes" Value="Bold"></Setter>
                 <Setter Property="HorizontalOptions" Value="Center"></Setter>
+                <Setter Property="TextColor" Value="Black"></Setter>
             </Style>
             <Style x:Key="EntryStyle" TargetType="Entry">
                 <Setter Property="Margin" Value="0, 0, 0, 0"></Setter>

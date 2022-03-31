@@ -132,7 +132,8 @@ namespace priceapp.UI
                 placeHolder.TextColor = PlaceholderColor;
             }
         }
-        public virtual void OnTextChanged(System.Object sender, Xamarin.Forms.TextChangedEventArgs e)
+
+        protected virtual void OnTextChanged(Object sender, TextChangedEventArgs e)
         {
             TextChanged?.Invoke(this, e);
         }

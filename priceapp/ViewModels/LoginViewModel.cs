@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using priceapp.Utils;
 using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
 using priceapp.WebServices;
@@ -21,25 +23,37 @@ namespace priceapp.ViewModels
                 return false;
             }
 
-            var jsonBody = new
+            string json;
+            if (username.Contains('@'))
             {
-                username, password
-            };
+                var email = username;
+                var jsonBody = new
+                {
+                    email, password
+                };
+                json = JsonSerializer.Serialize(jsonBody);
+            }
+            else
+            {
+                var jsonBody = new
+                {
+                    username, password
+                };
+                json = JsonSerializer.Serialize(jsonBody);
+            }
+            
+            
             IPriceAppWebAccess priceAppWebAccess = DependencyService.Get<IPriceAppWebAccess>();
 
             var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler()) {
                 BaseAddress = new Uri("https://priceapp.arxalex.co/")  
             };
-
-            //ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-
-            var client = new RestClient(httpClient);
-            //client.Options.MaxTimeout = 30000;
-            //client.Options.RemoteCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+            
+            var client = new RestClient(httpClient); 
             var request = new RestRequest("be/login", Method.Post);
 
             request.AddHeader("Content-Type", "application/json");
-            request.AddBody(JsonSerializer.Serialize(jsonBody), "application/json");
+            request.AddBody(json, "application/json");
 
             var response = client.ExecuteAsync(request).Result;
             if (response.StatusCode != HttpStatusCode.OK)
@@ -47,22 +61,31 @@ namespace priceapp.ViewModels
                 return false;
             }
 
-            var cookies = response.Cookies;
-
             if (response.Content == null)
             {
                 return false;
             }
+            
+            var result = JsonSerializer.Deserialize<UserLoginParse>(response.Content, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
 
-            var result = JsonSerializer.Deserialize<(bool statusLogin, int role)>(response.Content);
-
-            if (result.statusLogin != true)
+            if (result == null || !result.StatusLogin)
             {
                 return false;
             }
+            
+            if (response.Headers == null) {return false;}
+            
+            var cookies = response.Headers.Where(x => x.Name?.ToLower() == "set-cookie");
+            foreach (var cookie in cookies)
+            {
+                var thisCookie = CookieUtil.Parse(cookie.Value as string);
+                Application.Current.Properties[thisCookie.key] = thisCookie.value;
+            }
 
             Application.Current.Properties["isLoggedIn"] = true;
-            Application.Current.Properties["Cookies"] = cookies;
 
             return true;
         }
@@ -76,6 +99,12 @@ namespace priceapp.ViewModels
 
             Application.Current.Properties["isLoggedIn"] = false;
             return false;
+        }
+        
+        class UserLoginParse
+        {
+            public bool StatusLogin { get; set; }
+            public int Role { get; set; } 
         }
     }
 }
