@@ -2,9 +2,8 @@
 
 <Shell xmlns="http://xamarin.com/schemas/2014/forms"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
-       xmlns:local="clr-namespace:priceapp"
-       x:Class="priceapp.MainPage"
+       xmlns:views="clr-namespace:priceapp.Views;assembly=priceapp"
+       x:Class="priceapp.Views.MainPage"
        Visual="Material"
        NavBarIsVisible="False"
        TabBarIsVisible="True">
@@ -15,7 +14,7 @@
                                  Glyph="&#xe8b6;">
                 </FontImageSource>
             </Tab.Icon>
-            <ShellContent ContentTemplate="{DataTemplate local:CatalogAndSearchPage}"></ShellContent>
+            <ShellContent ContentTemplate="{DataTemplate views:CatalogAndSearchPage}"></ShellContent>
         </Tab>
         <Tab Title="Список покупок">
             <Tab.Icon>
@@ -23,7 +22,7 @@
                                  Glyph="&#xe0ee;">
                 </FontImageSource>
             </Tab.Icon>
-            <ShellContent ContentTemplate="{DataTemplate local:ShoppingListPage}"></ShellContent>
+            <ShellContent ContentTemplate="{DataTemplate views:ShoppingListPage}"></ShellContent>
         </Tab>
         <Tab Title="Кошик">
             <Tab.Icon>
@@ -31,7 +30,7 @@
                                  Glyph="&#xe8cc;">
                 </FontImageSource>
             </Tab.Icon>
-            <ShellContent ContentTemplate="{DataTemplate local:CartPage}"></ShellContent>
+            <ShellContent ContentTemplate="{DataTemplate views:CartPage}"></ShellContent>
         </Tab>
     </TabBar>
 </Shell>

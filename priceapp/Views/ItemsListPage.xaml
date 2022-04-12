@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:priceapp.Models;assembly=priceapp"
+             xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
+             x:Class="priceapp.Views.ItemsListPage"
+             x:DataType="viewModels:IItemsListViewModel">
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid Padding="15, 15"
+                  BackgroundColor="Accent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="25" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <ImageButton Grid.Column="0"
+                             BackgroundColor="Transparent"
+                             Clicked="ImageButton_OnClicked">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="MaterialOutlined"
+                                         Glyph="&#xe5c4;"
+                                         Color="White">
+                        </FontImageSource>
+                    </ImageButton.Source>
+                </ImageButton>
+                <Label Grid.Column="1"
+                       x:Name="CategoryLabel"
+                       FontSize="22"
+                       TextColor="White"
+                       Margin="10,0,0,0"
+                       HeightRequest="35" />
+            </Grid>
+            <CollectionView x:Name="CollectionView"
+                            ItemsSource="{Binding Items}"
+                            Margin="7, 0"
+                            ItemsLayout="VerticalGrid, 2"
+                            SelectionMode="Single"
+                            SelectionChanged="CollectionView_OnSelectionChanged">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Item">
+                        <Frame Padding="7">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Frame Grid.Row="0"
+                                       BackgroundColor="{StaticResource ColorSecondary}"
+                                       CornerRadius="20"
+                                       Padding="0">
+                                    <Image Source="{Binding Image}" />
+                                </Frame>
+                                <Label Grid.Row="1"
+                                       Text="{Binding Label}"
+                                       FontSize="18"
+                                       VerticalOptions="End"
+                                       HorizontalOptions="Start"
+                                       Margin="0, 0, 0,5"
+                                       TextColor="Black" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

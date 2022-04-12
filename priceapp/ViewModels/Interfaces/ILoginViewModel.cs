@@ -1,8 +1,12 @@
+using System.Threading.Tasks;
+using priceapp.Events.Delegates;
+
 namespace priceapp.ViewModels.Interfaces
 {
     public interface ILoginViewModel
     {
-        bool LoginUser(string email, string password);
-        bool IsUserLoggedIn();
+        event LoginHandler LoginSuccess;
+        void LoginUser(string email, string password);
+        Task<bool> IsUserLoggedInAsync();
     }
 }

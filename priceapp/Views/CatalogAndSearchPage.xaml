@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
+             xmlns:models="clr-namespace:priceapp.Models;assembly=priceapp"
+             xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
+             x:Class="priceapp.Views.CatalogAndSearchPage"
+             x:DataType="viewModels:ICategoryViewModel"
+             Padding="0, 20">
+    <ContentPage.Content>
+        <StackLayout>
+            <ui:ContentButton Margin="14,0,14,20"
+                              Tapped="SearchButton_OnTapped">
+                <Frame BackgroundColor="{StaticResource ColorSecondary}"
+                       Padding="20, 15"
+                       CornerRadius="20">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image Grid.Column="0"
+                               HorizontalOptions="Start">
+                            <Image.Source>
+                                <FontImageSource FontFamily="MaterialOutlined"
+                                                 Glyph="&#xe8b6;"
+                                                 Color="Accent">
+                                </FontImageSource>
+                            </Image.Source>
+                        </Image>
+                        <Label Grid.Column="1"
+                               FontSize="18"
+                               VerticalTextAlignment="Center">
+                            Пошук
+                        </Label>
+                    </Grid>
+                </Frame>
+            </ui:ContentButton>
+            <CollectionView x:Name="CollectionView"
+                            ItemsSource="{Binding Categories}"
+                            Margin="7, 0"
+                            ItemsLayout="VerticalGrid, 2"
+                            SelectionMode="Single"
+                            SelectionChanged="SelectableItemsView_OnSelectionChanged">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Category">
+                        <Frame Padding="7">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Frame Grid.Row="0"
+                                       BackgroundColor="{StaticResource ColorSecondary}"
+                                       CornerRadius="20"
+                                       Padding="0">
+                                    <Image Source="{Binding Image}" />
+                                </Frame>
+                                <Label Grid.Row="1"
+                                       Text="{Binding Label}"
+                                       FontSize="18"
+                                       VerticalOptions="End"
+                                       HorizontalOptions="Start"
+                                       Margin="0, 0, 0,5"
+                                       TextColor="Black" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

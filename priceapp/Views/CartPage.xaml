@@ -2,7 +2,7 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="priceapp.CartPage"
+             x:Class="priceapp.Views.CartPage"
              Padding="10, 20">
     <ContentPage.Content>
         <StackLayout>

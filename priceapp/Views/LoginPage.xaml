@@ -3,7 +3,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:priceapp.UI;assembly=priceapp"
-             x:Class="priceapp.LoginPage"
+             x:Class="priceapp.Views.LoginPage"
              Title="Login page"
              Padding="10, 20">
     <ContentPage.Content>
@@ -22,6 +22,17 @@
                                    ClearButtonVisibility="WhileEditing"
                                    BackgroundColor="Transparent"
                                    x:Name="EntryPassword" />
+            <Frame x:Name="ProcessedFrame"
+                   IsVisible="False"
+                   BackgroundColor="LightYellow"
+                   BorderColor="DarkOrange"
+                   CornerRadius="5"
+                   Margin="2">
+                <Frame.Content>
+                    <Label x:Name="ProcessedLabel"
+                           TextColor="DarkOrange"></Label>
+                </Frame.Content>
+            </Frame>
             <Button Style="{StaticResource ButtonStyle}"
                     Text="Login"
                     Clicked="Button_OnClicked"/>

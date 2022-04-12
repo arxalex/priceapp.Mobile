@@ -3,6 +3,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading.Tasks;
+using priceapp.Events.Delegates;
+using priceapp.Events.Models;
 using priceapp.Utils;
 using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
@@ -16,11 +19,14 @@ namespace priceapp.ViewModels
 {
     public class LoginViewModel : ILoginViewModel
     {
-        public bool LoginUser(string username, string password)
+        public event LoginHandler LoginSuccess;
+
+        public void LoginUser(string username, string password)
         {
-            if (username == "" || password == "")
+            if (username == null || password == null)
             {
-                return false;
+                LoginSuccess?.Invoke(this, new ProcessedArgs() {Success = false, Message = "Fields are empty"});
+                return;
             }
 
             string json;
@@ -41,15 +47,16 @@ namespace priceapp.ViewModels
                 };
                 json = JsonSerializer.Serialize(jsonBody);
             }
-            
-            
-            IPriceAppWebAccess priceAppWebAccess = DependencyService.Get<IPriceAppWebAccess>();
 
-            var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler()) {
-                BaseAddress = new Uri("https://priceapp.arxalex.co/")  
+
+            var priceAppWebAccess = DependencyService.Get<IPriceAppWebAccess>();
+
+            var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler())
+            {
+                BaseAddress = new Uri("https://priceapp.arxalex.co/")
             };
-            
-            var client = new RestClient(httpClient); 
+
+            var client = new RestClient(httpClient);
             var request = new RestRequest("be/login", Method.Post);
 
             request.AddHeader("Content-Type", "application/json");
@@ -58,14 +65,17 @@ namespace priceapp.ViewModels
             var response = client.ExecuteAsync(request).Result;
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                return false;
+                LoginSuccess?.Invoke(this,
+                    new ProcessedArgs() {Success = false, Message = "Login or password is incorrect"});
+                return;
             }
 
             if (response.Content == null)
             {
-                return false;
+                LoginSuccess?.Invoke(this, new ProcessedArgs() {Success = false, Message = "Something went wrong"});
+                return;
             }
-            
+
             var result = JsonSerializer.Deserialize<UserLoginParse>(response.Content, new JsonSerializerOptions()
             {
                 PropertyNameCaseInsensitive = true
@@ -73,38 +83,38 @@ namespace priceapp.ViewModels
 
             if (result == null || !result.StatusLogin)
             {
-                return false;
+                LoginSuccess?.Invoke(this, new ProcessedArgs() {Success = false, Message = "Status of login is false"});
+                return;
             }
-            
-            if (response.Headers == null) {return false;}
-            
+
+            if (response.Headers == null)
+            {
+                LoginSuccess?.Invoke(this, new ProcessedArgs() {Success = false, Message = "Something went wrong"});
+                return;
+            }
+
             var cookies = response.Headers.Where(x => x.Name?.ToLower() == "set-cookie");
-            foreach (var cookie in cookies)
-            {
-                var thisCookie = CookieUtil.Parse(cookie.Value as string);
-                Application.Current.Properties[thisCookie.key] = thisCookie.value;
-            }
+            var cookieContainer = cookies
+                .Select(cookie => CookieUtil.Parse(cookie.Value as string))
+                .ToDictionary(thisCookie => thisCookie.key, thisCookie => thisCookie.value);
 
-            Application.Current.Properties["isLoggedIn"] = true;
+            Xamarin.Essentials.SecureStorage.SetAsync("cookie", CookieUtil.DictionaryToCookieString(cookieContainer));
 
-            return true;
+            Xamarin.Essentials.SecureStorage.SetAsync("isLoggedIn", "true");
+
+            LoginSuccess?.Invoke(this, new ProcessedArgs() {Success = true, Message = "Success login"});
         }
 
-        public bool IsUserLoggedIn()
+        public async Task<bool> IsUserLoggedInAsync()
         {
-            if (Application.Current.Properties.ContainsKey("isLoggedIn"))
-            {
-                return (bool) Application.Current.Properties["isLoggedIn"];
-            }
-
-            Application.Current.Properties["isLoggedIn"] = false;
-            return false;
+            return await Xamarin.Essentials.SecureStorage.GetAsync("isLoggedIn") != null &&
+                   bool.Parse(await Xamarin.Essentials.SecureStorage.GetAsync("isLoggedIn"));
         }
-        
+
         class UserLoginParse
         {
             public bool StatusLogin { get; set; }
-            public int Role { get; set; } 
+            public int Role { get; set; }
         }
     }
 }

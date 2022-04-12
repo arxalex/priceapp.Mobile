@@ -1,5 +1,6 @@
-﻿using System;
+﻿using priceapp.Utils;
 using priceapp.ViewModels.Interfaces;
+using priceapp.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,24 +13,23 @@ using Xamarin.Forms.Xaml;
 [assembly: ExportFont("MaterialIconsTwoToneRegular.otf", Alias = "MaterialTwoTone")]
 namespace priceapp
 {
-    public partial class App : Application
+    public partial class App
     {
-        private readonly ILoginViewModel _loginViewModel;
         public App()
         {
             InitializeComponent();
+            DependencyService.RegisterSingleton(MapperUtil.CreateMapper());
             
-            _loginViewModel = DependencyService.Get<ILoginViewModel>();
+            var loginViewModel = DependencyService.Get<ILoginViewModel>();
 
-            var isLoggedIn = _loginViewModel.IsUserLoggedIn();
-            if (isLoggedIn == false)
+            var isLoggedIn = loginViewModel.IsUserLoggedInAsync().Result;
+            if (isLoggedIn)
             {
-                Current.Properties["isLoggedIn"] = false;
-                MainPage = new LoginPage();
+                MainPage = new MainPage();
             }
             else
             {
-                MainPage = new MainPage();
+                MainPage = new LoginPage();
             }
         }
 
