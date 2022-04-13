@@ -24,4 +24,6 @@ public class Item
     public object Additional { get; set; }
     public double PriceMin { get; set; }
     public double PriceMax { get; set; }
+
+    public string PriceText => PriceMin + " - " + PriceMax + " грн";
 }

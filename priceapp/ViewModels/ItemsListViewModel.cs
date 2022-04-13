@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -9,34 +10,31 @@ using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(ItemsListViewModel))]
+
 namespace priceapp.ViewModels;
 
 public class ItemsListViewModel : IItemsListViewModel
 {
-    public IList<Item> Items { get; set; } = new List<Item>();
-    public int CategoryId { get; set; }
-    private const int PageSize = 25;
-
     private readonly IMapper _mapper;
     private readonly IItemRepository _itemRepository;
+    private const int PageSize = 25;
+    public List<Item> Items { get; set; }
+    public int CategoryId { get; set; }
 
     public ItemsListViewModel()
     {
+        Items = new List<Item>();
         _mapper = DependencyService.Get<IMapper>();
         _itemRepository = DependencyService.Get<IItemRepository>();
     }
-    
-    public void Load(int page)
+
+    public void LoadAsync()
     {
-        var list = _itemRepository.GetItems(CategoryId, page * PageSize, (page + 1) * PageSize);
-        var items = _mapper.Map<IList<ItemRepositoryModel>, IList<Item>>(list);
-        var excited = Items.ToList();
-        excited.AddRange(items);
-        Items = excited;
+        Items.AddRange(_mapper.Map<IList<ItemRepositoryModel>, IList<Item>>(_itemRepository.GetItems(CategoryId, 0, PageSize)));
     }
 
-    public IList<Item> GetItems()
+    public void Reload()
     {
-        return Items;
+        Items.Clear();
     }
 }

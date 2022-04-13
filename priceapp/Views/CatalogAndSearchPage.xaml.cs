@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using priceapp.Models;
 using priceapp.ViewModels.Interfaces;
@@ -27,11 +26,11 @@ namespace priceapp.Views
             Navigation.PushAsync(new SearchPage());
         }
 
-        private void SelectableItemsView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void SelectableItemsView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CollectionView.SelectedItem == null) return;
             var category = (Category) e.CurrentSelection.FirstOrDefault()!;
-            Navigation.PushAsync(new ItemsListPage(category.Id, category.Label));
+            await Navigation.PushAsync(new ItemsListPage(category.Id, category.Label));
             CollectionView.SelectedItem = null;
         }
     }
