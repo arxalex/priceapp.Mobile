@@ -1,10 +1,16 @@
 using System.Collections.Generic;
-using priceapp.Models;
+using System.Threading.Tasks;
+using priceapp.Events.Delegates;
 using priceapp.Repositories.Models;
 
 namespace priceapp.Repositories.Interfaces;
 
 public interface IItemRepository
 {
-    IList<ItemRepositoryModel> GetItems(int categoryId, int from, int to);
+    Task<IList<ItemRepositoryModel>> GetItems(int categoryId, int from, int to, double? xCord = null,
+        double? yCord = null, double? radius = null);
+    Task<ItemRepositoryModel> GetItem(int itemId, double? xCord = null,
+        double? yCord = null, double? radius = null);
+    Task<IList<PriceAndFilialRepositoryModel>> GetPricesAndFilials(int itemId, double xCord, double yCord, int radius);
+    event ConnectionErrorHandler BadConnectEvent;
 }

@@ -1,10 +1,12 @@
 using System.Collections.Generic;
-using priceapp.Models;
+using System.Threading.Tasks;
+using priceapp.Events.Delegates;
 using priceapp.Repositories.Models;
 
 namespace priceapp.Repositories.Interfaces;
 
 public interface ICategoryRepository
 {
-    IList<CategoryRepositoryModel> GetCategories(int? parent = null);
+    Task<IList<CategoryRepositoryModel>> GetCategories(int? parent = null);
+    event ConnectionErrorHandler BadConnectEvent;
 }

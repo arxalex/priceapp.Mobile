@@ -8,29 +8,29 @@
              x:DataType="viewModels:IItemsListViewModel">
     <ContentPage.Content>
         <StackLayout>
-            <Grid Padding="15, 15"
-                  BackgroundColor="Accent">
+            <Grid Padding="15, 15">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="25" />
+                    <ColumnDefinition Width="45" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <ImageButton Grid.Column="0"
                              BackgroundColor="Transparent"
-                             Clicked="ImageButton_OnClicked">
+                             Clicked="ImageButton_OnClicked"
+                             Padding="10,0">
                     <ImageButton.Source>
                         <FontImageSource FontFamily="MaterialOutlined"
-                                         Glyph="&#xe5c4;"
-                                         Color="White">
-                        </FontImageSource>
+                                         Glyph="&#xe2ea;"
+                                         Color="{AppThemeBinding Light=Black, Dark=White}"/>
                     </ImageButton.Source>
                 </ImageButton>
                 <Label Grid.Column="1"
                        x:Name="CategoryLabel"
-                       FontSize="22"
-                       TextColor="White"
-                       Margin="10,0,0,0"
-                       HeightRequest="35" />
+                       FontSize="20"
+                       TextColor="Black"
+                       FontAttributes="Bold"
+                       Margin="5,2,0,0"
+                       HeightRequest="35"/>
             </Grid>
             <CollectionView x:Name="CollectionView"
                             ItemsSource="{Binding Items}"
@@ -40,7 +40,8 @@
                             SelectionChanged="CollectionView_OnSelectionChanged">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Item">
-                        <Frame Padding="7">
+                        <Frame Padding="7"
+                               BackgroundColor="White">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -48,7 +49,7 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Frame Grid.Row="0"
-                                       BackgroundColor="{StaticResource ColorSecondary}"
+                                       BackgroundColor="WhiteSmoke"
                                        CornerRadius="20"
                                        Padding="0">
                                     <Image Source="{Binding Image}" />
@@ -73,6 +74,11 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            <ActivityIndicator x:Name="ActivityIndicator" 
+                               IsRunning="False" 
+                               IsVisible="False"
+                               VerticalOptions="CenterAndExpand"
+                               Color="Accent"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

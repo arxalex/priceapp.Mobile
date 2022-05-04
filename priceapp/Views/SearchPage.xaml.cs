@@ -6,7 +6,7 @@ using Xamarin.Forms.Xaml;
 namespace priceapp.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SearchPage : ContentPage
+    public partial class SearchPage
     {
         public SearchPage()
         {
@@ -18,13 +18,14 @@ namespace priceapp.Views
             base.OnAppearing(); 
             Device.BeginInvokeOnMainThread(async () =>
             {
-                await Task.Delay(250); SearchEctry.Focus();
+                await Task.Delay(250); 
+                SearchEctry.Focus();
             });
         }
 
-        private void ImageButton_OnClicked(object sender, EventArgs e)
+        private async void ImageButton_OnClicked(object sender, EventArgs e)
         {
-            Navigation.PopAsync();
+            await Navigation.PopAsync();
         }
     }
 }

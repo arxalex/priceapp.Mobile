@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading.Tasks;
+using priceapp.Events.Delegates;
+using priceapp.Events.Models;
 using priceapp.Repositories.Implementation;
 using priceapp.Repositories.Interfaces;
 using priceapp.Repositories.Models;
@@ -15,6 +18,7 @@ namespace priceapp.Repositories.Implementation;
 
 public class CategoryRepository : ICategoryRepository
 {
+    public event ConnectionErrorHandler BadConnectEvent;
     private readonly RestClient _client;
     public CategoryRepository()
     {
@@ -25,7 +29,7 @@ public class CategoryRepository : ICategoryRepository
         _client = new RestClient(httpClient);
         _client.AddDefaultHeader("Cookie", Xamarin.Essentials.SecureStorage.GetAsync("cookie").Result);
     }
-    public IList<CategoryRepositoryModel> GetCategories(int? parent = null)
+    public async Task<IList<CategoryRepositoryModel>> GetCategories(int? parent = null)
     {
         var request = new RestRequest("be/categories/get_categories", Method.Post);
 
@@ -33,9 +37,10 @@ public class CategoryRepository : ICategoryRepository
         request.AddHeader("Content-Type", "application/json");
         request.AddBody(json, "application/json");
 
-        var response = _client.ExecuteAsync(request).Result;
+        var response = await _client.ExecuteAsync(request);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
+            BadConnectEvent?.Invoke(this, new ConnectionErrorArgs(){Success = false, StatusCode = (int) response.StatusCode});
             return new List<CategoryRepositoryModel>();
         }
 

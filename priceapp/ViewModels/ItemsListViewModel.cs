@@ -1,10 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using AutoMapper;
+using priceapp.Events.Delegates;
+using priceapp.Events.Models;
 using priceapp.Models;
 using priceapp.Repositories.Interfaces;
-using priceapp.Repositories.Models;
+using priceapp.Utils;
 using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
@@ -15,26 +16,62 @@ namespace priceapp.ViewModels;
 
 public class ItemsListViewModel : IItemsListViewModel
 {
+    public event LoadingHandler Loaded;
+    public event ConnectionErrorHandler BadConnectEvent;
+
     private readonly IMapper _mapper;
     private readonly IItemRepository _itemRepository;
-    private const int PageSize = 25;
-    public List<Item> Items { get; set; }
+    private readonly GeolocationUtil _geolocationUtil;
+    private const int PageSize = 20;
+    public ObservableCollection<Item> Items { get; set; }
     public int CategoryId { get; set; }
+    private bool CanLoadMode { get; set; }
 
     public ItemsListViewModel()
     {
-        Items = new List<Item>();
+        Items = new ObservableCollection<Item>();
+        CanLoadMode = true;
         _mapper = DependencyService.Get<IMapper>();
         _itemRepository = DependencyService.Get<IItemRepository>();
+        _geolocationUtil = DependencyService.Get<GeolocationUtil>();
+        
+        _itemRepository.BadConnectEvent += ItemRepositoryOnBadConnectEvent;
     }
 
-    public void LoadAsync()
+    private void ItemRepositoryOnBadConnectEvent(object sender, ConnectionErrorArgs args)
     {
-        Items.AddRange(_mapper.Map<IList<ItemRepositoryModel>, IList<Item>>(_itemRepository.GetItems(CategoryId, 0, PageSize)));
+        BadConnectEvent?.Invoke(this, args);
     }
 
-    public void Reload()
+    public async Task LoadAsync()
     {
-        Items.Clear();
+        if (!CanLoadMode)
+        {
+            Loaded?.Invoke(this, new LoadingArgs(){Success = false, Total = Items.Count});
+            return;
+        }
+
+        var location = await _geolocationUtil.GetCurrentLocation();
+
+        var items = await _itemRepository
+            .GetItems(
+                CategoryId,
+                Items.Count,
+                Items.Count + PageSize,
+                location.Longitude,
+                location.Latitude,
+                Xamarin.Essentials.Preferences.Get("locationRadius", 5000)
+            );
+
+        if (items.Count > 0)
+        {
+            foreach (var item in items)
+            {
+                Items.Add(_mapper.Map<Item>(item));
+            }
+        }
+
+        CanLoadMode = items.Count >= PageSize;
+        Loaded?.Invoke(this, new LoadingArgs(){Success = true, Total = Items.Count, LoadedCount = items.Count});
     }
 }

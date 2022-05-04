@@ -22,7 +22,7 @@ namespace priceapp
             
             var loginViewModel = DependencyService.Get<ILoginViewModel>();
 
-            var isLoggedIn = loginViewModel.IsUserLoggedInAsync().Result;
+            var isLoggedIn = loginViewModel.IsUserLoggedIn();
             if (isLoggedIn)
             {
                 MainPage = new MainPage();
@@ -31,6 +31,9 @@ namespace priceapp
             {
                 MainPage = new LoginPage();
             }
+
+            var geolocationUtil = DependencyService.Get<GeolocationUtil>();
+            geolocationUtil?.GetCurrentLocationNow();
         }
 
         protected override void OnStart()

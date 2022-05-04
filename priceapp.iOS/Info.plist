@@ -31,5 +31,7 @@
 	<string>priceapp</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>App needs GPS to get shops near you</string>
 </dict>
 </plist>

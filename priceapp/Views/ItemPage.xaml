@@ -2,12 +2,245 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="priceapp.Views.ItemPage">
+             xmlns:models="clr-namespace:priceapp.Models;assembly=priceapp"
+             xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             x:Class="priceapp.Views.ItemPage"
+             x:DataType="viewModels:IItemViewModel">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Hello, world!"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout>
+
+                <Grid>
+                    
+                    <Image Source="{Binding Item.Image}" BackgroundColor="WhiteSmoke"/>
+                    <Grid Padding="15, 15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="65" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
+
+                        <ImageButton Grid.Column="0"
+                                     BackgroundColor="WhiteSmoke"
+                                     Clicked="ImageButton_OnClicked"
+                                     CornerRadius="2000"
+                                     Padding="20,7">
+                            <ImageButton.Source>
+                                <FontImageSource FontFamily="MaterialOutlined"
+                                                 Glyph="&#xe2ea;"
+                                                 Color="{AppThemeBinding Light=Black, Dark=White}" />
+                            </ImageButton.Source>
+                        </ImageButton>
+                    </Grid>
+                </Grid>
+                <Grid x:Name="ItemInfo" Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2"
+                           Text="{Binding Item.Label}"
+                           FontSize="25"
+                           TextColor="Black"
+                           FontAttributes="Bold" />
+                    <Label Grid.Row="1"
+                           Grid.Column="0"
+                           Text="{Binding Item.PriceText}"
+                           FontAttributes="Bold"
+                           FontSize="40"
+                           TextColor="Accent" />
+                    <Button Grid.Row="1" Grid.Column="1" 
+                            Text="Додати"
+                            BackgroundColor="Accent"
+                            Padding="0"
+                            Margin="0, 2"
+                            Clicked="Button_OnClicked"/>
+                    <Grid Grid.Row="2"
+                          Grid.Column="0"
+                          Grid.ColumnSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0"
+                               Grid.Row="0"
+                               Text="Бренд"
+                               x:Name="BrandLabel" />
+                        <Label Grid.Column="1"
+                               Grid.Row="0"
+                               Text="{Binding Item.BrandLabel}"
+                               x:Name="BrandLabelValue" />
+                        <Label Grid.Column="0"
+                               Grid.Row="1"
+                               Text="Категорія"
+                               x:Name="CategoryLabel" />
+                        <Label Grid.Column="1"
+                               Grid.Row="1"
+                               Text="{Binding Item.CategoryLabel}"
+                               x:Name="CategoryLabelValue" />
+                        <Label Grid.Column="0"
+                               Grid.Row="2"
+                               Text="Упаковка"
+                               x:Name="PackageLabel" />
+                        <Label Grid.Column="1"
+                               Grid.Row="2"
+                               Text="{Binding Item.PackageLabel}"
+                               x:Name="PackageLabelValue" />
+                        <Label Grid.Column="0"
+                               Grid.Row="3"
+                               Text="Калорійність"
+                               x:Name="CalorieLabel" />
+                        <Label Grid.Column="1"
+                               Grid.Row="3"
+                               Text="{Binding Item.Calorie}"
+                               x:Name="CalorieLabelValue" />
+                        <Label Grid.Column="0"
+                               Grid.Row="4"
+                               Text="Жири"
+                               x:Name="FatLabel" />
+                        <Label Grid.Column="1"
+                               Grid.Row="4"
+                               Text="{Binding Item.Fat}"
+                               x:Name="FatLabelValue" />
+                        <Label Grid.Column="0"
+                               Grid.Row="5"
+                               Text="Вуглеводи"
+                               x:Name="CarbohydratesLabel" />
+                        <Label Grid.Column="1"
+                               Grid.Row="5"
+                               Text="{Binding Item.Carbohydrates}"
+                               x:Name="CarbohydratesLabelValue" />
+                        <Label Grid.Column="0"
+                               Grid.Row="6"
+                               Text="Білки"
+                               x:Name="ProteinsLabel" />
+                        <Label Grid.Column="1"
+                               Grid.Row="6"
+                               Text="{Binding Item.Proteins}"
+                               x:Name="ProteinsLabelValue" />
+                    </Grid>
+                    <CollectionView Grid.Row="3"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    x:Name="CollectionView"
+                                    ItemsSource="{Binding PricesAndFilials}"
+                                    ItemsLayout="VerticalGrid"
+                                    HeightRequest="150"
+                                    SelectionMode="Single"
+                                    SelectionChanged="CollectionView_OnSelectionChanged">
+                        <CollectionView.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="1" Text="Магазин" />
+                                <Label Grid.Column="2"
+                                       Text="Ціна" />
+                            </Grid>
+                        </CollectionView.Header>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:ItemPriceInfo">
+                                <Frame Padding="0"
+                                       Margin="0, 7"
+                                       BackgroundColor="White"
+                                       BorderColor="White">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="50" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Grid.Column="0"
+                                               Source="{Binding Shop.Icon}" />
+                                        <Grid Grid.Column="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="24" />
+                                                <RowDefinition Height="18" />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Row="0"
+                                                   Grid.Column="0"
+                                                   Grid.ColumnSpan="2"
+                                                   FontSize="18"
+                                                   Text="{Binding Shop.Label}" />
+                                            <Label Grid.Row="1"
+                                                   Grid.Column="0"
+                                                   Text="{Binding Filial.Street}" />
+                                            <Label Grid.Row="1"
+                                                   Grid.Column="1"
+                                                   Text="{Binding Filial.House}" />
+                                        </Grid>
+                                        <Grid Grid.Column="2">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="26" />
+                                                <RowDefinition Height="16" />
+                                            </Grid.RowDefinitions>
+                                            <Label Grid.Row="0"
+                                                   Text="{Binding PriceView}"
+                                                   FontSize="20"
+                                                   FontAttributes="Bold"
+                                                   HorizontalTextAlignment="End" />
+                                            <Label Grid.Row="1"
+                                                   Text="{Binding QuantityView}"
+                                                   TextColor="{Binding QuantityViewColor}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   HorizontalTextAlignment="End" />
+                                        </Grid>
+
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <maps:Map Grid.Row="4"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="2"
+                              x:Name="Map"
+                              HeightRequest="500"
+                              IsShowingUser="True"
+                              ItemsSource="{Binding PricesAndFilials}"
+                              MapType="Street">
+                        <maps:Map.ItemTemplate>
+                            <DataTemplate x:DataType="models:ItemPriceInfo">
+                                <maps:Pin Position="{Binding Position}"
+                                          Address="{Binding Filial.Address}"
+                                          Label="{Binding PriceView}" />
+                            </DataTemplate>
+                        </maps:Map.ItemTemplate>
+                    </maps:Map>
+                </Grid>
+                <ActivityIndicator x:Name="ActivityIndicator"
+                                   IsRunning="False"
+                                   IsVisible="False"
+                                   VerticalOptions="CenterAndExpand"
+                                   Color="Accent" />
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

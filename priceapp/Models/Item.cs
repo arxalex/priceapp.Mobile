@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+using System;
+using System.Collections.ObjectModel;
 
 namespace priceapp.Models;
 
@@ -16,7 +17,7 @@ public class Item
     public string PackageUnits { get; set; }
     public double Units { get; set; }
     public double Term { get; set; }
-    public IList<int> Consist { get; set; }
+    public ObservableCollection<int> Consist { get; set; } = new();
     public double Calorie { get; set; }
     public double Carbohydrates { get; set; }
     public double Fat { get; set; }
@@ -25,5 +26,5 @@ public class Item
     public double PriceMin { get; set; }
     public double PriceMax { get; set; }
 
-    public string PriceText => PriceMin + " - " + PriceMax + " грн";
+    public string PriceText => (Math.Abs(PriceMax - PriceMin) < 0.01 ? PriceMax : PriceMin + " - " + PriceMax) + " грн";
 }

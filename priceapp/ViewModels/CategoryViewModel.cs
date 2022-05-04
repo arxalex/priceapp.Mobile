@@ -1,17 +1,22 @@
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using AutoMapper;
+using priceapp.Events.Delegates;
+using priceapp.Events.Models;
 using priceapp.Models;
 using priceapp.Repositories.Interfaces;
-using priceapp.Repositories.Models;
 using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(CategoryViewModel))]
+
 namespace priceapp.ViewModels
 {
     public class CategoryViewModel : ICategoryViewModel
     {
+        public event ConnectionErrorHandler BadConnectEvent;
+        public event LoadingHandler Loaded;
         private readonly IMapper _mapper;
         private readonly ICategoryRepository _categoryRepository;
 
@@ -19,21 +24,28 @@ namespace priceapp.ViewModels
         {
             _mapper = DependencyService.Get<IMapper>();
             _categoryRepository = DependencyService.Get<ICategoryRepository>();
+            
+            _categoryRepository.BadConnectEvent += CategoryRepositoryOnBadConnectEvent;
         }
 
-        public IList<Category> Categories { get; set; } = new List<Category>();
-
-        public void Load()
+        private void CategoryRepositoryOnBadConnectEvent(object sender, ConnectionErrorArgs args)
         {
-            var list = _categoryRepository.GetCategories();
-            Categories = _mapper.Map<IList<CategoryRepositoryModel>, IList<Category>>(list);
+            BadConnectEvent?.Invoke(this, args);
         }
 
-        public IList<Category> GetCategories()
+        public ObservableCollection<Category> Categories { get; set; } = new();
+
+        public async Task LoadAsync()
         {
-            return Categories;
+            var categories = await _categoryRepository.GetCategories();
+
+            foreach (var category in categories)
+            {
+                Categories.Add(_mapper.Map<Category>(category));
+            }
+
+            Loaded?.Invoke(this,
+                new LoadingArgs() {Success = true, LoadedCount = categories.Count, Total = Categories.Count});
         }
-        
-        
     }
 }

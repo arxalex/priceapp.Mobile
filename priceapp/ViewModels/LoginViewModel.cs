@@ -19,9 +19,43 @@ namespace priceapp.ViewModels
 {
     public class LoginViewModel : ILoginViewModel
     {
+        private readonly RestClient _client;
         public event LoginHandler LoginSuccess;
 
-        public void LoginUser(string username, string password)
+        public LoginViewModel()
+        {
+            var priceAppWebAccess = DependencyService.Get<IPriceAppWebAccess>();
+            var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler())
+            {
+                BaseAddress = new Uri("https://priceapp.arxalex.co/")
+            };
+
+            _client = new RestClient(httpClient);
+            var cookie = Xamarin.Essentials.SecureStorage.GetAsync("cookie").Result;
+
+            if (cookie is not {Length: > 0})
+            {
+                Xamarin.Essentials.SecureStorage.Remove("cookie");
+                return;
+            }
+
+            var expires = int.Parse(cookie
+                .Split(' ')
+                .First(x => x.Contains("token_expires"))
+                .Substring(13)
+                .Trim('=', ';'));
+            
+            if (DateTimeOffset.Now.ToUnixTimeSeconds() > expires)
+            {
+                Xamarin.Essentials.SecureStorage.Remove("cookie");
+            }
+            else
+            {
+                _client.AddDefaultHeader("Cookie", cookie);
+            }
+        }
+
+        public async Task LoginUser(string username, string password)
         {
             if (username == null || password == null)
             {
@@ -48,21 +82,12 @@ namespace priceapp.ViewModels
                 json = JsonSerializer.Serialize(jsonBody);
             }
 
-
-            var priceAppWebAccess = DependencyService.Get<IPriceAppWebAccess>();
-
-            var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler())
-            {
-                BaseAddress = new Uri("https://priceapp.arxalex.co/")
-            };
-
-            var client = new RestClient(httpClient);
             var request = new RestRequest("be/login", Method.Post);
 
             request.AddHeader("Content-Type", "application/json");
             request.AddBody(json, "application/json");
 
-            var response = client.ExecuteAsync(request).Result;
+            var response = await _client.ExecuteAsync(request);
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 LoginSuccess?.Invoke(this,
@@ -81,7 +106,7 @@ namespace priceapp.ViewModels
                 PropertyNameCaseInsensitive = true
             });
 
-            if (result == null || !result.StatusLogin)
+            if (result is not {StatusLogin: true})
             {
                 LoginSuccess?.Invoke(this, new ProcessedArgs() {Success = false, Message = "Status of login is false"});
                 return;
@@ -98,20 +123,33 @@ namespace priceapp.ViewModels
                 .Select(cookie => CookieUtil.Parse(cookie.Value as string))
                 .ToDictionary(thisCookie => thisCookie.key, thisCookie => thisCookie.value);
 
-            Xamarin.Essentials.SecureStorage.SetAsync("cookie", CookieUtil.DictionaryToCookieString(cookieContainer));
-
-            Xamarin.Essentials.SecureStorage.SetAsync("isLoggedIn", "true");
+            await Xamarin.Essentials.SecureStorage.SetAsync("cookie", CookieUtil.DictionaryToCookieString(cookieContainer));
 
             LoginSuccess?.Invoke(this, new ProcessedArgs() {Success = true, Message = "Success login"});
         }
 
-        public async Task<bool> IsUserLoggedInAsync()
+        public bool IsUserLoggedIn()
         {
-            return await Xamarin.Essentials.SecureStorage.GetAsync("isLoggedIn") != null &&
-                   bool.Parse(await Xamarin.Essentials.SecureStorage.GetAsync("isLoggedIn"));
+            var request = new RestRequest("be/login", Method.Post);
+
+            request.AddHeader("Content-Type", "application/json");
+
+            var response = _client.ExecuteAsync(request).Result;
+
+            if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
+            {
+                return false;
+            }
+
+            var result = JsonSerializer.Deserialize<UserLoginParse>(response.Content, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            return result is {StatusLogin: false};
         }
 
-        class UserLoginParse
+        private class UserLoginParse
         {
             public bool StatusLogin { get; set; }
             public int Role { get; set; }

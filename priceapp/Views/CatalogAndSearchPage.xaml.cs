@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using priceapp.Events.Models;
 using priceapp.Models;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
@@ -8,22 +9,38 @@ using Xamarin.Forms.Xaml;
 namespace priceapp.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class CatalogAndSearchPage : ContentPage
+    public partial class CatalogAndSearchPage
     {
-        public ICategoryViewModel _categoryViewModel;
-
         public CatalogAndSearchPage()
         {
             InitializeComponent();
-            _categoryViewModel = DependencyService.Get<ICategoryViewModel>();
-            _categoryViewModel.Load();
+            var categoryViewModel = DependencyService.Get<ICategoryViewModel>(DependencyFetchTarget.NewInstance);
+            categoryViewModel.Loaded += CategoryViewModelOnLoaded;
+            categoryViewModel.BadConnectEvent += CategoryViewModelOnBadConnectEvent;
+            
+            ActivityIndicator.IsRunning = true;
+            ActivityIndicator.IsVisible = true;
+            CollectionView.IsVisible = false;
+            categoryViewModel.LoadAsync();
 
-            BindingContext = _categoryViewModel;
+            BindingContext = categoryViewModel;
         }
 
-        private void SearchButton_OnTapped(object sender, EventArgs e)
+        private async void CategoryViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
         {
-            Navigation.PushAsync(new SearchPage());
+            await Navigation.PushAsync(new ConnectionErrorPage(args));
+        }
+
+        private void CategoryViewModelOnLoaded(object sender, LoadingArgs args)
+        {
+            ActivityIndicator.IsRunning = false;
+            ActivityIndicator.IsVisible = false;
+            CollectionView.IsVisible = true;
+        }
+
+        private async void SearchButton_OnTapped(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new SearchPage());
         }
 
         private async void SelectableItemsView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

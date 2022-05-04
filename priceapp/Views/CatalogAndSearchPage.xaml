@@ -46,7 +46,8 @@
                             SelectionChanged="SelectableItemsView_OnSelectionChanged">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Category">
-                        <Frame Padding="7">
+                        <Frame Padding="7"
+                               BackgroundColor="White">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -70,6 +71,11 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            <ActivityIndicator x:Name="ActivityIndicator" 
+                               IsRunning="False" 
+                               IsVisible="False"
+                               VerticalOptions="CenterAndExpand"
+                               Color="Accent"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

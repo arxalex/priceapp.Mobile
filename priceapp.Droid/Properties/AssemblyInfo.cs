@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Android;
 using Android.App;
 
 // General Information about an assembly is controlled through the following 
@@ -9,10 +9,10 @@ using Android.App;
 [assembly: AssemblyTitle("priceapp.Droid")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("CompanyName")]
+[assembly: AssemblyCompany("Arxalex")]
 [assembly: AssemblyProduct("priceapp.Droid")]
-[assembly: AssemblyCopyright("Copyright © CompanyName Year")]
-[assembly: AssemblyTrademark("CompanyTrademark")]
+[assembly: AssemblyCopyright("Copyright © Arxalex 2021")]
+[assembly: AssemblyTrademark("Arxalex")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 
@@ -28,3 +28,10 @@ using Android.App;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+//GPS
+[assembly: UsesPermission(Manifest.Permission.AccessCoarseLocation)]
+[assembly: UsesPermission(Manifest.Permission.AccessFineLocation)]
+[assembly: UsesFeature("android.hardware.location", Required = false)]
+[assembly: UsesFeature("android.hardware.location.gps", Required = false)]
+[assembly: UsesFeature("android.hardware.location.network", Required = false)]
+[assembly: UsesPermission(Manifest.Permission.AccessBackgroundLocation)]

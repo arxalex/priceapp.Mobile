@@ -1,5 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.priceapp">
-    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="30" />
-    <application android:label="priceapp.Droid"></application>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="co.arxalex.priceapp" android:installLocation="auto">
+	<uses-sdk android:minSdkVersion="24" android:targetSdkVersion="30" />
+	<application android:label="priceapp.Droid" android:icon="@mipmap/ic_launcher">
+		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="PLACEHOLDER_API_KEY" />
+		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+	</application>
 </manifest>

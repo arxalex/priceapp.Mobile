@@ -6,7 +6,7 @@ namespace priceapp.ViewModels.Interfaces
     public interface ILoginViewModel
     {
         event LoginHandler LoginSuccess;
-        void LoginUser(string email, string password);
-        Task<bool> IsUserLoggedInAsync();
+        Task LoginUser(string email, string password);
+        bool IsUserLoggedIn();
     }
 }

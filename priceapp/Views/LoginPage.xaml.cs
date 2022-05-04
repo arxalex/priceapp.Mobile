@@ -30,9 +30,9 @@ namespace priceapp.Views
             }
         }
 
-        private void Button_OnClicked(object sender, EventArgs e)
+        private async void Button_OnClicked(object sender, EventArgs e)
         {
-            _loginViewModel.LoginUser(EntryEmail.Text, EntryPassword.Text);
+            await _loginViewModel.LoginUser(EntryEmail.Text, EntryPassword.Text);
         }
         
     }
