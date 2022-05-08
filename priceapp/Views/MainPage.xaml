@@ -16,14 +16,6 @@
             </Tab.Icon>
             <ShellContent ContentTemplate="{DataTemplate views:CatalogAndSearchPage}"></ShellContent>
         </Tab>
-        <Tab Title="Список покупок">
-            <Tab.Icon>
-                <FontImageSource FontFamily="MaterialOutlined"
-                                 Glyph="&#xe0ee;">
-                </FontImageSource>
-            </Tab.Icon>
-            <ShellContent ContentTemplate="{DataTemplate views:ShoppingListPage}"></ShellContent>
-        </Tab>
         <Tab Title="Кошик">
             <Tab.Icon>
                 <FontImageSource FontFamily="MaterialOutlined"
@@ -31,6 +23,14 @@
                 </FontImageSource>
             </Tab.Icon>
             <ShellContent ContentTemplate="{DataTemplate views:CartPage}"></ShellContent>
+        </Tab>
+        <Tab Title="Акаунт">
+            <Tab.Icon>
+                <FontImageSource FontFamily="MaterialOutlined"
+                                 Glyph="&#xe7fd;">
+                </FontImageSource>
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate views:AccountPage}"></ShellContent>
         </Tab>
     </TabBar>
 </Shell>

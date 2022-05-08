@@ -1,6 +1,8 @@
+using System.Text.Json;
 using AutoMapper;
 using priceapp.Models;
 using priceapp.Repositories.Models;
+using priceapp.LocalDatabase.Models;
 
 namespace priceapp.Utils;
 
@@ -54,6 +56,29 @@ public static class MapperUtil
                     destination.xCord = source.Filial.XCord;
                     destination.yCord = source.Filial.YCord;
                 });
+            cfg.CreateMap<ItemToBuyLocalDatabaseModel, ItemToBuy>().BeforeMap((s, d) =>
+            {
+                d.Filial = s.FilialId != null ? new Filial() {Id = s.FilialId ?? 0} : null;
+                d.Item = new Item(){Id = s.ItemId};
+            });
+            cfg.CreateMap<ItemToBuy, ItemToBuyLocalDatabaseModel>().BeforeMap((s, d) =>
+            {
+                d.FilialId = s.Filial?.Id;
+                d.ItemId = s.Item.Id;
+            });
+            cfg.CreateMap<ItemLocalDatabaseModel, ItemRepositoryModel>().BeforeMap((s, d) =>
+            {
+                d.additional = JsonSerializer.Deserialize<object>(s.Additional);
+                d.consist = JsonSerializer.Deserialize<object>(s.Additional);
+            });
+            cfg.CreateMap<ItemRepositoryModel, ItemLocalDatabaseModel>().BeforeMap((s, d) =>
+            {
+                d.Additional = JsonSerializer.Serialize(s.additional);
+                d.Consist = JsonSerializer.Serialize(s.consist);
+            });
+            cfg.CreateMap<CategoryRepositoryModel, CategoryLocalDatabaseModel>();
+            cfg.CreateMap<CategoryLocalDatabaseModel, CategoryRepositoryModel>();
+
         });
 
         return mapperConfiguration.CreateMapper();

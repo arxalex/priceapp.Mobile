@@ -2,13 +2,62 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:priceapp.Models;assembly=priceapp"
              x:Class="priceapp.Views.CartPage"
-             Padding="10, 20">
+             xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
+             x:DataType="viewModels:ICartViewModel"
+             Padding="0">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Hello, world!"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand" />
+            <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                         Command="{Binding RefreshCommand}"
+                         RefreshColor="Accent">
+                <CollectionView x:Name="CollectionView"
+                                ItemsSource="{Binding ItemsList}"
+                                Margin="7, 0"
+                                ItemsLayout="VerticalGrid, 1"
+                                SelectionMode="Single">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ItemToBuy">
+                            <Frame Padding="7"
+                                   BackgroundColor="White">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="42"/>
+                                        <RowDefinition Height="38"/>
+                                    </Grid.RowDefinitions>
+                                    <Frame Grid.Column="0"
+                                           Grid.Row="0"
+                                           Grid.RowSpan="2"
+                                           BackgroundColor="WhiteSmoke"
+                                           CornerRadius="5"
+                                           Padding="0">
+                                        <Image Source="{Binding Item.Image}" />
+                                    </Frame>
+                                    <Label Grid.Column="1"
+                                           Grid.Row="0"
+                                           Text="{Binding Item.Label}"
+                                           FontSize="16"
+                                           VerticalOptions="End"
+                                           HorizontalOptions="Start"
+                                           Margin="2, 0, 0,5"
+                                           TextColor="Black" />
+                                    
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+            <ActivityIndicator x:Name="ActivityIndicator"
+                               IsRunning="False"
+                               IsVisible="False"
+                               VerticalOptions="CenterAndExpand"
+                               Color="Accent" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -6,6 +6,6 @@ namespace priceapp.Models
         public string Image { get; set; }
         public int Id { get; set; }
         public int? Parent { get; set; }
-        public int isFilter { get; set; }
+        public bool IsFilter { get; set; }
     }
 }

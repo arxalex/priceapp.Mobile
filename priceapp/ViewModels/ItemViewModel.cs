@@ -6,6 +6,8 @@ using AutoMapper;
 using priceapp.Annotations;
 using priceapp.Events.Delegates;
 using priceapp.Events.Models;
+using priceapp.LocalDatabase.Models;
+using priceapp.LocalDatabase.Repositories.Interfaces;
 using priceapp.Models;
 using priceapp.Repositories.Interfaces;
 using priceapp.Utils;
@@ -24,6 +26,7 @@ public class ItemViewModel : IItemViewModel
     private readonly IMapper _mapper;
     private readonly IItemRepository _itemRepository;
     private readonly GeolocationUtil _geolocationUtil;
+    private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository;
 
     private Item _item;
 
@@ -44,7 +47,8 @@ public class ItemViewModel : IItemViewModel
         _mapper = DependencyService.Get<IMapper>();
         _itemRepository = DependencyService.Get<IItemRepository>();
         _geolocationUtil = DependencyService.Get<GeolocationUtil>();
-        
+        _itemsToBuyLocalRepository = DependencyService.Get<IItemsToBuyLocalRepository>();
+
         _itemRepository.BadConnectEvent += ItemRepositoryOnBadConnectEvent;
 
         PricesAndFilials = new ObservableCollection<ItemPriceInfo>();
@@ -72,13 +76,25 @@ public class ItemViewModel : IItemViewModel
         {
             PricesAndFilials.Add(_mapper.Map<ItemPriceInfo>(priceInfo));
         }
-        
+
         Loaded?.Invoke(this, new LoadingArgs()
         {
             Success = true,
             LoadedCount = 1,
             Total = 1
         });
+    }
+
+    public async Task AddToCart(int? filialId = null)
+    {
+        var itemToBuy = new ItemToBuy()
+        {
+            Added = false,
+            Count = 1,
+            Filial = filialId != null ? new Filial {Id = (int) filialId} : null,
+            Item = Item
+        };
+        await _itemsToBuyLocalRepository.AddItem(_mapper.Map<ItemToBuyLocalDatabaseModel>(itemToBuy));
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

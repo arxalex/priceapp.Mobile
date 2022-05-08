@@ -70,12 +70,17 @@ public partial class ItemPage
     private async void CollectionView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (CollectionView.SelectedItem == null) return;
-        var action = await DisplayActionSheet("Дії:", "Закрити", null, "Додати до кошика");
+        const string addAction = "Додати до кошика";
+        var action = await DisplayActionSheet("Дії:", "Закрити", null, addAction);
+        if (action == addAction)
+        {
+            await _itemViewModel.AddToCart(((ItemPriceInfo) CollectionView.SelectedItem).Filial.Id);
+        }
         CollectionView.SelectedItem = null;
     }
 
-    private void Button_OnClicked(object sender, EventArgs e)
+    private async void Button_OnClicked(object sender, EventArgs e)
     {
-        throw new NotImplementedException();
+        await _itemViewModel.AddToCart();
     }
 }

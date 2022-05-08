@@ -7,7 +7,7 @@
              xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              x:Class="priceapp.Views.CatalogAndSearchPage"
              x:DataType="viewModels:ICategoryViewModel"
-             Padding="0, 20">
+             Padding="0, 20, 0, 0">
     <ContentPage.Content>
         <StackLayout>
             <ui:ContentButton Margin="14,0,14,20"
@@ -61,10 +61,10 @@
                                 </Frame>
                                 <Label Grid.Row="1"
                                        Text="{Binding Label}"
-                                       FontSize="18"
+                                       FontSize="16"
                                        VerticalOptions="End"
                                        HorizontalOptions="Start"
-                                       Margin="0, 0, 0,5"
+                                       Margin="2, 0, 0,5"
                                        TextColor="Black" />
                             </Grid>
                         </Frame>

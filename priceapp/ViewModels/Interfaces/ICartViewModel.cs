@@ -1,17 +1,18 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using priceapp.Events.Delegates;
 using priceapp.Models;
 
 namespace priceapp.ViewModels.Interfaces;
 
-public interface IItemViewModel : INotifyPropertyChanged
+public interface ICartViewModel : INotifyPropertyChanged
 {
-    Item Item { get; set; }
-    ObservableCollection<ItemPriceInfo> PricesAndFilials { get; set; }
-    Task LoadAsync(Item item);
+    Task LoadAsync();
     event LoadingHandler Loaded;
     event ConnectionErrorHandler BadConnectEvent;
-    Task AddToCart(int? filialId = null);
+    ObservableCollection<ItemToBuy> ItemsList { get; set; }
+    bool IsRefreshing { get; set; }
+    ICommand RefreshCommand { get; }
 }

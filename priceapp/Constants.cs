@@ -1,0 +1,18 @@
+using System.IO;
+
+namespace priceapp;
+
+public class Constants
+{
+    private const string DatabaseFilename = "PriceAppSQLite.db3";
+    private const string CacheDatabaseFilename = "PriceAppSQLiteCache.db3";
+
+    public const SQLite.SQLiteOpenFlags Flags =
+        SQLite.SQLiteOpenFlags.ReadWrite |
+        SQLite.SQLiteOpenFlags.Create |
+        SQLite.SQLiteOpenFlags.SharedCache;
+
+    public static string DatabasePath => Path.Combine(Xamarin.Essentials.FileSystem.AppDataDirectory, DatabaseFilename);
+    public static string CacheDatabasePath => Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, CacheDatabaseFilename);
+
+}

@@ -10,9 +10,7 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout>
-
                 <Grid>
-                    
                     <Image Source="{Binding Item.Image}" BackgroundColor="WhiteSmoke"/>
                     <Grid Padding="15, 15">
                         <Grid.ColumnDefinitions>
@@ -23,10 +21,10 @@
                         </Grid.RowDefinitions>
 
                         <ImageButton Grid.Column="0"
-                                     BackgroundColor="WhiteSmoke"
+                                     BackgroundColor="#FAFAFA"
                                      Clicked="ImageButton_OnClicked"
                                      CornerRadius="2000"
-                                     Padding="20,7">
+                                     Padding="17,7, 20, 7">
                             <ImageButton.Source>
                                 <FontImageSource FontFamily="MaterialOutlined"
                                                  Glyph="&#xe2ea;"
@@ -65,6 +63,7 @@
                             BackgroundColor="Accent"
                             Padding="0"
                             Margin="0, 2"
+                            CornerRadius="20"
                             Clicked="Button_OnClicked"/>
                     <Grid Grid.Row="2"
                           Grid.Column="0"
