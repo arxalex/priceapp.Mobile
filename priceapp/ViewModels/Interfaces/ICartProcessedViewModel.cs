@@ -1,20 +1,16 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using priceapp.Enums;
 using priceapp.Events.Delegates;
 using priceapp.Models;
 
 namespace priceapp.ViewModels.Interfaces;
 
-public interface ICartViewModel : INotifyPropertyChanged
+public interface ICartProcessedViewModel
 {
-    Task LoadAsync();
     event LoadingHandler Loaded;
     event ConnectionErrorHandler BadConnectEvent;
     ObservableCollection<ItemToBuy> ItemsList { get; set; }
-    bool IsRefreshing { get; set; }
-    ICommand RefreshCommand { get; }
-    Task ChangeCartItem(ItemToBuy model);
-    Task DeleteCartItem(ItemToBuy model);
+    Task LoadAsync(IList<ItemToBuy> items, CartProcessingType type);
 }

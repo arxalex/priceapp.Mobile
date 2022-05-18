@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Text.Json;
 using AutoMapper;
 using priceapp.Models;
@@ -16,6 +17,17 @@ public static class MapperUtil
             cfg.CreateMap<CategoryRepositoryModel, Category>();
             cfg.CreateMap<ItemRepositoryModel, Item>();
             cfg.CreateMap<Item, ItemRepositoryModel>();
+            cfg.CreateMap<Shop, ShopRepositoryModel>();
+            cfg.CreateMap<ShopRepositoryModel, Shop>();
+            cfg.CreateMap<FilialRepositoryModel, Filial>().BeforeMap((s, d) =>
+            {
+                d.Shop = new Shop {Id = s.shopid};
+            });
+            cfg.CreateMap<Filial, FilialRepositoryModel>().BeforeMap((s, d) =>
+            {
+                d.shopid = s.Shop.Id;
+            });
+
             cfg.CreateMap<PriceAndFilialRepositoryModel, ItemPriceInfo>()
                 .BeforeMap((source, destination) =>
                 {
@@ -68,17 +80,43 @@ public static class MapperUtil
             });
             cfg.CreateMap<ItemLocalDatabaseModel, ItemRepositoryModel>().BeforeMap((s, d) =>
             {
-                d.additional = JsonSerializer.Deserialize<object>(s.Additional);
-                d.consist = JsonSerializer.Deserialize<object>(s.Additional);
+                d.additional = s.Additional != null ? JsonSerializer.Deserialize<object>(s.Additional) : null;
+                d.consist = s.Consist != null ? JsonSerializer.Deserialize<object>(s.Consist) : null;
             });
             cfg.CreateMap<ItemRepositoryModel, ItemLocalDatabaseModel>().BeforeMap((s, d) =>
             {
                 d.Additional = JsonSerializer.Serialize(s.additional);
                 d.Consist = JsonSerializer.Serialize(s.consist);
             });
+            cfg.CreateMap<ItemLocalDatabaseModel, Item>().BeforeMap((s, d) =>
+            {
+                d.Additional = s.Additional != null ? JsonSerializer.Deserialize<object>(s.Additional) : null;
+                d.Consist = s.Consist != null ? JsonSerializer.Deserialize<ObservableCollection<int>>(s.Consist) : null;
+            });
+            cfg.CreateMap<Item, ItemLocalDatabaseModel>().BeforeMap((s, d) =>
+            {
+                d.Additional = JsonSerializer.Serialize(s.Additional);
+                d.Consist = JsonSerializer.Serialize(s.Consist);
+            });
             cfg.CreateMap<CategoryRepositoryModel, CategoryLocalDatabaseModel>();
             cfg.CreateMap<CategoryLocalDatabaseModel, CategoryRepositoryModel>();
-
+            cfg.CreateMap<ShopRepositoryModel, ShopLocalDatabaseModel>();
+            cfg.CreateMap<ShopLocalDatabaseModel, ShopRepositoryModel>();
+            cfg.CreateMap<FilialLocalDatabaseModel, FilialRepositoryModel>();
+            cfg.CreateMap<FilialRepositoryModel, FilialLocalDatabaseModel>();
+            cfg.CreateMap<FilialLocalDatabaseModel, Filial>().BeforeMap((s, d) =>
+            {
+                d.Shop = new Shop {Id = s.ShopId};
+            });
+            cfg.CreateMap<Filial, FilialLocalDatabaseModel>().BeforeMap((s, d) =>
+            {
+                d.ShopId = s.Shop.Id;
+            });
+            cfg.CreateMap<ItemToBuy, ItemToBuyRepositoryModel>().BeforeMap((s, d) =>
+            {
+                d.itemId = s.Item.Id;
+                d.filialId = s.Filial?.Id;
+            });
         });
 
         return mapperConfiguration.CreateMapper();

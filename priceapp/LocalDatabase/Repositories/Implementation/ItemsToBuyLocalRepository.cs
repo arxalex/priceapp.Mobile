@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using priceapp.Events.Delegates;
@@ -24,6 +25,13 @@ public class ItemsToBuyLocalRepository : IItemsToBuyLocalRepository
 
     public async Task AddItem(ItemToBuyLocalDatabaseModel model)
     {
+        if (await Exists(model.ItemId, model.FilialId))
+        {
+            var item = (await GetItems(x => x.ItemId == model.ItemId && x.FilialId == model.FilialId)).First();
+            item.Count++;
+            await UpdateItem(item);
+            return;
+        }
         await _connection.InsertAsync(model);
     }
 
@@ -49,6 +57,12 @@ public class ItemsToBuyLocalRepository : IItemsToBuyLocalRepository
 
     public async Task UpdateItem(ItemToBuyLocalDatabaseModel model)
     {
-        await _connection.UpdateAsync(model);
+        if (model.Count > 0)
+        {
+            await _connection.UpdateAsync(model);
+            return;
+        }
+
+        await RemoveItem(model.ItemId);
     }
 }

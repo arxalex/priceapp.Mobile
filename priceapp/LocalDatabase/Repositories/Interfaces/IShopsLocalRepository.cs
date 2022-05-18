@@ -9,11 +9,10 @@ namespace priceapp.LocalDatabase.Repositories.Interfaces;
 
 public interface IShopsLocalRepository
 {
-    Task AddItem(ItemToBuyLocalDatabaseModel model);
-    Task RemoveItem(int id);
-    Task<List<ItemToBuyLocalDatabaseModel>> GetItems();
-    Task<List<ItemToBuyLocalDatabaseModel>> GetItems(Expression<Func<ItemToBuyLocalDatabaseModel, bool>> expression);
-    Task<bool> Exists(int itemId, int? filialId);
-    Task UpdateItem(ItemToBuyLocalDatabaseModel model);
+    Task<int> AddShop(ShopLocalDatabaseModel model);
+    Task RemoveShop(int id);
+    Task<List<ShopLocalDatabaseModel>> GetShops();
+    Task<List<ShopLocalDatabaseModel>> GetShops(Expression<Func<ShopLocalDatabaseModel, bool>> expression);
+    Task UpdateShop(ShopLocalDatabaseModel model);
     event ConnectionErrorHandler BadConnectEvent;
 }

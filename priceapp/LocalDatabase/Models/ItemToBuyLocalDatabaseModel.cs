@@ -10,6 +10,6 @@ public class ItemToBuyLocalDatabaseModel
     public int ItemId { get; set; }
     [CanBeNull] 
     public int? FilialId { get; set; }
-    public int Count { get; set; } 
+    public double Count { get; set; } 
     public bool Added { get; set; }
 }

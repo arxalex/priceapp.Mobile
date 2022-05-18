@@ -9,7 +9,7 @@ using priceapp.LocalDatabase.Repositories.Interfaces;
 using SQLite;
 using Xamarin.Forms;
 
-/*[assembly: Dependency(typeof(FilialsLocalRepository))]*/
+[assembly: Dependency(typeof(FilialsLocalRepository))]
 namespace priceapp.LocalDatabase.Repositories.Implementation;
 
 public class FilialsLocalRepository : IFilialsLocalRepository
@@ -22,32 +22,28 @@ public class FilialsLocalRepository : IFilialsLocalRepository
         _connection = LocalCacheDatabase.Database;
     }
 
-    public async Task AddItem(ItemToBuyLocalDatabaseModel model)
+    public async Task<int> AddFilial(FilialLocalDatabaseModel model)
     {
         await _connection.InsertAsync(model);
+        return model.RecordId;
     }
 
-    public async Task RemoveItem(int id)
+    public async Task RemoveFilial(int id)
     {
-        await _connection.DeleteAsync<ItemToBuyLocalDatabaseModel>(id);
+        await _connection.DeleteAsync<FilialLocalDatabaseModel>(id);
     }
 
-    public async Task<List<ItemToBuyLocalDatabaseModel>> GetItems()
+    public async Task<List<FilialLocalDatabaseModel>> GetFilials()
     {
-        return await _connection.Table<ItemToBuyLocalDatabaseModel>().ToListAsync();
+        return await _connection.Table<FilialLocalDatabaseModel>().ToListAsync();
     }
 
-    public async Task<List<ItemToBuyLocalDatabaseModel>> GetItems(Expression<Func<ItemToBuyLocalDatabaseModel, bool>> expression)
+    public async Task<List<FilialLocalDatabaseModel>> GetFilials(Expression<Func<FilialLocalDatabaseModel, bool>> expression)
     {
-        return await _connection.Table<ItemToBuyLocalDatabaseModel>().Where(expression).ToListAsync();
+        return await _connection.Table<FilialLocalDatabaseModel>().Where(expression).ToListAsync();
     }
 
-    public async Task<bool> Exists(int itemId, int? filialId = null)
-    {
-        return (await GetItems(x => x.ItemId == itemId && x.FilialId == filialId)).Count > 0;
-    }
-
-    public async Task UpdateItem(ItemToBuyLocalDatabaseModel model)
+    public async Task UpdateFilial(FilialLocalDatabaseModel model)
     {
         await _connection.UpdateAsync(model);
     }

@@ -36,7 +36,7 @@
                 <Grid x:Name="ItemInfo" Margin="20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="80" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition />
@@ -49,20 +49,21 @@
                            Grid.Column="0"
                            Grid.ColumnSpan="2"
                            Text="{Binding Item.Label}"
-                           FontSize="25"
+                           FontSize="22"
                            TextColor="Black"
                            FontAttributes="Bold" />
                     <Label Grid.Row="1"
                            Grid.Column="0"
                            Text="{Binding Item.PriceText}"
                            FontAttributes="Bold"
-                           FontSize="40"
+                           FontSize="30"
                            TextColor="Accent" />
                     <Button Grid.Row="1" Grid.Column="1" 
                             Text="Додати"
+                            Style="{StaticResource ButtonStyle}"
                             BackgroundColor="Accent"
                             Padding="0"
-                            Margin="0, 2"
+                            Margin="0, 2, 0, 30"
                             CornerRadius="20"
                             Clicked="Button_OnClicked"/>
                     <Grid Grid.Row="2"

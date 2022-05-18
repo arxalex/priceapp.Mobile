@@ -17,9 +17,9 @@ public static class LocalCacheDatabase
             {
                 await _database.CreateTableAsync<CacheRequestsLocalDatabaseModel>();
                 await _database.CreateTableAsync<CategoryLocalDatabaseModel>();
-                // await _database.CreateTableAsync<FilialLocalDatabaseModel>();
+                await _database.CreateTableAsync<FilialLocalDatabaseModel>();
                 await _database.CreateTableAsync<ItemLocalDatabaseModel>();
-                // await _database.CreateTableAsync<ShopLocalDatabaseModel>();
+                await _database.CreateTableAsync<ShopLocalDatabaseModel>();
             });
 
             return _database;

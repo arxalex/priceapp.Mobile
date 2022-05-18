@@ -9,7 +9,7 @@ using priceapp.LocalDatabase.Repositories.Interfaces;
 using SQLite;
 using Xamarin.Forms;
 
-/*[assembly: Dependency(typeof(ShopsLocalRepository))]*/
+[assembly: Dependency(typeof(ShopsLocalRepository))]
 namespace priceapp.LocalDatabase.Repositories.Implementation;
 
 public class ShopsLocalRepository : IShopsLocalRepository
@@ -22,32 +22,28 @@ public class ShopsLocalRepository : IShopsLocalRepository
         _connection = LocalCacheDatabase.Database;
     }
 
-    public async Task AddItem(ItemToBuyLocalDatabaseModel model)
+    public async Task<int> AddShop(ShopLocalDatabaseModel model)
     {
         await _connection.InsertAsync(model);
+        return model.RecordId;
     }
 
-    public async Task RemoveItem(int id)
+    public async Task RemoveShop(int id)
     {
-        await _connection.DeleteAsync<ItemToBuyLocalDatabaseModel>(id);
+        await _connection.DeleteAsync<ShopLocalDatabaseModel>(id);
     }
 
-    public async Task<List<ItemToBuyLocalDatabaseModel>> GetItems()
+    public async Task<List<ShopLocalDatabaseModel>> GetShops()
     {
-        return await _connection.Table<ItemToBuyLocalDatabaseModel>().ToListAsync();
+        return await _connection.Table<ShopLocalDatabaseModel>().ToListAsync();
     }
 
-    public async Task<List<ItemToBuyLocalDatabaseModel>> GetItems(Expression<Func<ItemToBuyLocalDatabaseModel, bool>> expression)
+    public async Task<List<ShopLocalDatabaseModel>> GetShops(Expression<Func<ShopLocalDatabaseModel, bool>> expression)
     {
-        return await _connection.Table<ItemToBuyLocalDatabaseModel>().Where(expression).ToListAsync();
+        return await _connection.Table<ShopLocalDatabaseModel>().Where(expression).ToListAsync();
     }
-
-    public async Task<bool> Exists(int itemId, int? filialId = null)
-    {
-        return (await GetItems(x => x.ItemId == itemId && x.FilialId == filialId)).Count > 0;
-    }
-
-    public async Task UpdateItem(ItemToBuyLocalDatabaseModel model)
+    
+    public async Task UpdateShop(ShopLocalDatabaseModel model)
     {
         await _connection.UpdateAsync(model);
     }

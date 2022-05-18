@@ -1,0 +1,146 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
+using AutoMapper;
+using priceapp.Events.Delegates;
+using priceapp.Events.Models;
+using priceapp.LocalDatabase.Models;
+using priceapp.LocalDatabase.Repositories.Interfaces;
+using priceapp.Repositories.Implementation;
+using priceapp.Repositories.Interfaces;
+using priceapp.Repositories.Models;
+using priceapp.WebServices;
+using RestSharp;
+using Xamarin.Forms;
+
+[assembly: Dependency(typeof(ShopRepository))]
+namespace priceapp.Repositories.Implementation;
+
+public class ShopRepository : IShopRepository
+{
+    public event ConnectionErrorHandler BadConnectEvent;
+    private readonly RestClient _client;
+    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository;
+    private readonly IShopsLocalRepository _shopsLocalRepository;
+    private readonly IFilialsLocalRepository _filialsLocalRepository;
+    private readonly IMapper _mapper;
+    public ShopRepository()
+    {
+        var priceAppWebAccess = DependencyService.Get<IPriceAppWebAccess>();
+        _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
+        _shopsLocalRepository = DependencyService.Get<IShopsLocalRepository>();
+        _filialsLocalRepository = DependencyService.Get<IFilialsLocalRepository>();
+        _mapper = DependencyService.Get<IMapper>();
+        var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler()) {
+            BaseAddress = new Uri("https://priceapp.arxalex.co/")  
+        };
+        _client = new RestClient(httpClient);
+        _client.AddDefaultHeader("Cookie", Xamarin.Essentials.SecureStorage.GetAsync("cookie").Result);
+    }
+
+    public async Task<IList<ShopRepositoryModel>> GetShops()
+    {
+        var json = JsonSerializer.Serialize(new { source = 0 });
+        
+        if (await _cacheRequestsLocalRepository.Exists("be/shops/get_shops", json))
+        {
+            var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
+                .GetCacheRecords(x =>
+                    x.RequestName == "be/shops/get_shops" &&
+                    x.RequestProperties == json &&
+                    x.Expires > DateTime.Now
+                )).First().ResponseItemIds);
+
+            var responseCache = await _shopsLocalRepository
+                .GetShops(x => responseCacheIds.Contains(x.RecordId));
+
+            return _mapper.Map<IList<ShopRepositoryModel>>(responseCache);
+        }
+        
+        var request = new RestRequest("be/shops/get_shops", Method.Post);
+        
+        request.AddHeader("Content-Type", "application/json");
+        request.AddBody(json, "application/json");
+
+        var response = await _client.ExecuteAsync(request);
+        if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
+        {
+            BadConnectEvent?.Invoke(this, new ConnectionErrorArgs(){Success = false, StatusCode = (int) response.StatusCode});
+            return new List<ShopRepositoryModel>();
+        }
+
+        var list = JsonSerializer.Deserialize<List<ShopRepositoryModel>>(response.Content) ?? new List<ShopRepositoryModel>();
+        list.RemoveAll(x => x.id == 0);
+        
+        var recordIds = new List<int>();
+        foreach (var item in list)
+        {
+            recordIds.Add(await _shopsLocalRepository.AddShop(_mapper.Map<ShopLocalDatabaseModel>(item)));
+        }
+
+        await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
+        {
+            RequestName = "be/shops/get_shops",
+            RequestProperties = json,
+            ResponseItemIds = JsonSerializer.Serialize(recordIds.ToArray()),
+            Expires = DateTime.Now + TimeSpan.FromHours(4080)
+        });
+        
+        return list;
+    }
+
+    public async Task<IList<FilialRepositoryModel>> GetFilials()
+    {
+        var json = JsonSerializer.Serialize(new { source = 0 });
+        
+        if (await _cacheRequestsLocalRepository.Exists("be/filials/get_filials", json))
+        {
+            var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
+                .GetCacheRecords(x =>
+                    x.RequestName == "be/filials/get_filials" &&
+                    x.RequestProperties == json &&
+                    x.Expires > DateTime.Now
+                )).First().ResponseItemIds);
+
+            var responseCache = await _filialsLocalRepository
+                .GetFilials(x => responseCacheIds.Contains(x.RecordId));
+
+            return _mapper.Map<IList<FilialRepositoryModel>>(responseCache);
+        }
+        
+        var request = new RestRequest("be/filials/get_filials", Method.Post);
+        
+        request.AddHeader("Content-Type", "application/json");
+        request.AddBody(json, "application/json");
+
+        var response = await _client.ExecuteAsync(request);
+        if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
+        {
+            BadConnectEvent?.Invoke(this, new ConnectionErrorArgs(){Success = false, StatusCode = (int) response.StatusCode});
+            return new List<FilialRepositoryModel>();
+        }
+
+        var list = JsonSerializer.Deserialize<List<FilialRepositoryModel>>(response.Content) ?? new List<FilialRepositoryModel>();
+        list.RemoveAll(x => x.id == 0);
+        
+        var recordIds = new List<int>();
+        foreach (var item in list)
+        {
+            recordIds.Add(await _filialsLocalRepository.AddFilial(_mapper.Map<FilialLocalDatabaseModel>(item)));
+        }
+
+        await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
+        {
+            RequestName = "be/filials/get_filials",
+            RequestProperties = json,
+            ResponseItemIds = JsonSerializer.Serialize(recordIds.ToArray()),
+            Expires = DateTime.Now + TimeSpan.FromHours(480)
+        });
+        
+        return list;
+    }
+}

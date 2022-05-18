@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
+using priceapp.Enums;
 using priceapp.Events.Delegates;
 using priceapp.Events.Models;
 using priceapp.LocalDatabase.Models;
@@ -146,11 +147,11 @@ public class ItemRepository : IItemRepository
             });
             requestProperty = JsonSerializer.Serialize(new
             {
-                source = 0, 
-                id = itemId, 
-                method = "viewModelByIdAndLocation", 
+                source = 0,
+                id = itemId,
+                method = "viewModelByIdAndLocation",
                 xCord = Math.Round((double) xCord, 3),
-                yCord = Math.Round((double) yCord, 3), 
+                yCord = Math.Round((double) yCord, 3),
                 radius
             });
         }
@@ -217,6 +218,50 @@ public class ItemRepository : IItemRepository
             yCord,
             radius,
             method = "pricesAndFilialsViewModelById"
+        });
+        request.AddHeader("Content-Type", "application/json");
+        request.AddBody(json, "application/json");
+
+        var response = await _client.ExecuteAsync(request);
+        if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
+        {
+            BadConnectEvent?.Invoke(this,
+                new ConnectionErrorArgs() {Success = false, StatusCode = (int) response.StatusCode});
+            return new List<PriceAndFilialRepositoryModel>();
+        }
+
+        var list = JsonSerializer.Deserialize<List<PriceAndFilialRepositoryModel>>(response.Content) ??
+                   new List<PriceAndFilialRepositoryModel>();
+        return list;
+    }
+
+    public async Task<IList<PriceAndFilialRepositoryModel>> GetShoppingList(ItemToBuyRepositoryModel items, double xCord, double yCord,
+        int radius, CartProcessingType type)
+    {
+        var request = new RestRequest("be/items/get_shopping_list", Method.Post);
+
+        var method = "";
+
+        switch (type)
+        {
+            case CartProcessingType.OneMarket:
+                break;
+            case CartProcessingType.OneMarketLowest:
+                break;
+            case CartProcessingType.MultipleMarketsLowest:
+                method = "multipleLowest";
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
+
+        var json = JsonSerializer.Serialize(new
+        {
+            xCord,
+            yCord,
+            radius,
+            method,
+            items
         });
         request.AddHeader("Content-Type", "application/json");
         request.AddBody(json, "application/json");

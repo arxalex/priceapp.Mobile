@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using priceapp.Enums;
 using priceapp.Events.Delegates;
 using priceapp.Repositories.Models;
 
@@ -13,4 +14,7 @@ public interface IItemRepository
         double? yCord = null, double? radius = null);
     Task<IList<PriceAndFilialRepositoryModel>> GetPricesAndFilials(int itemId, double xCord, double yCord, int radius);
     event ConnectionErrorHandler BadConnectEvent;
+
+    Task<IList<PriceAndFilialRepositoryModel>> GetShoppingList(ItemToBuyRepositoryModel items, double xCord, double yCord,
+        int radius, CartProcessingType type);
 }
