@@ -2,12 +2,60 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="priceapp.Views.AccountPage">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Hello, world!"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
-    </ContentPage.Content>
+             x:Class="priceapp.Views.AccountPage"
+             xmlns:viewsModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
+             xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
+             x:DataType="viewsModels:IAccountViewModel">
+    <StackLayout>
+        <Grid BackgroundColor="WhiteSmoke"
+              Padding="15,10">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <ActivityIndicator Grid.Row="0"
+                               Grid.RowSpan="2"
+                               x:Name="ActivityIndicator"
+                               IsRunning="False"
+                               IsVisible="False"
+                               VerticalOptions="CenterAndExpand"
+                               Color="Accent" />
+            <Label Grid.Row="0"
+                   Text="{Binding Username}"
+                   FontSize="40"
+                   TextColor="Black"/>
+            <Label Grid.Row="1"
+                   Text="{Binding Email}"
+                   TextColor="Black"/>
+        </Grid>
+        <CollectionView ItemsSource="{Binding MenuItems}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="ui:MenuItem">
+                    <Grid Padding="15,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Frame Grid.Column="0" 
+                               CornerRadius="50"
+                               Padding="15, 5"
+                               BackgroundColor="Accent">
+                        <Image>
+                            <Image.Source>
+                                <FontImageSource FontFamily="MaterialOutlined"
+                                                 Size="18"
+                                                 Glyph="{Binding  Glyph}" />
+                            </Image.Source>
+                        </Image>
+                        </Frame>
+                        <Label Grid.Column="1"
+                               Margin="10, 0, 0,0"
+                               Text="{Binding Label}" 
+                               FontSize="Medium"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
 </ContentPage>

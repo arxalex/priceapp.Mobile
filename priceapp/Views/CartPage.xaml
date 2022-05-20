@@ -9,11 +9,6 @@
              Padding="0">
     <ContentPage.Content>
         <StackLayout>
-            <ActivityIndicator x:Name="ActivityIndicator"
-                               IsRunning="False"
-                               IsVisible="False"
-                               VerticalOptions="CenterAndExpand"
-                               Color="Accent" />
             <RefreshView IsRefreshing="{Binding IsRefreshing}"
                          Command="{Binding RefreshCommand}"
                          RefreshColor="Accent">
@@ -26,6 +21,15 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+                    <ActivityIndicator Grid.Column="0"
+                                       Grid.Row="0"
+                                       Grid.ColumnSpan="2"
+                                       Grid.RowSpan="2"
+                                       x:Name="ActivityIndicator"
+                                       IsRunning="False"
+                                       IsVisible="False"
+                                       VerticalOptions="CenterAndExpand"
+                                       Color="Accent" />
                     <Label Grid.Row="0"
                            Grid.Column="0"
                            FontSize="20"
