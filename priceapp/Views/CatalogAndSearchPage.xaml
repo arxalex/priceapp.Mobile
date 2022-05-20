@@ -8,6 +8,23 @@
              x:Class="priceapp.Views.CatalogAndSearchPage"
              x:DataType="viewModels:ICategoryViewModel"
              Padding="0, 20, 0, 0">
+    <ContentPage.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="Transparent" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
             <ui:ContentButton Margin="14,0,14,20"
@@ -26,8 +43,7 @@
                             <Image.Source>
                                 <FontImageSource FontFamily="MaterialOutlined"
                                                  Glyph="&#xe8b6;"
-                                                 Color="Accent">
-                                </FontImageSource>
+                                                 Color="Accent" />
                             </Image.Source>
                         </Image>
                         <Label Grid.Column="1"

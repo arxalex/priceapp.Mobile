@@ -11,17 +11,19 @@ using SQLite;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(ItemsToBuyLocalRepository))]
+
 namespace priceapp.LocalDatabase.Repositories.Implementation;
 
 public class ItemsToBuyLocalRepository : IItemsToBuyLocalRepository
 {
-    public event ConnectionErrorHandler BadConnectEvent;
-    
     private readonly SQLiteAsyncConnection _connection;
+
     public ItemsToBuyLocalRepository()
     {
         _connection = LocalDatabase.Database;
     }
+
+    public event ConnectionErrorHandler BadConnectEvent;
 
     public async Task AddItem(ItemToBuyLocalDatabaseModel model)
     {
@@ -32,6 +34,7 @@ public class ItemsToBuyLocalRepository : IItemsToBuyLocalRepository
             await UpdateItem(item);
             return;
         }
+
         await _connection.InsertAsync(model);
     }
 
@@ -40,12 +43,18 @@ public class ItemsToBuyLocalRepository : IItemsToBuyLocalRepository
         await _connection.DeleteAsync<ItemToBuyLocalDatabaseModel>(id);
     }
 
+    public async Task RemoveAll()
+    {
+        await _connection.DeleteAllAsync<ItemToBuyLocalDatabaseModel>();
+    }
+
     public async Task<List<ItemToBuyLocalDatabaseModel>> GetItems()
     {
         return await _connection.Table<ItemToBuyLocalDatabaseModel>().ToListAsync();
     }
 
-    public async Task<List<ItemToBuyLocalDatabaseModel>> GetItems(Expression<Func<ItemToBuyLocalDatabaseModel, bool>> expression)
+    public async Task<List<ItemToBuyLocalDatabaseModel>> GetItems(
+        Expression<Func<ItemToBuyLocalDatabaseModel, bool>> expression)
     {
         return await _connection.Table<ItemToBuyLocalDatabaseModel>().Where(expression).ToListAsync();
     }

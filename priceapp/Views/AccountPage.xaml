@@ -6,6 +6,23 @@
              xmlns:viewsModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
              x:DataType="viewsModels:IAccountViewModel">
+    <ContentPage.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="WhiteSmoke" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
     <StackLayout>
         <Grid BackgroundColor="WhiteSmoke"
               Padding="15,10">
@@ -28,7 +45,10 @@
                    Text="{Binding Email}"
                    TextColor="Black"/>
         </Grid>
-        <CollectionView ItemsSource="{Binding MenuItems}">
+        <CollectionView x:Name="CollectionView"
+                        ItemsSource="{Binding MenuItems}"
+                        SelectionChanged="CollectionView_OnSelectionChanged"
+                        SelectionMode="Single">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="ui:MenuItem">
                     <Grid Padding="15,10">

@@ -20,4 +20,5 @@ public interface ICartViewModel : INotifyPropertyChanged
     event ConnectionErrorHandler BadConnectEvent;
     Task ChangeCartItem(ItemToBuy model);
     Task DeleteCartItem(ItemToBuy model);
+    Task ClearShoppingList();
 }

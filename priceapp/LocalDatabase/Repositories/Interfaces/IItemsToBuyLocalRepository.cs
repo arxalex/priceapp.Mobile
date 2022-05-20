@@ -16,4 +16,5 @@ public interface IItemsToBuyLocalRepository
     Task<bool> Exists(int itemId, int? filialId);
     Task UpdateItem(ItemToBuyLocalDatabaseModel model);
     event ConnectionErrorHandler BadConnectEvent;
+    Task RemoveAll();
 }

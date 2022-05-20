@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
+             x:Class="priceapp.Views.SettingPage"
+             xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
+             x:DataType="viewModels:ISettingsViewModel">
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid Padding="15, 15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="45" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <ImageButton Grid.Column="0"
+                             BackgroundColor="Transparent"
+                             Clicked="ImageButton_OnClicked"
+                             Padding="10,0">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="MaterialOutlined"
+                                         Glyph="&#xe2ea;"
+                                         Color="{AppThemeBinding Light=Black, Dark=White}" />
+                    </ImageButton.Source>
+                </ImageButton>
+                <Label Grid.Column="1"
+                       FontSize="20"
+                       TextColor="Black"
+                       FontAttributes="Bold"
+                       Margin="5,2,0,0"
+                       HeightRequest="35"
+                       Text="Налаштування" />
+            </Grid>
+            <ScrollView>
+                <StackLayout Margin="20, 0">
+                    <Label Text="Радіус пошуку (в метрах)"
+                           FontSize="Medium"
+                           TextColor="Black"
+                           FontAttributes="Bold" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="60" />
+                        </Grid.ColumnDefinitions>
+                        <Frame Grid.Column="0"
+                               Padding="0"
+                               Margin="-10,0">
+                            <Slider Maximum="10000"
+                                    Minimum="0"
+                                    ThumbColor="Accent"
+                                    MinimumTrackColor="Black"
+                                    Value="{Binding Radius}" />
+                        </Frame>
+                        <ui:RdEntryBorderless Grid.Column="1"
+                                              Text="{Binding Radius}" />
+                    </Grid>
+                    <Label Text="Спосыб формування списку покупок"
+                           FontSize="Medium"
+                           TextColor="Black"
+                           FontAttributes="Bold" />
+                    <Picker ItemsSource="{Binding CartProcessingTypes}"
+                            SelectedItem="{Binding CartProcessingTypeSetting}" />
+                </StackLayout>
+            </ScrollView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

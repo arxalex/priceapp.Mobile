@@ -1,3 +1,5 @@
+using System;
+using System.Globalization;
 using priceapp.Events.Models;
 using priceapp.Models;
 using priceapp.ViewModels.Interfaces;
@@ -51,7 +53,7 @@ namespace priceapp.Views
             {
                 case changeQuantity:
                     var result = await DisplayPromptAsync(changeQuantity, "Введіть кількість",
-                        initialValue: item.Count.ToString(), keyboard: Keyboard.Numeric);
+                        initialValue: item.Count.ToString(CultureInfo.InvariantCulture), keyboard: Keyboard.Numeric);
                     item.Count = double.Parse(result);
                     await _cartViewModel.ChangeCartItem(item);
                     break;
@@ -61,6 +63,11 @@ namespace priceapp.Views
             }
 
             CollectionView.SelectedItem = null;
+        }
+
+        private async void Button_OnClicked(object sender, EventArgs e)
+        {
+            await _cartViewModel.ClearShoppingList();
         }
     }
 }

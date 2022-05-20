@@ -7,6 +7,23 @@
              xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              x:DataType="viewModels:ICartViewModel"
              Padding="0">
+    <ContentPage.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="Transparent" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
             <RefreshView IsRefreshing="{Binding IsRefreshing}"
@@ -45,7 +62,8 @@
                            BackgroundColor="White"
                            HasShadow="False">
                     <Button WidthRequest="50"
-                            BackgroundColor="White">
+                            BackgroundColor="White"
+                            Clicked="Button_OnClicked">
                         <Button.ImageSource>
                             <FontImageSource FontFamily="MaterialOutlined"
                                              Glyph="&#xe92b;"

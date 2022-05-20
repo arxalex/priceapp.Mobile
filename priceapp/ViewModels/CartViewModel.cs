@@ -121,7 +121,8 @@ public class CartViewModel : ICartViewModel
         var itemsResult = await _itemRepository.GetShoppingList(
             _mapper.Map<List<ItemToBuyRepositoryModel>>(ItemsToBuyListPreProcessed),
             location.Longitude, location.Latitude, Xamarin.Essentials.Preferences.Get("locationRadius", 5000),
-            CartProcessingType.MultipleMarketsLowest);
+            (CartProcessingType) Xamarin.Essentials.Preferences.Get("cartProcessingType",
+                (int) CartProcessingType.MultipleMarketsLowest));
 
         var itemsToBuyListUngrouped = new List<ItemToBuy>();
 
@@ -171,6 +172,14 @@ public class CartViewModel : ICartViewModel
     {
         await _itemsToBuyLocalRepository.RemoveItem(model.RecordId);
         await LoadAsync();
+    }
+
+    public async Task ClearShoppingList()
+    {
+        ItemsToBuyList = new ObservableCollection<ItemToBuyGroup>();
+        ItemsToBuyListPreProcessed = new List<ItemToBuy>();
+        HeaderText = "Доступно 0 з 0";
+        await _itemsToBuyLocalRepository.RemoveAll();
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
