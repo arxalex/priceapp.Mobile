@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -7,15 +8,19 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using AutoMapper;
 using priceapp.Annotations;
+using priceapp.Enums;
 using priceapp.Events.Delegates;
 using priceapp.Events.Models;
 using priceapp.LocalDatabase.Models;
 using priceapp.LocalDatabase.Repositories.Interfaces;
 using priceapp.Models;
 using priceapp.Repositories.Interfaces;
+using priceapp.Repositories.Models;
+using priceapp.Utils;
 using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 [assembly: Xamarin.Forms.Dependency(typeof(CartViewModel))]
 
@@ -23,6 +28,29 @@ namespace priceapp.ViewModels;
 
 public class CartViewModel : ICartViewModel
 {
+    private const int RefreshDuration = 0;
+    private readonly GeolocationUtil _geolocationUtil;
+    private readonly IItemRepository _itemRepository;
+
+    private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository;
+    private readonly IMapper _mapper;
+    private readonly IShopRepository _shopRepository;
+
+    private string _headerText;
+    private bool _isRefreshing;
+    private ObservableCollection<ItemToBuyGroup> _itemsToBuyList = new();
+
+    public CartViewModel()
+    {
+        _itemsToBuyLocalRepository = DependencyService.Get<IItemsToBuyLocalRepository>();
+        _shopRepository = DependencyService.Get<IShopRepository>();
+        _itemRepository = DependencyService.Get<IItemRepository>();
+        _geolocationUtil = DependencyService.Get<GeolocationUtil>();
+        _mapper = DependencyService.Get<IMapper>();
+
+        _itemsToBuyLocalRepository.BadConnectEvent += ItemsToBuyLocalRepositoryOnBadConnectEvent;
+    }
+
     public event LoadingHandler Loaded;
     public event ConnectionErrorHandler BadConnectEvent;
 
@@ -44,43 +72,32 @@ public class CartViewModel : ICartViewModel
         IsRefreshing = false;
     });
 
-    public ObservableCollection<ItemToBuy> ItemsList
+    public ObservableCollection<ItemToBuyGroup> ItemsToBuyList
     {
-        get => _itemsList;
+        get => _itemsToBuyList;
         set
         {
-            _itemsList = value;
+            _itemsToBuyList = value;
             OnPropertyChanged();
         }
     }
 
-    private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository;
-    private readonly IShopRepository _shopRepository;
-    private readonly IItemRepository _itemRepository;
-    private readonly IMapper _mapper;
-
-    private bool _isRefreshing;
-    private ObservableCollection<ItemToBuy> _itemsList = new();
-    private const int RefreshDuration = 0;
-
-    public CartViewModel()
+    public string HeaderText
     {
-        _itemsToBuyLocalRepository = DependencyService.Get<IItemsToBuyLocalRepository>();
-        _shopRepository = DependencyService.Get<IShopRepository>();
-        _itemRepository = DependencyService.Get<IItemRepository>();
-        _mapper = DependencyService.Get<IMapper>();
-
-        _itemsToBuyLocalRepository.BadConnectEvent += ItemsToBuyLocalRepositoryOnBadConnectEvent;
+        get => _headerText;
+        set
+        {
+            _headerText = value;
+            OnPropertyChanged();
+        }
     }
 
-    private void ItemsToBuyLocalRepositoryOnBadConnectEvent(object sender, ConnectionErrorArgs args)
-    {
-        BadConnectEvent?.Invoke(this, args);
-    }
+    public List<ItemToBuy> ItemsToBuyListPreProcessed { get; set; }
 
     public async Task LoadAsync()
     {
-        ItemsList = new ObservableCollection<ItemToBuy>();
+        ItemsToBuyListPreProcessed = new List<ItemToBuy>();
+        ItemsToBuyList = new ObservableCollection<ItemToBuyGroup>();
         var items = await _itemsToBuyLocalRepository.GetItems();
         var filials = await _shopRepository.GetFilials();
         var shops = await _shopRepository.GetShops();
@@ -97,11 +114,51 @@ public class CartViewModel : ICartViewModel
                     _mapper.Map<Shop>(shops.Last(x => x.id == itemToBuy.Filial.Shop.Id));
             }
 
-            ItemsList.Add(itemToBuy);
+            ItemsToBuyListPreProcessed.Add(itemToBuy);
         }
 
+        var location = await _geolocationUtil.GetCurrentLocation();
+        var itemsResult = await _itemRepository.GetShoppingList(
+            _mapper.Map<List<ItemToBuyRepositoryModel>>(ItemsToBuyListPreProcessed),
+            location.Longitude, location.Latitude, Xamarin.Essentials.Preferences.Get("locationRadius", 5000),
+            CartProcessingType.MultipleMarketsLowest);
+
+        var itemsToBuyListUngrouped = new List<ItemToBuy>();
+
+        foreach (var item in ItemsToBuyListPreProcessed)
+        {
+            PriceAndFilialRepositoryModel itemResult;
+            if (item.Filial == null)
+            {
+                itemResult = itemsResult.First(x => x.itemId == item.Item.Id);
+            }
+            else
+            {
+                itemResult = itemsResult.First(x => x.itemId == item.Item.Id && x.filialId == item.Filial.Id);
+            }
+
+            var itemToBuy = new ItemToBuy()
+            {
+                RecordId = item.RecordId,
+                Added = true,
+                Count = item.Count,
+                Filial = _mapper.Map<Filial>(filials.Last(x => x.id == itemResult.filialId)),
+                Item = item.Item
+            };
+
+            itemToBuy.Item.PriceMin = itemResult.price;
+            itemToBuy.Item.PriceMax = itemResult.price;
+
+            itemsToBuyListUngrouped.Add(itemToBuy);
+        }
+
+        itemsToBuyListUngrouped.GroupBy(x => x.Filial.City + ", " + x.Filial.Street + " " + x.Filial.House)
+            .ForEach(x => { ItemsToBuyList.Add(new ItemToBuyGroup(x.Key, x.ToList())); });
+
+        HeaderText = "Доступно " + itemsToBuyListUngrouped.Count + " з " + ItemsToBuyListPreProcessed.Count;
+
         Loaded?.Invoke(this,
-            new LoadingArgs() {Success = true, LoadedCount = items.Count, Total = ItemsList.Count});
+            new LoadingArgs() {Success = true, LoadedCount = items.Count, Total = ItemsToBuyListPreProcessed.Count});
     }
 
     public async Task ChangeCartItem(ItemToBuy model)
@@ -117,6 +174,11 @@ public class CartViewModel : ICartViewModel
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
+
+    private void ItemsToBuyLocalRepositoryOnBadConnectEvent(object sender, ConnectionErrorArgs args)
+    {
+        BadConnectEvent?.Invoke(this, args);
+    }
 
     [NotifyPropertyChangedInvocator]
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

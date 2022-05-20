@@ -1,4 +1,3 @@
-using System;
 using priceapp.Events.Models;
 using priceapp.Models;
 using priceapp.ViewModels.Interfaces;
@@ -11,15 +10,16 @@ namespace priceapp.Views
     public partial class CartPage
     {
         private readonly ICartViewModel _cartViewModel;
+
         public CartPage()
         {
             InitializeComponent();
-            
+
             _cartViewModel = DependencyService.Get<ICartViewModel>(DependencyFetchTarget.NewInstance);
-            
+
             _cartViewModel.Loaded += CartViewModelOnLoaded;
             _cartViewModel.BadConnectEvent += CartViewModelOnBadConnectEvent;
-            
+
             ActivityIndicator.IsRunning = true;
             ActivityIndicator.IsVisible = true;
             CollectionView.IsVisible = false;
@@ -40,24 +40,6 @@ namespace priceapp.Views
             CollectionView.IsVisible = true;
         }
 
-        private async void Button_OnClicked(object sender, EventArgs e)
-        {
-            const string oneMarket = "Все в одному магазині";
-            const string oneMarketLowest = "Найдешевший варіант в одному магазині, окрім тих товарів, що вже вибрані";
-            const string manyMarketsLowest = "Найдешевший варіант в декількох магазинах";
-
-            var action = await DisplayActionSheet("Метод формування списку:", "Закрити", null, oneMarket, oneMarketLowest, manyMarketsLowest);
-            switch (action)
-            {
-                case oneMarket:
-                    break;
-                case oneMarketLowest:
-                    break;
-                case manyMarketsLowest:
-                    break;
-            }
-        }
-        
         private async void CollectionView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CollectionView.SelectedItem == null) return;
@@ -68,7 +50,8 @@ namespace priceapp.Views
             switch (action)
             {
                 case changeQuantity:
-                    var result = await DisplayPromptAsync(changeQuantity, "Введіть кількість", initialValue: item.Count.ToString(), keyboard: Keyboard.Numeric);
+                    var result = await DisplayPromptAsync(changeQuantity, "Введіть кількість",
+                        initialValue: item.Count.ToString(), keyboard: Keyboard.Numeric);
                     item.Count = double.Parse(result);
                     await _cartViewModel.ChangeCartItem(item);
                     break;

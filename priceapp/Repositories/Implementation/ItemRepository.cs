@@ -24,11 +24,10 @@ namespace priceapp.Repositories.Implementation;
 
 public class ItemRepository : IItemRepository
 {
-    private readonly RestClient _client;
     private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository;
+    private readonly RestClient _client;
     private readonly IItemsLocalRepository _itemsLocalRepository;
     private readonly IMapper _mapper;
-    public event ConnectionErrorHandler BadConnectEvent;
 
     public ItemRepository()
     {
@@ -43,6 +42,8 @@ public class ItemRepository : IItemRepository
         _client = new RestClient(httpClient);
         _client.AddDefaultHeader("Cookie", Xamarin.Essentials.SecureStorage.GetAsync("cookie").Result);
     }
+
+    public event ConnectionErrorHandler BadConnectEvent;
 
     public async Task<IList<ItemRepositoryModel>> GetItems(int categoryId,
         int from,
@@ -235,7 +236,8 @@ public class ItemRepository : IItemRepository
         return list;
     }
 
-    public async Task<IList<PriceAndFilialRepositoryModel>> GetShoppingList(ItemToBuyRepositoryModel items, double xCord, double yCord,
+    public async Task<IList<PriceAndFilialRepositoryModel>> GetShoppingList(List<ItemToBuyRepositoryModel> items,
+        double xCord, double yCord,
         int radius, CartProcessingType type)
     {
         var request = new RestRequest("be/items/get_shopping_list", Method.Post);

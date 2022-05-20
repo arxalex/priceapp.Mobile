@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -9,12 +10,14 @@ namespace priceapp.ViewModels.Interfaces;
 
 public interface ICartViewModel : INotifyPropertyChanged
 {
+    List<ItemToBuy> ItemsToBuyListPreProcessed { get; set; }
+    bool IsRefreshing { get; set; }
+    ICommand RefreshCommand { get; }
+    ObservableCollection<ItemToBuyGroup> ItemsToBuyList { get; set; }
+    string HeaderText { get; set; }
     Task LoadAsync();
     event LoadingHandler Loaded;
     event ConnectionErrorHandler BadConnectEvent;
-    ObservableCollection<ItemToBuy> ItemsList { get; set; }
-    bool IsRefreshing { get; set; }
-    ICommand RefreshCommand { get; }
     Task ChangeCartItem(ItemToBuy model);
     Task DeleteCartItem(ItemToBuy model);
 }
