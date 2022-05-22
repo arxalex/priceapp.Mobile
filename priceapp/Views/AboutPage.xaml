@@ -31,7 +31,9 @@
             </Grid>
             <Label Text="Hello, world!"
                    VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand" />
+                   HorizontalOptions="CenterAndExpand" 
+                   x:Name="Label"/>
+            <Image />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
