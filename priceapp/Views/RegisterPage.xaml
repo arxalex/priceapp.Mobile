@@ -2,22 +2,27 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:priceapp.UI;assembly=priceapp"
-             x:Class="priceapp.Views.LoginPage"
-             Title="Login page"
-             Padding="10, 20"
-             NavigationPage.HasNavigationBar="false">
+             xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
+             x:Class="priceapp.Views.RegisterPage"
+             NavigationPage.HasNavigationBar="false"
+             Title="Registration page"
+             Padding="10, 20">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Вхід"
+            <Label Text="Реєстрація"
                    Style="{StaticResource PageTitle}"
                    Margin="0, 50"/>
-            <local:RdEntryOutlined Keyboard="Email"
+            <ui:RdEntryOutlined Keyboard="Email"
                                    Placeholder="E-mail"
                                    ClearButtonVisibility="WhileEditing"
                                    BackgroundColor="Transparent"
                                    x:Name="EntryEmail" />
-            <local:RdEntryOutlined Keyboard="Default"
+            <ui:RdEntryOutlined Keyboard="Plain"
+                                Placeholder="Ім'я користувача"
+                                ClearButtonVisibility="WhileEditing"
+                                BackgroundColor="Transparent"
+                                x:Name="EntryUsername" />
+            <ui:RdEntryOutlined Keyboard="Default"
                                    Placeholder="Пароль"
                                    IsPassword="True"
                                    ClearButtonVisibility="WhileEditing"
@@ -35,16 +40,16 @@
                 </Frame.Content>
             </Frame>
             <Button Style="{StaticResource ButtonStyle}"
-                    Text="Увійти"
+                    Text="Зареєструватися"
                     Clicked="Button_OnClicked"/>
             <Button Style="{StaticResource ButtonStyle}"
                     BackgroundColor="{AppThemeBinding Light=White, Dark=#222}"
                     TextColor="Accent"
                     BorderColor="Accent"
                     BorderWidth="1"
-                    Text="Реєстрація"
+                    Text="Вхід"
                     VerticalOptions="EndAndExpand"
-                    Clicked="ButtonRegistration_OnClicked"/>
+                    Clicked="ButtonLogin_OnClicked"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

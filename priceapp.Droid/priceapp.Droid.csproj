@@ -81,6 +81,8 @@
   </ItemGroup>
     <ItemGroup>
         <AndroidResource Include="Resources\drawable\arxlogo.png"/>
+        <AndroidResource Include="Resources\drawable\arxlogo_dark.png"/>
+        <AndroidResource Include="Resources\drawable\arxlogo_light.png"/>
         <AndroidResource Include="Resources\drawable\splash_logo.png">
             <SubType>Designer</SubType>
             <Generator>MSBuild:UpdateGeneratedFiles</Generator>

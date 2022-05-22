@@ -20,7 +20,7 @@
             android:layout_alignParentBottom="true" android:layout_centerInParent="true"
     />
     <ImageView
-            android:src="@drawable/arxlogo"
+            android:src="@drawable/arxlogo_light"
             android:layout_width="70dp"
             android:layout_height="wrap_content" android:id="@+id/imageView2"
             android:layout_alignParentBottom="true" android:layout_centerInParent="true"

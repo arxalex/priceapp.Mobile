@@ -29,11 +29,21 @@
                        HeightRequest="35"
                        Text="Про додаток"/>
             </Grid>
-            <Label Text="Hello, world!"
-                   VerticalOptions="CenterAndExpand"
+            <Image Source="{OnPlatform Android=splash_logo.png}"/>
+            <Label Text="PriceApp"
+                   FontSize="30"
+                   TextColor="Black"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+            <Label Text="by"
+                   HorizontalOptions="Center"/>
+            <Image Source="{OnPlatform Android=arxlogo.png}"
+                   WidthRequest="70"
+                   VerticalOptions="StartAndExpand"/>
+            <Label Text="Версія"
+                   Margin="0,0,0,20"
                    HorizontalOptions="CenterAndExpand" 
                    x:Name="Label"/>
-            <Image />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

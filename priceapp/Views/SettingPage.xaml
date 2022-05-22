@@ -53,6 +53,8 @@
                                     Value="{Binding Radius}" />
                         </Frame>
                         <ui:RdEntryBorderless Grid.Column="1"
+                                              Keyboard="Numeric"
+                                              MaxLength="5"
                                               Text="{Binding Radius}" />
                     </Grid>
                     <Label Text="Спосыб формування списку покупок"

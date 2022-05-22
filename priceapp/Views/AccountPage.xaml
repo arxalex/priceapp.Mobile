@@ -25,7 +25,8 @@
     </ContentPage.Resources>
     <StackLayout>
         <Grid BackgroundColor="WhiteSmoke"
-              Padding="15,10">
+              Padding="15,10, 15, 60"
+              Margin="0,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -40,9 +41,11 @@
             <Label Grid.Row="0"
                    Text="{Binding Username}"
                    FontSize="40"
+                   Margin="0,0,0,-40"
                    TextColor="Black"/>
             <Label Grid.Row="1"
                    Text="{Binding Email}"
+                   Margin="0,40,0,-50"
                    TextColor="Black"/>
         </Grid>
         <CollectionView x:Name="CollectionView"

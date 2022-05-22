@@ -11,6 +11,7 @@ using Xamarin.Forms.Xaml;
 [assembly: ExportFont("MaterialIconsRoundRegular.otf", Alias = "MaterialRound")]
 [assembly: ExportFont("MaterialIconsSharpRegular.otf", Alias = "MaterialSharp")]
 [assembly: ExportFont("MaterialIconsTwoToneRegular.otf", Alias = "MaterialTwoTone")]
+
 namespace priceapp
 {
     public partial class App
@@ -19,7 +20,7 @@ namespace priceapp
         {
             InitializeComponent();
             DependencyService.RegisterSingleton(MapperUtil.CreateMapper());
-            
+
             var loginViewModel = DependencyService.Get<ILoginViewModel>();
 
             var isLoggedIn = loginViewModel.IsUserLoggedIn();
@@ -29,7 +30,7 @@ namespace priceapp
             }
             else
             {
-                MainPage = new LoginPage();
+                MainPage = new NavigationPage(new LoginPage());
             }
 
             var geolocationUtil = DependencyService.Get<GeolocationUtil>();

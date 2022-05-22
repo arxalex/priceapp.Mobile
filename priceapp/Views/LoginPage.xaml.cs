@@ -10,6 +10,7 @@ namespace priceapp.Views
     public partial class LoginPage
     {
         private readonly ILoginViewModel _loginViewModel;
+
         public LoginPage()
         {
             InitializeComponent();
@@ -34,6 +35,10 @@ namespace priceapp.Views
         {
             await _loginViewModel.LoginUser(EntryEmail.Text, EntryPassword.Text);
         }
-        
+
+        private async void ButtonRegistration_OnClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new RegisterPage());
+        }
     }
 }
