@@ -12,19 +12,20 @@ namespace priceapp.Views;
 public partial class ItemsListPage
 {
     private readonly IItemsListViewModel _itemsListViewModel;
-    private string CategoryName { get; set; }
+    private bool isBusy;
 
     public ItemsListPage(int categoryId, string categoryName)
     {
         InitializeComponent();
         CategoryName = categoryName;
+        IsBusy = false;
         CategoryLabel.Text = CategoryName;
 
         _itemsListViewModel = DependencyService.Get<IItemsListViewModel>(DependencyFetchTarget.NewInstance);
         _itemsListViewModel.CategoryId = categoryId;
         _itemsListViewModel.Loaded += ItemsListViewModelOnLoaded;
         _itemsListViewModel.BadConnectEvent += ItemsListViewModelOnBadConnectEvent;
-        
+
         CollectionView.RemainingItemsThreshold = 2;
         CollectionView.RemainingItemsThresholdReached += CollectionViewOnRemainingThresholdReached;
 
@@ -36,6 +37,8 @@ public partial class ItemsListPage
         _itemsListViewModel.LoadAsync();
     }
 
+    private string CategoryName { get; set; }
+
     private async void ItemsListViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
     {
         await Navigation.PushAsync(new ConnectionErrorPage(args));
@@ -43,6 +46,7 @@ public partial class ItemsListPage
 
     private void ItemsListViewModelOnLoaded(object sender, LoadingArgs args)
     {
+        isBusy = false;
         ActivityIndicator.IsRunning = false;
         ActivityIndicator.IsVisible = false;
         CollectionView.IsVisible = true;
@@ -54,8 +58,14 @@ public partial class ItemsListPage
 
     private void CollectionViewOnRemainingThresholdReached(object sender, EventArgs e)
     {
+        if (isBusy)
+        {
+            return;
+        }
+
+        isBusy = true;
         ActivityIndicator.IsRunning = true;
-        ActivityIndicator.IsVisible = true; 
+        ActivityIndicator.IsVisible = true;
         _itemsListViewModel.LoadAsync();
     }
 
