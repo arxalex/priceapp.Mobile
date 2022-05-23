@@ -21,7 +21,7 @@ public class SettingsViewModel : ISettingsViewModel
 
     public int Radius
     {
-        get => Xamarin.Essentials.Preferences.Get("locationRadius", 5000);
+        get => Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius);
         set
         {
             Xamarin.Essentials.Preferences.Set("locationRadius", value);

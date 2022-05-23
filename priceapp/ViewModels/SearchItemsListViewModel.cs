@@ -10,11 +10,11 @@ using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(ItemsListViewModel))]
+[assembly: Dependency(typeof(SearchItemsListViewModel))]
 
 namespace priceapp.ViewModels;
 
-public class ItemsListViewModel : IItemsListViewModel
+public class SearchItemsListViewModel : ISearchItemsListViewModel
 {
     private const int PageSize = 20;
     private readonly GeolocationUtil _geolocationUtil;
@@ -22,7 +22,7 @@ public class ItemsListViewModel : IItemsListViewModel
 
     private readonly IMapper _mapper;
 
-    public ItemsListViewModel()
+    public SearchItemsListViewModel()
     {
         Items = new ObservableCollection<Item>();
         CanLoadMode = true;
@@ -39,7 +39,7 @@ public class ItemsListViewModel : IItemsListViewModel
     public event LoadingHandler Loaded;
     public event ConnectionErrorHandler BadConnectEvent;
     public ObservableCollection<Item> Items { get; set; }
-    public int CategoryId { get; set; }
+    public string Search { get; set; }
 
     public async Task LoadAsync()
     {
@@ -61,8 +61,8 @@ public class ItemsListViewModel : IItemsListViewModel
         var location = await _geolocationUtil.GetCurrentLocation();
 
         var items = await _itemRepository
-            .GetItems(
-                CategoryId,
+            .SearchItems(
+                Search,
                 Items.Count,
                 Items.Count + PageSize,
                 location.Longitude,

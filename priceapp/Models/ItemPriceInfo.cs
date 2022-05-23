@@ -12,6 +12,7 @@ public class ItemPriceInfo
     public double Quantity { get; set; }
 
     public string PriceView => Price + " грн";
+    public string ShopItemPriceInfo => Shop.Label + ": " + Price + " грн";
     public string QuantityView => Quantity > 0 ? "Є в наявності" : "Немає в наявності";
     public Color QuantityViewColor => Quantity > 0 ? Color.Accent : Color.Red;
 

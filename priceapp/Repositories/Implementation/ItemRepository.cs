@@ -128,6 +128,93 @@ public class ItemRepository : IItemRepository
         return list;
     }
 
+    public async Task<IList<ItemRepositoryModel>> SearchItems(string search,
+        int from,
+        int to,
+        double? xCord = null,
+        double? yCord = null,
+        double? radius = null)
+    {
+        string json;
+        string requestProperty;
+        if (xCord == null || yCord == null || radius == null)
+        {
+            json = JsonSerializer.Serialize(new
+            {
+                source = 0,
+                search, from, to, method = "viewModelBySearch"
+            });
+            requestProperty = json;
+        }
+        else
+        {
+            json = JsonSerializer.Serialize(new
+            {
+                source = 0,
+                search, from, to, method = "viewModelBySearchAndLocation", xCord, yCord,
+                radius
+            });
+            requestProperty = JsonSerializer.Serialize(new
+            {
+                source = 0,
+                search,
+                from,
+                to,
+                method = "viewModelBySearchAndLocation",
+                xCord = Math.Round((double) xCord, 3),
+                yCord = Math.Round((double) yCord, 3),
+                radius
+            });
+        }
+
+        if (await _cacheRequestsLocalRepository.Exists("be/items/get_items", requestProperty))
+        {
+            var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
+                .GetCacheRecords(x =>
+                    x.RequestName == "be/items/get_items" &&
+                    x.RequestProperties == requestProperty &&
+                    x.Expires > DateTime.Now
+                )).First().ResponseItemIds);
+
+            var responseCache = await _itemsLocalRepository
+                .GetItems(x => responseCacheIds.Contains(x.RecordId));
+
+            return _mapper.Map<IList<ItemRepositoryModel>>(responseCache);
+        }
+
+        var request = new RestRequest("be/items/get_items", Method.Post);
+
+        request.AddHeader("Content-Type", "application/json");
+        request.AddBody(json, "application/json");
+
+        var response = await _client.ExecuteAsync(request);
+        if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
+        {
+            BadConnectEvent?.Invoke(this,
+                new ConnectionErrorArgs() {Success = false, StatusCode = (int) response.StatusCode});
+            return new List<ItemRepositoryModel>();
+        }
+
+        var list = JsonSerializer.Deserialize<List<ItemRepositoryModel>>(response.Content) ??
+                   new List<ItemRepositoryModel>();
+
+        var recordIds = new List<int>();
+        foreach (var item in list)
+        {
+            recordIds.Add(await _itemsLocalRepository.AddItem(_mapper.Map<ItemLocalDatabaseModel>(item)));
+        }
+
+        await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
+        {
+            RequestName = "be/items/get_items",
+            RequestProperties = requestProperty,
+            ResponseItemIds = JsonSerializer.Serialize(recordIds.ToArray()),
+            Expires = DateTime.Now + TimeSpan.FromHours(5)
+        });
+
+        return list;
+    }
+
     public async Task<ItemRepositoryModel> GetItem(int itemId,
         double? xCord = null,
         double? yCord = null,

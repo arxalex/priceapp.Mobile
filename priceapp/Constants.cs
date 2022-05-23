@@ -4,6 +4,7 @@ namespace priceapp;
 
 public class Constants
 {
+    public const int DefaultRadius = 1000;
     private const string DatabaseFilename = "PriceAppSQLite.db3";
     private const string CacheDatabaseFilename = "PriceAppSQLiteCache.db3";
 
@@ -13,6 +14,7 @@ public class Constants
         SQLite.SQLiteOpenFlags.SharedCache;
 
     public static string DatabasePath => Path.Combine(Xamarin.Essentials.FileSystem.AppDataDirectory, DatabaseFilename);
-    public static string CacheDatabasePath => Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, CacheDatabaseFilename);
 
+    public static string CacheDatabasePath =>
+        Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, CacheDatabaseFilename);
 }

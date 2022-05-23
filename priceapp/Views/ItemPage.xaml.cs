@@ -14,6 +14,7 @@ namespace priceapp.Views;
 public partial class ItemPage
 {
     private readonly IItemViewModel _itemViewModel;
+
     public ItemPage(Item item)
     {
         InitializeComponent();
@@ -26,12 +27,12 @@ public partial class ItemPage
         Map.MoveToRegion(
             MapSpan.FromCenterAndRadius(
                 new Position(currentPosition.Latitude, currentPosition.Longitude),
-                Distance.FromMeters(3000)
+                Distance.FromMeters(Xamarin.Essentials.Preferences.Get("locationRadius", 1000) + 100)
             )
         );
-        
+
         BindingContext = _itemViewModel;
-        
+
         ActivityIndicator.IsRunning = true;
         ActivityIndicator.IsVisible = true;
         ItemInfo.IsVisible = false;
@@ -66,7 +67,7 @@ public partial class ItemPage
     {
         await Navigation.PopAsync();
     }
-    
+
     private async void CollectionView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (CollectionView.SelectedItem == null) return;
@@ -76,6 +77,7 @@ public partial class ItemPage
         {
             await _itemViewModel.AddToCart(((ItemPriceInfo) CollectionView.SelectedItem).Filial.Id);
         }
+
         CollectionView.SelectedItem = null;
     }
 

@@ -21,26 +21,12 @@ namespace priceapp.ViewModels;
 
 public class ItemViewModel : IItemViewModel
 {
-    public event ConnectionErrorHandler BadConnectEvent;
-    public event LoadingHandler Loaded;
-    private readonly IMapper _mapper;
-    private readonly IItemRepository _itemRepository;
     private readonly GeolocationUtil _geolocationUtil;
+    private readonly IItemRepository _itemRepository;
     private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository;
+    private readonly IMapper _mapper;
 
     private Item _item;
-
-    public Item Item
-    {
-        get => _item;
-        set
-        {
-            _item = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public ObservableCollection<ItemPriceInfo> PricesAndFilials { get; set; }
 
     public ItemViewModel()
     {
@@ -54,10 +40,20 @@ public class ItemViewModel : IItemViewModel
         PricesAndFilials = new ObservableCollection<ItemPriceInfo>();
     }
 
-    private void ItemRepositoryOnBadConnectEvent(object sender, ConnectionErrorArgs args)
+    public event ConnectionErrorHandler BadConnectEvent;
+    public event LoadingHandler Loaded;
+
+    public Item Item
     {
-        BadConnectEvent?.Invoke(this, args);
+        get => _item;
+        set
+        {
+            _item = value;
+            OnPropertyChanged();
+        }
     }
+
+    public ObservableCollection<ItemPriceInfo> PricesAndFilials { get; set; }
 
     public async Task LoadAsync(Item item)
     {
@@ -69,7 +65,7 @@ public class ItemViewModel : IItemViewModel
                 Item.Id,
                 location.Longitude,
                 location.Latitude,
-                Xamarin.Essentials.Preferences.Get("locationRadius", 5000)
+                Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius)
             );
 
         foreach (var priceInfo in priceInfos)
@@ -98,6 +94,11 @@ public class ItemViewModel : IItemViewModel
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
+
+    private void ItemRepositoryOnBadConnectEvent(object sender, ConnectionErrorArgs args)
+    {
+        BadConnectEvent?.Invoke(this, args);
+    }
 
     [NotifyPropertyChangedInvocator]
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

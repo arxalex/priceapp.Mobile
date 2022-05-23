@@ -230,7 +230,7 @@
                             <DataTemplate x:DataType="models:ItemPriceInfo">
                                 <maps:Pin Position="{Binding Position}"
                                           Address="{Binding Filial.Address}"
-                                          Label="{Binding PriceView}" />
+                                          Label="{Binding ShopItemPriceInfo}" />
                             </DataTemplate>
                         </maps:Map.ItemTemplate>
                     </maps:Map>

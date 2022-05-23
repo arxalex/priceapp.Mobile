@@ -9,42 +9,39 @@ using Xamarin.Forms.Xaml;
 namespace priceapp.Views;
 
 [XamlCompilation(XamlCompilationOptions.Compile)]
-public partial class ItemsListPage
+public partial class SearchItemsListPage
 {
-    private readonly IItemsListViewModel _itemsListViewModel;
+    private readonly ISearchItemsListViewModel _searchItemsListViewModel;
     private bool _isBusy;
 
-    public ItemsListPage(int categoryId, string categoryName)
+    public SearchItemsListPage(string search)
     {
         InitializeComponent();
-        CategoryName = categoryName;
         IsBusy = false;
-        CategoryLabel.Text = CategoryName;
+        CategoryLabel.Text = search;
 
-        _itemsListViewModel = DependencyService.Get<IItemsListViewModel>(DependencyFetchTarget.NewInstance);
-        _itemsListViewModel.CategoryId = categoryId;
-        _itemsListViewModel.Loaded += ItemsListViewModelOnLoaded;
-        _itemsListViewModel.BadConnectEvent += ItemsListViewModelOnBadConnectEvent;
+        _searchItemsListViewModel = DependencyService.Get<ISearchItemsListViewModel>(DependencyFetchTarget.NewInstance);
+        _searchItemsListViewModel.Loaded += SearchItemsListViewModelOnLoaded;
+        _searchItemsListViewModel.BadConnectEvent += SearchItemsListViewModelOnBadConnectEvent;
+        _searchItemsListViewModel.Search = search;
 
         CollectionView.RemainingItemsThreshold = 2;
         CollectionView.RemainingItemsThresholdReached += CollectionViewOnRemainingThresholdReached;
 
-        BindingContext = _itemsListViewModel;
+        BindingContext = _searchItemsListViewModel;
 
         ActivityIndicator.IsRunning = true;
         ActivityIndicator.IsVisible = true;
         CollectionView.IsVisible = false;
-        _itemsListViewModel.LoadAsync();
+        _searchItemsListViewModel.LoadAsync();
     }
 
-    private string CategoryName { get; set; }
-
-    private async void ItemsListViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
+    private async void SearchItemsListViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
     {
         await Navigation.PushAsync(new ConnectionErrorPage(args));
     }
 
-    private void ItemsListViewModelOnLoaded(object sender, LoadingArgs args)
+    private void SearchItemsListViewModelOnLoaded(object sender, LoadingArgs args)
     {
         _isBusy = false;
         ActivityIndicator.IsRunning = false;
@@ -66,7 +63,7 @@ public partial class ItemsListPage
         _isBusy = true;
         ActivityIndicator.IsRunning = true;
         ActivityIndicator.IsVisible = true;
-        _itemsListViewModel.LoadAsync();
+        _searchItemsListViewModel.LoadAsync();
     }
 
     private async void ImageButton_OnClicked(object sender, EventArgs e)

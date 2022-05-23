@@ -10,23 +10,21 @@ using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(ItemsListViewModel))]
+[assembly: Dependency(typeof(SearchViewModel))]
 
 namespace priceapp.ViewModels;
 
-public class ItemsListViewModel : IItemsListViewModel
+public class SearchViewModel : ISearchViewModel
 {
-    private const int PageSize = 20;
+    private const int PageSize = 5;
     private readonly GeolocationUtil _geolocationUtil;
     private readonly IItemRepository _itemRepository;
 
     private readonly IMapper _mapper;
 
-    public ItemsListViewModel()
+    public SearchViewModel()
     {
         Items = new ObservableCollection<Item>();
-        CanLoadMode = true;
-        ItemsLoadingNow = false;
         _mapper = DependencyService.Get<IMapper>();
         _itemRepository = DependencyService.Get<IItemRepository>();
         _geolocationUtil = DependencyService.Get<GeolocationUtil>();
@@ -34,52 +32,33 @@ public class ItemsListViewModel : IItemsListViewModel
         _itemRepository.BadConnectEvent += ItemRepositoryOnBadConnectEvent;
     }
 
-    private bool CanLoadMode { get; set; }
-    private bool ItemsLoadingNow { get; set; }
     public event LoadingHandler Loaded;
     public event ConnectionErrorHandler BadConnectEvent;
     public ObservableCollection<Item> Items { get; set; }
-    public int CategoryId { get; set; }
+    public string Search { get; set; }
 
     public async Task LoadAsync()
     {
-        if (ItemsLoadingNow)
-        {
-            Loaded?.Invoke(this, new LoadingArgs() {Success = false, Total = Items.Count});
-            return;
-        }
-
-        ItemsLoadingNow = true;
-
-        if (!CanLoadMode)
-        {
-            ItemsLoadingNow = false;
-            Loaded?.Invoke(this, new LoadingArgs() {Success = false, Total = Items.Count});
-            return;
-        }
+        Items.Clear();
 
         var location = await _geolocationUtil.GetCurrentLocation();
 
         var items = await _itemRepository
-            .GetItems(
-                CategoryId,
-                Items.Count,
-                Items.Count + PageSize,
+            .SearchItems(
+                Search,
+                0,
+                PageSize,
                 location.Longitude,
                 location.Latitude,
                 Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius)
             );
 
-        if (items.Count > 0)
+
+        foreach (var item in items)
         {
-            foreach (var item in items)
-            {
-                Items.Add(_mapper.Map<Item>(item));
-            }
+            Items.Add(_mapper.Map<Item>(item));
         }
 
-        CanLoadMode = items.Count >= PageSize;
-        ItemsLoadingNow = false;
         Loaded?.Invoke(this, new LoadingArgs() {Success = true, Total = Items.Count, LoadedCount = items.Count});
     }
 

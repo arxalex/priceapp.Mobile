@@ -20,4 +20,11 @@ public interface IItemRepository
     Task<IList<PriceAndFilialRepositoryModel>> GetShoppingList(List<ItemToBuyRepositoryModel> items, double xCord,
         double yCord,
         int radius, CartProcessingType type);
+
+    Task<IList<ItemRepositoryModel>> SearchItems(string search,
+        int from,
+        int to,
+        double? xCord = null,
+        double? yCord = null,
+        double? radius = null);
 }
