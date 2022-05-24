@@ -57,7 +57,7 @@
                                               MaxLength="5"
                                               Text="{Binding Radius}" />
                     </Grid>
-                    <Label Text="Спосыб формування списку покупок"
+                    <Label Text="Спосіб формування списку покупок"
                            FontSize="Medium"
                            TextColor="Black"
                            FontAttributes="Bold" />

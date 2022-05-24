@@ -17,7 +17,8 @@ public interface IItemRepository
     Task<IList<PriceAndFilialRepositoryModel>> GetPricesAndFilials(int itemId, double xCord, double yCord, int radius);
     event ConnectionErrorHandler BadConnectEvent;
 
-    Task<IList<PriceAndFilialRepositoryModel>> GetShoppingList(List<ItemToBuyRepositoryModel> items, double xCord,
+    Task<(IList<PriceAndFilialRepositoryModel>, double)> GetShoppingList(List<ItemToBuyRepositoryModel> items,
+        double xCord,
         double yCord,
         int radius, CartProcessingType type);
 

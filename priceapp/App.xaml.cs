@@ -21,16 +21,24 @@ namespace priceapp
             InitializeComponent();
             DependencyService.RegisterSingleton(MapperUtil.CreateMapper());
 
+            var updateAppViewModel = DependencyService.Get<IUpdateAppViewModel>();
             var loginViewModel = DependencyService.Get<ILoginViewModel>();
 
-            var isLoggedIn = loginViewModel.IsUserLoggedIn();
-            if (isLoggedIn)
+            if (updateAppViewModel.IsAppNeedUpdate())
             {
-                MainPage = new MainPage();
+                MainPage = new UpdateAppPage();
             }
             else
             {
-                MainPage = new NavigationPage(new LoginPage());
+                var isLoggedIn = loginViewModel.IsUserLoggedIn();
+                if (isLoggedIn)
+                {
+                    MainPage = new MainPage();
+                }
+                else
+                {
+                    MainPage = new NavigationPage(new LoginPage());
+                }
             }
 
             var geolocationUtil = DependencyService.Get<GeolocationUtil>();

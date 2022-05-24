@@ -118,7 +118,7 @@ public class CartViewModel : ICartViewModel
         }
 
         var location = await _geolocationUtil.GetCurrentLocation();
-        var itemsResult = await _itemRepository.GetShoppingList(
+        var (itemsResult, economy) = await _itemRepository.GetShoppingList(
             _mapper.Map<List<ItemToBuyRepositoryModel>>(ItemsToBuyListPreProcessed),
             location.Longitude, location.Latitude,
             Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius),

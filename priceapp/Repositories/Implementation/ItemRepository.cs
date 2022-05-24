@@ -323,7 +323,8 @@ public class ItemRepository : IItemRepository
         return list;
     }
 
-    public async Task<IList<PriceAndFilialRepositoryModel>> GetShoppingList(List<ItemToBuyRepositoryModel> items,
+    public async Task<(IList<PriceAndFilialRepositoryModel>, double)> GetShoppingList(
+        List<ItemToBuyRepositoryModel> items,
         double xCord, double yCord,
         int radius, CartProcessingType type)
     {
@@ -360,11 +361,24 @@ public class ItemRepository : IItemRepository
         {
             BadConnectEvent?.Invoke(this,
                 new ConnectionErrorArgs() {Success = false, StatusCode = (int) response.StatusCode});
-            return new List<PriceAndFilialRepositoryModel>();
+            return (new List<PriceAndFilialRepositoryModel>(), 0);
         }
 
-        var list = JsonSerializer.Deserialize<List<PriceAndFilialRepositoryModel>>(response.Content) ??
-                   new List<PriceAndFilialRepositoryModel>();
-        return list;
+        var content = JsonSerializer.Deserialize<ShoppingListResponse>(response.Content, new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true,
+        }) ?? new ShoppingListResponse()
+        {
+            ShoppingList = new List<PriceAndFilialRepositoryModel>(),
+            Economy = 2
+        };
+
+        return (content.ShoppingList, content.Economy);
+    }
+
+    private class ShoppingListResponse
+    {
+        public List<PriceAndFilialRepositoryModel> ShoppingList { get; set; } = new();
+        public double Economy { get; set; }
     }
 }

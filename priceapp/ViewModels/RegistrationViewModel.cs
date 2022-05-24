@@ -77,7 +77,7 @@ namespace priceapp.ViewModels
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 RegisterSuccess?.Invoke(this,
-                    new ProcessedArgs() {Success = false, Message = "Login or email already exists"});
+                    new ProcessedArgs() {Success = false, Message = "Login or email already exists or invalid"});
                 return;
             }
 

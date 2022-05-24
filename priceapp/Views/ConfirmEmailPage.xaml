@@ -13,7 +13,7 @@
                    VerticalOptions="CenterAndExpand"
                    HorizontalTextAlignment="Center"
                    HorizontalOptions="CenterAndExpand" />
-            <Label Text="Для продовження вам необхідно підтвердити реєстрації. Вам було надіслано лист на вказану електронну пошту з посиланням для підтвердження реєстрації. Перейдіть за посиланням. Після цього можете зробити вхід у цьому додатку"
+            <Label Text="Для продовження вам необхідно підтвердити реєстрацію. Вам було надіслано лист на вказану електронну пошту з посиланням для підтвердження реєстрації. Перейдіть за посиланням. Після цього можете зробити вхід у цьому додатку"
                    VerticalOptions="CenterAndExpand"
                    HorizontalOptions="CenterAndExpand" />
             <Button Style="{StaticResource ButtonStyle}"

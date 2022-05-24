@@ -19,23 +19,24 @@
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>false</DebugSymbols>
+    <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
-      <ErrorReport>prompt</ErrorReport>
-      <WarningLevel>4</WarningLevel>
-      <AndroidLinkMode>None</AndroidLinkMode>
-      <AotAssemblies>false</AotAssemblies>
-      <EnableLLVM>false</EnableLLVM>
-      <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-      <BundleAssemblies>false</BundleAssemblies>
-      <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
-      <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
-      <AndroidTlsProvider>btls</AndroidTlsProvider>
-      <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-      <AndroidEnableSGenConcurrent>false</AndroidEnableSGenConcurrent>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <BundleAssemblies>false</BundleAssemblies>
+    <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
+    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
+    <AndroidTlsProvider>btls</AndroidTlsProvider>
+    <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
+    <AndroidEnableSGenConcurrent>false</AndroidEnableSGenConcurrent>
+    <MandroidI18n/>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,56 +67,56 @@
     <PackageReference Include="Xamarin.Google.Android.Material" Version="1.4.0.2" />
     <PackageReference Include="Xamarin.AndroidX.Legacy.Support.V4" Version="1.0.0.8" />
     <PackageReference Include="Xamarin.AndroidX.MediaRouter" Version="1.2.0" />
-    <PackageReference Include="Xamarin.AndroidX.Palette" Version="1.0.0.5" />
+    <PackageReference Include="Xamarin.AndroidX.Palette" Version="1.0.0.5"/>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainActivity.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
-      <Compile Include="Properties\AssemblyInfo.cs"/>
-      <Compile Include="SplashScreen.cs"/>
-      <Compile Include="UI\RdEntryBorderlessRenderer.cs"/>
-      <Compile Include="WebServices\PriceAppWebAccess.cs"/>
-  </ItemGroup>
-    <ItemGroup>
-        <None Include="Resources\AboutResources.txt"/>
-        <None Include="Assets\AboutAssets.txt"/>
-        <None Include="Properties\AndroidManifest.xml"/>
-    </ItemGroup>
-    <ItemGroup>
-        <AndroidResource Include="Resources\drawable\arxlogo.png"/>
-        <AndroidResource Include="Resources\drawable\arxlogo_dark.png"/>
-        <AndroidResource Include="Resources\drawable\arxlogo_light.png"/>
-        <AndroidResource Include="Resources\drawable\splash_logo.png">
-            <SubType>Designer</SubType>
-            <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-        </AndroidResource>
-        <AndroidResource Include="Resources\drawable\splash_screen.xml"/>
-        <AndroidResource Include="Resources\layout\SplashScreen.xml"/>
-        <AndroidResource Include="Resources\layout\Tabbar.axml"/>
-        <AndroidResource Include="Resources\layout\Toolbar.axml"/>
-        <AndroidResource Include="Resources\values\styles.xml"/>
-        <AndroidResource Include="Resources\values\colors.xml"/>
-    </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\priceapp\priceapp.csproj">
-            <Project>{751F727B-98B5-4E45-BD97-675AA611529C}</Project>
-            <Name>priceapp</Name>
-        </ProjectReference>
-    </ItemGroup>
-    <ItemGroup>
-        <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml"/>
-    </ItemGroup>
-    <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png" />
+    <Compile Include="MainActivity.cs"/>
+    <Compile Include="Resources\Resource.Designer.cs"/>
+    <Compile Include="Properties\AssemblyInfo.cs"/>
+    <Compile Include="SplashScreen.cs"/>
+    <Compile Include="UI\RdEntryBorderlessRenderer.cs"/>
+    <Compile Include="WebServices\PriceAppWebAccess.cs"/>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_adaptive_back.png" />
+    <None Include="Resources\AboutResources.txt"/>
+    <None Include="Assets\AboutAssets.txt"/>
+    <None Include="Properties\AndroidManifest.xml"/>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_adaptive_fore.png" />
+    <AndroidResource Include="Resources\drawable\arxlogo.png"/>
+    <AndroidResource Include="Resources\drawable\arxlogo_dark.png"/>
+    <AndroidResource Include="Resources\drawable\arxlogo_light.png"/>
+    <AndroidResource Include="Resources\drawable\splash_logo.png">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\splash_screen.xml"/>
+    <AndroidResource Include="Resources\layout\SplashScreen.xml"/>
+    <AndroidResource Include="Resources\layout\Tabbar.axml"/>
+    <AndroidResource Include="Resources\layout\Toolbar.axml"/>
+    <AndroidResource Include="Resources\values\styles.xml"/>
+    <AndroidResource Include="Resources\values\colors.xml"/>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png" />
+    <ProjectReference Include="..\priceapp\priceapp.csproj">
+      <Project>{751F727B-98B5-4E45-BD97-675AA611529C}</Project>
+      <Name>priceapp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml"/>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png"/>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_adaptive_back.png"/>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_adaptive_fore.png"/>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png"/>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_adaptive_back.png" />
