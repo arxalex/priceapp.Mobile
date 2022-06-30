@@ -6,6 +6,7 @@
              x:Class="priceapp.Views.LoginPage"
              Title="Login page"
              Padding="10, 20"
+             BackgroundColor="White"
              NavigationPage.HasNavigationBar="false">
     <ContentPage.Content>
         <StackLayout>
@@ -38,13 +39,21 @@
                     Text="Увійти"
                     Clicked="Button_OnClicked"/>
             <Button Style="{StaticResource ButtonStyle}"
-                    BackgroundColor="{AppThemeBinding Light=White, Dark=#222}"
+                    BackgroundColor="{AppThemeBinding Light=White, Dark=#222, Default=White}"
                     TextColor="Accent"
                     BorderColor="Accent"
                     BorderWidth="1"
                     Text="Реєстрація"
                     VerticalOptions="EndAndExpand"
                     Clicked="ButtonRegistration_OnClicked"/>
+            <Button Style="{StaticResource ButtonStyle}"
+                    BackgroundColor="Transparent"
+                    TextColor="Accent"
+                    BorderColor="Transparent"
+                    BorderWidth="1"
+                    Text="Продовжити як гість"
+                    VerticalOptions="End"
+                    Clicked="ButtonLoginAsGuest_OnClicked"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -50,6 +50,9 @@ public partial class AccountPage
             case "Про додаток":
                 await Navigation.PushAsync(new AboutPage());
                 break;
+            case "Змінити акаунт":
+                Application.Current.MainPage = new LoginPage();
+                break;
         }
 
         CollectionView.SelectedItem = null;

@@ -91,13 +91,15 @@
     <AppExtensionDebugBundleId />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
-    <Compile Include="AppDelegate.cs" />
-    <Compile Include="UI\RdEntryBorderlessRenderer.cs" />
-    <Compile Include="WebServices\PriceAppWebAccess.cs" />
-    <None Include="Entitlements.plist" />
-    <None Include="Info.plist" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+      <Compile Include="Main.cs"/>
+      <Compile Include="AppDelegate.cs"/>
+      <Compile Include="UI\RdEntryBorderlessRenderer.cs"/>
+      <Compile Include="UI\RdPickerBorderlessRenderer.cs"/>
+      <Compile Include="UI\RdSliderBorderlessRenderer.cs"/>
+      <Compile Include="WebServices\PriceAppWebAccess.cs"/>
+      <None Include="Entitlements.plist"/>
+      <None Include="Info.plist"/>
+      <Compile Include="Properties\AssemblyInfo.cs"/>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />

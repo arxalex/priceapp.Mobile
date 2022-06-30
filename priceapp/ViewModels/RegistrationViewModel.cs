@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using priceapp.Events.Delegates;
 using priceapp.Events.Models;
+using priceapp.Utils;
 using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
 using priceapp.WebServices;
@@ -59,7 +60,27 @@ namespace priceapp.ViewModels
         {
             if (username == null || password == null || email == null)
             {
-                RegisterSuccess?.Invoke(this, new ProcessedArgs() {Success = false, Message = "Fields are empty"});
+                RegisterSuccess?.Invoke(this,
+                    new ProcessedArgs() {Success = false, Message = "Усі поля обов'язкові до заповнення"});
+                return;
+            }
+
+            if (!StringUtil.IsValidUsername(username))
+            {
+                RegisterSuccess?.Invoke(this,
+                    new ProcessedArgs()
+                    {
+                        Success = false,
+                        Message =
+                            "Ім'я користувача містить недопустимі символи. Використовуйте лише малі літери латинського алфавіту, цифри та символи \".\" і \"_\""
+                    });
+                return;
+            }
+
+            if (!StringUtil.IsValidEmail(email))
+            {
+                RegisterSuccess?.Invoke(this,
+                    new ProcessedArgs() {Success = false, Message = "E-mail вказано некорректно"});
                 return;
             }
 
@@ -77,13 +98,14 @@ namespace priceapp.ViewModels
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 RegisterSuccess?.Invoke(this,
-                    new ProcessedArgs() {Success = false, Message = "Login or email already exists or invalid"});
+                    new ProcessedArgs()
+                        {Success = false, Message = "Логін та e-mail вже використовуються або вказані некорректно"});
                 return;
             }
 
             if (response.Content == null)
             {
-                RegisterSuccess?.Invoke(this, new ProcessedArgs() {Success = false, Message = "Something went wrong"});
+                RegisterSuccess?.Invoke(this, new ProcessedArgs() {Success = false, Message = "Щось пішло не так"});
                 return;
             }
 
@@ -95,17 +117,17 @@ namespace priceapp.ViewModels
             if (result is not {StatusRegister: true})
             {
                 RegisterSuccess?.Invoke(this,
-                    new ProcessedArgs() {Success = false, Message = "Status of register is false"});
+                    new ProcessedArgs() {Success = false, Message = "Реєстрація відхилена. Перевірте введені дані"});
                 return;
             }
 
             if (response.Headers == null)
             {
-                RegisterSuccess?.Invoke(this, new ProcessedArgs() {Success = false, Message = "Something went wrong"});
+                RegisterSuccess?.Invoke(this, new ProcessedArgs() {Success = false, Message = "Щось пішло не так"});
                 return;
             }
 
-            RegisterSuccess?.Invoke(this, new ProcessedArgs() {Success = true, Message = "Success register"});
+            RegisterSuccess?.Invoke(this, new ProcessedArgs() {Success = true, Message = "Реєстрація успішна"});
         }
 
         private class UserRegisterParse

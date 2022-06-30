@@ -4,33 +4,29 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:views="clr-namespace:priceapp.Views;assembly=priceapp"
        x:Class="priceapp.Views.MainPage"
-       Visual="Material"
        NavBarIsVisible="False"
        TabBarIsVisible="True">
     <TabBar>
         <Tab Title="Товари">
             <Tab.Icon>
                 <FontImageSource FontFamily="MaterialOutlined"
-                                 Glyph="&#xe8b6;">
-                </FontImageSource>
+                                 Glyph="&#xe8b6;" />
             </Tab.Icon>
-            <ShellContent ContentTemplate="{DataTemplate views:CatalogAndSearchPage}"></ShellContent>
+            <ShellContent ContentTemplate="{DataTemplate views:CatalogAndSearchPage}" />
         </Tab>
         <Tab Title="Кошик">
             <Tab.Icon>
                 <FontImageSource FontFamily="MaterialOutlined"
-                                 Glyph="&#xe8cc;">
-                </FontImageSource>
+                                 Glyph="&#xe8cc;" />
             </Tab.Icon>
-            <ShellContent ContentTemplate="{DataTemplate views:CartPage}"></ShellContent>
+            <ShellContent ContentTemplate="{DataTemplate views:CartPage}" />
         </Tab>
         <Tab Title="Акаунт">
             <Tab.Icon>
                 <FontImageSource FontFamily="MaterialOutlined"
-                                 Glyph="&#xe7fd;">
-                </FontImageSource>
+                                 Glyph="&#xe7fd;" />
             </Tab.Icon>
-            <ShellContent ContentTemplate="{DataTemplate views:AccountPage}"></ShellContent>
+            <ShellContent ContentTemplate="{DataTemplate views:AccountPage}" />
         </Tab>
     </TabBar>
 </Shell>

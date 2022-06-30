@@ -15,6 +15,7 @@ public interface ICartViewModel : INotifyPropertyChanged
     ICommand RefreshCommand { get; }
     ObservableCollection<ItemToBuyGroup> ItemsToBuyList { get; set; }
     string HeaderText { get; set; }
+    string Economy { get; set; }
     Task LoadAsync();
     event LoadingHandler Loaded;
     event ConnectionErrorHandler BadConnectEvent;

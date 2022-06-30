@@ -38,7 +38,7 @@
                     <ImageButton.Source>
                         <FontImageSource FontFamily="MaterialOutlined"
                                          Glyph="&#xe2ea;"
-                                         Color="{AppThemeBinding Light=Black, Dark=White}"/>
+                                         Color="{AppThemeBinding Light=Black, Dark=White, Default=Black}"/>
                     </ImageButton.Source>
                 </ImageButton>
                 <Label Grid.Column="1"

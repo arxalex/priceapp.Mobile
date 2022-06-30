@@ -35,6 +35,7 @@ public class CartViewModel : ICartViewModel
     private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository;
     private readonly IMapper _mapper;
     private readonly IShopRepository _shopRepository;
+    private string _economy;
 
     private string _headerText;
     private bool _isRefreshing;
@@ -47,8 +48,10 @@ public class CartViewModel : ICartViewModel
         _itemRepository = DependencyService.Get<IItemRepository>();
         _geolocationUtil = DependencyService.Get<GeolocationUtil>();
         _mapper = DependencyService.Get<IMapper>();
+        _economy = "0.00 грн";
 
         _itemsToBuyLocalRepository.BadConnectEvent += ItemsToBuyLocalRepositoryOnBadConnectEvent;
+        _itemRepository.BadConnectEvent += ItemsToBuyLocalRepositoryOnBadConnectEvent;
     }
 
     public event LoadingHandler Loaded;
@@ -78,6 +81,16 @@ public class CartViewModel : ICartViewModel
         set
         {
             _itemsToBuyList = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string Economy
+    {
+        get => _economy;
+        set
+        {
+            _economy = value;
             OnPropertyChanged();
         }
     }
@@ -124,6 +137,8 @@ public class CartViewModel : ICartViewModel
             Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius),
             (CartProcessingType) Xamarin.Essentials.Preferences.Get("cartProcessingType",
                 (int) CartProcessingType.MultipleMarketsLowest));
+
+        Economy = Math.Round(economy, 2) + " грн";
 
         var itemsToBuyListUngrouped = new List<ItemToBuy>();
 

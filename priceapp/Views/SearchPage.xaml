@@ -21,7 +21,7 @@
                     <ImageButton.Source>
                         <FontImageSource FontFamily="MaterialOutlined"
                                          Glyph="&#xe5c4;"
-                                         Color="{AppThemeBinding Dark=White, Light=Black}" />
+                                         Color="{AppThemeBinding Dark=White, Light=Black, Default=Black}" />
                     </ImageButton.Source>
                 </ImageButton>
                 <ui:RdEntryBorderless Grid.Column="1"

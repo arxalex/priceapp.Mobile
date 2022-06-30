@@ -33,6 +33,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -134,6 +135,19 @@
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
+                    <Grid Grid.Row="2"
+                          Grid.Column="0"
+                          ColumnSpan="2"
+                          Margin="15, 10, 0, 10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0"
+                               Text="Економія: "/>
+                        <Label Grid.Column="1"
+                               Text="{Binding Economy}"/>
+                    </Grid>
                 </Grid>
             </RefreshView>
         </StackLayout>

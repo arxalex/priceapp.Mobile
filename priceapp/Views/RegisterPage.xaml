@@ -43,7 +43,7 @@
                     Text="Зареєструватися"
                     Clicked="Button_OnClicked"/>
             <Button Style="{StaticResource ButtonStyle}"
-                    BackgroundColor="{AppThemeBinding Light=White, Dark=#222}"
+                    BackgroundColor="{AppThemeBinding Light=White, Dark=#222, Default=White}"
                     TextColor="Accent"
                     BorderColor="Accent"
                     BorderWidth="1"

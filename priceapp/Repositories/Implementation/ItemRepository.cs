@@ -370,7 +370,7 @@ public class ItemRepository : IItemRepository
         }) ?? new ShoppingListResponse()
         {
             ShoppingList = new List<PriceAndFilialRepositoryModel>(),
-            Economy = 2
+            Economy = 0
         };
 
         return (content.ShoppingList, content.Economy);

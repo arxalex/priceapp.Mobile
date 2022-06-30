@@ -14,7 +14,7 @@ namespace priceapp.Views
         public LoginPage()
         {
             InitializeComponent();
-            _loginViewModel = DependencyService.Get<ILoginViewModel>();
+            _loginViewModel = DependencyService.Get<ILoginViewModel>(DependencyFetchTarget.NewInstance);
             _loginViewModel.LoginSuccess += LoginViewModelOnLoginSuccess;
         }
 
@@ -34,6 +34,11 @@ namespace priceapp.Views
         private async void Button_OnClicked(object sender, EventArgs e)
         {
             await _loginViewModel.LoginUser(EntryEmail.Text, EntryPassword.Text);
+        }
+
+        private async void ButtonLoginAsGuest_OnClicked(object sender, EventArgs e)
+        {
+            await _loginViewModel.LoginAsGuest();
         }
 
         private async void ButtonRegistration_OnClicked(object sender, EventArgs e)

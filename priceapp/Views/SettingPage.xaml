@@ -21,7 +21,7 @@
                     <ImageButton.Source>
                         <FontImageSource FontFamily="MaterialOutlined"
                                          Glyph="&#xe2ea;"
-                                         Color="{AppThemeBinding Light=Black, Dark=White}" />
+                                         Color="{AppThemeBinding Light=Black, Dark=White, Default=Black}" />
                     </ImageButton.Source>
                 </ImageButton>
                 <Label Grid.Column="1"
@@ -46,11 +46,12 @@
                         <Frame Grid.Column="0"
                                Padding="0"
                                Margin="-10,0">
-                            <Slider Maximum="10000"
-                                    Minimum="0"
-                                    ThumbColor="Accent"
-                                    MinimumTrackColor="Black"
-                                    Value="{Binding Radius}" />
+                            <ui:RdSliderBorderless Maximum="10000"
+                                                   Minimum="0"
+                                                   ThumbColor="Accent"
+                                                   MinimumTrackColor="Black"
+                                                   Value="{Binding Radius}"
+                                                   BackgroundColor="{AppThemeBinding Light=White, Dark=Black, Default=White}" />
                         </Frame>
                         <ui:RdEntryBorderless Grid.Column="1"
                                               Keyboard="Numeric"
@@ -61,8 +62,15 @@
                            FontSize="Medium"
                            TextColor="Black"
                            FontAttributes="Bold" />
-                    <Picker ItemsSource="{Binding CartProcessingTypes}"
-                            SelectedItem="{Binding CartProcessingTypeSetting}" />
+                    <Frame BorderColor="Accent"
+                           Padding="1">
+                        <Frame BorderColor="Accent"
+                               Padding="0">
+                        <ui:RdPickerBorderless ItemsSource="{Binding CartProcessingTypes}"
+                                               SelectedItem="{Binding CartProcessingTypeSetting}"
+                                               Margin="10,0"/>
+                    </Frame>
+                    </Frame>
                 </StackLayout>
             </ScrollView>
         </StackLayout>
