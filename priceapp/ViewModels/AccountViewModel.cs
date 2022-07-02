@@ -27,7 +27,11 @@ public class AccountViewModel : IAccountViewModel
         _userRepository = DependencyService.Get<IUserRepository>(DependencyFetchTarget.NewInstance);
 
         MenuItems.Add(new MenuItem {Label = "Налаштування", Glyph = "\ue8b8"});
+        MenuItems.Add(new MenuItem {Label = "Підказки", Glyph = "\ue79a"});
+        MenuItems.Add(new MenuItem {Label = "Новини", Glyph = "\ueb81"});
         MenuItems.Add(new MenuItem {Label = "Про додаток", Glyph = "\ue88e"});
+        MenuItems.Add(new MenuItem {Label = "Питання та відповіді", Glyph = "\uf04c"});
+        MenuItems.Add(new MenuItem {Label = "Політика конфіденційності", Glyph = "\uf0dc"});
         MenuItems.Add(new MenuItem {Label = "Змінити акаунт", Glyph = "\ue7ef"});
 
         _userRepository.BadConnectEvent += UserRepositoryOnBadConnectEvent;

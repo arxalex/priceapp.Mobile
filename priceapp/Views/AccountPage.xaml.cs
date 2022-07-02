@@ -1,6 +1,7 @@
 using System.Linq;
 using priceapp.Events.Models;
 using priceapp.ViewModels.Interfaces;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using MenuItem = priceapp.UI.MenuItem;
@@ -51,7 +52,23 @@ public partial class AccountPage
                 await Navigation.PushAsync(new AboutPage());
                 break;
             case "Змінити акаунт":
+                SecureStorage.Remove("cookie");
+                SecureStorage.Remove("username");
+                SecureStorage.Remove("email");
                 Application.Current.MainPage = new LoginPage();
+                break;
+            case "Підказки":
+                Application.Current.MainPage = new OnboardingPage();
+                break;
+            case "Питання та відповіді":
+                await Browser.OpenAsync("https://priceapp.arxalex.co/documents/faq", BrowserLaunchMode.SystemPreferred);
+                break;
+            case "Політика конфіденційності":
+                await Browser.OpenAsync("https://priceapp.arxalex.co/documents/privacy",
+                    BrowserLaunchMode.SystemPreferred);
+                break;
+            case "Новини":
+                await Browser.OpenAsync("https://t.me/price_app", BrowserLaunchMode.SystemPreferred);
                 break;
         }
 

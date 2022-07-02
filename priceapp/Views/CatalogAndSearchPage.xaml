@@ -91,7 +91,7 @@
                                IsRunning="False" 
                                IsVisible="False"
                                VerticalOptions="CenterAndExpand"
-                               Color="Accent"/>
+                               Color="{AppThemeBinding Light=Accent, Dark=DarkGreen, Default=Accent}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

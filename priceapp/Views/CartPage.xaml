@@ -31,13 +31,13 @@
                          RefreshColor="Accent">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <ActivityIndicator Grid.Column="0"
                                        Grid.Row="0"
@@ -47,7 +47,7 @@
                                        IsRunning="False"
                                        IsVisible="False"
                                        VerticalOptions="CenterAndExpand"
-                                       Color="Accent" />
+                                       Color="{AppThemeBinding Light=Accent, Dark=DarkGreen, Default=Accent}" />
                     <Label Grid.Row="0"
                            Grid.Column="0"
                            FontSize="20"
@@ -55,22 +55,22 @@
                            FontAttributes="Bold"
                            Margin="15,0,0,0"
                            VerticalOptions="Center"
-                           Text="{Binding HeaderText}"/>
+                           Text="{Binding HeaderText}" />
                     <Frame Grid.Row="0"
                            Grid.Column="1"
                            Padding="0"
                            BorderColor="White"
-                           BackgroundColor="White"
+                           BackgroundColor="Transparent"
                            HasShadow="False">
-                    <Button WidthRequest="50"
-                            BackgroundColor="White"
-                            Clicked="Button_OnClicked">
-                        <Button.ImageSource>
-                            <FontImageSource FontFamily="MaterialOutlined"
-                                             Glyph="&#xe92b;"
-                                             Color="DarkRed"/>
-                        </Button.ImageSource>
-                    </Button>
+                        <Button WidthRequest="50"
+                                BackgroundColor="Transparent"
+                                Clicked="Button_OnClicked">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="MaterialOutlined"
+                                                 Glyph="&#xe92b;"
+                                                 Color="DarkRed" />
+                            </Button.ImageSource>
+                        </Button>
                     </Frame>
                     <CollectionView Grid.Row="1"
                                     Grid.Column="0"
@@ -85,8 +85,8 @@
                         <CollectionView.GroupHeaderTemplate>
                             <DataTemplate x:DataType="models:ItemToBuyGroup">
                                 <Label Text="{Binding Name}"
-                                       FontAttributes="Bold" 
-                                       Padding="5,0,0,0"/>
+                                       FontAttributes="Bold"
+                                       Padding="5,0,0,0" />
                             </DataTemplate>
                         </CollectionView.GroupHeaderTemplate>
                         <CollectionView.ItemTemplate>
@@ -140,13 +140,13 @@
                           ColumnSpan="2"
                           Margin="15, 10, 0, 10">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0"
-                               Text="Економія: "/>
+                               Text="Економія: " />
                         <Label Grid.Column="1"
-                               Text="{Binding Economy}"/>
+                               Text="{Binding Economy}" />
                     </Grid>
                 </Grid>
             </RefreshView>

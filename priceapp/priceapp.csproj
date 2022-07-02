@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>latest</LangVersion>
+        <PackageVersion>1.0.1</PackageVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -30,6 +31,7 @@
         <PackageReference Include="AutoMapper" Version="10.1.1" />
         <PackageReference Include="RestSharp" Version="107.3.1-alpha.0.18" />
         <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+        <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.2"/>
         <PackageReference Include="Xamarin.Essentials" Version="1.7.2" />
         <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" />
         <PackageReference Include="Xamarin.Forms.Maps" Version="5.0.0.2337" />

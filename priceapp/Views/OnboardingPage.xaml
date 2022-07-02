@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewsModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
+             xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
+             BackgroundColor="White"
+             x:Class="priceapp.Views.OnboardingPage"
+             x:DataType="viewsModels:IOnboardingViewModel">
+    <ContentPage.Content>
+        <Grid Padding="15,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <CarouselView x:Name="onBoardingCarousel" 
+                          IndicatorView="IndicatorView"
+                          Grid.Column="0"
+                          Grid.Row="0" 
+                          Grid.ColumnSpan="3" 
+                          Grid.RowSpan="2"
+                          ItemsSource="{Binding Items}"
+                          Position="{Binding Position}">
+                <CarouselView.ItemTemplate>
+                    <DataTemplate x:DataType="ui:OnboardingItem">
+                        <ContentView>
+                            <FlexLayout Direction="Column"
+                                        JustifyContent="SpaceEvenly">
+
+                                <Image Source="{Binding ImageUrl}"
+                                       Aspect="AspectFill"
+                                       WidthRequest="300"
+                                       FlexLayout.AlignSelf="Center" />
+
+                                <Label Text="{Binding Title}"
+                                       FontAttributes="Bold"
+                                       HorizontalTextAlignment="Center"
+                                       TextColor="Black"
+                                       FontSize="Title" />
+
+                                <Label Text="{Binding Content}"
+                                       HorizontalTextAlignment="Center"
+                                       TextColor="Black"
+                                       FontSize="Body" />
+
+                            </FlexLayout>
+                        </ContentView>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+            
+            <IndicatorView x:Name="IndicatorView"
+                           Grid.Row="2"
+                           Grid.Column="1"
+                           IndicatorSize="7"
+                           IndicatorsShape="Circle"
+                           IndicatorColor="DarkGray"
+                           SelectedIndicatorColor="Accent"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+            <Button Grid.Row="2"
+                    Grid.Column="0"
+                    Style="{StaticResource ButtonStyle}"
+                    Text="{Binding SkipButtonText}"
+                    BackgroundColor="Transparent"
+                    TextColor="Black"
+                    CornerRadius="20"
+                    Clicked="SkipButton_OnClicked" />
+            <Button Grid.Row="2"
+                    Grid.Column="2"
+                    Style="{StaticResource ButtonStyle}"
+                    Text="{Binding NextButtonText}"
+                    CornerRadius="20"
+                    Clicked="NextButton_OnClicked" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

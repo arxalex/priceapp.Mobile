@@ -337,6 +337,7 @@ public class ItemRepository : IItemRepository
             case CartProcessingType.OneMarket:
                 break;
             case CartProcessingType.OneMarketLowest:
+                method = "oneLowest";
                 break;
             case CartProcessingType.MultipleMarketsLowest:
                 method = "multipleLowest";

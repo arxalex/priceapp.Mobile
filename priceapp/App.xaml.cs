@@ -1,6 +1,7 @@
 ﻿using priceapp.Utils;
 using priceapp.ViewModels.Interfaces;
 using priceapp.Views;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -33,7 +34,14 @@ namespace priceapp
                 var isLoggedIn = loginViewModel.IsUserLoggedIn();
                 if (isLoggedIn)
                 {
-                    MainPage = new MainPage();
+                    if (VersionTracking.IsFirstLaunchEver)
+                    {
+                        MainPage = new OnboardingPage();
+                    }
+                    else
+                    {
+                        MainPage = new MainPage();
+                    }
                 }
                 else
                 {

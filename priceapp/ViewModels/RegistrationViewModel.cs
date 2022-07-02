@@ -91,6 +91,8 @@ namespace priceapp.ViewModels
 
             var request = new RestRequest("be/register", Method.Post);
 
+            Xamarin.Essentials.SecureStorage.Remove("cookie");
+            _client.DefaultParameters.RemoveParameter("Cookie");
             request.AddHeader("Content-Type", "application/json");
             request.AddBody(json, "application/json");
 

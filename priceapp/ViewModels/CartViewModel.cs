@@ -115,6 +115,16 @@ public class CartViewModel : ICartViewModel
         var filials = await _shopRepository.GetFilials();
         var shops = await _shopRepository.GetShops();
 
+        if (items.Count < 1)
+        {
+            Economy = "0.00 грн";
+            HeaderText = "Доступно 0 з " + ItemsToBuyListPreProcessed.Count;
+            Loaded?.Invoke(this,
+                new LoadingArgs()
+                    {Success = true, LoadedCount = items.Count, Total = ItemsToBuyListPreProcessed.Count});
+            return;
+        }
+
         foreach (var item in items)
         {
             var itemToBuy = _mapper.Map<ItemToBuy>(item);
@@ -137,6 +147,16 @@ public class CartViewModel : ICartViewModel
             Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius),
             (CartProcessingType) Xamarin.Essentials.Preferences.Get("cartProcessingType",
                 (int) CartProcessingType.MultipleMarketsLowest));
+
+        if (itemsResult.Count == 0)
+        {
+            Economy = "0.00 грн";
+            HeaderText = "Доступно 0 з " + ItemsToBuyListPreProcessed.Count;
+            Loaded?.Invoke(this,
+                new LoadingArgs()
+                    {Success = false, LoadedCount = items.Count, Total = ItemsToBuyListPreProcessed.Count});
+            return;
+        }
 
         Economy = Math.Round(economy, 2) + " грн";
 
@@ -169,7 +189,9 @@ public class CartViewModel : ICartViewModel
             itemsToBuyListUngrouped.Add(itemToBuy);
         }
 
-        itemsToBuyListUngrouped.GroupBy(x => x.Filial.City + ", " + x.Filial.Street + " " + x.Filial.House)
+        itemsToBuyListUngrouped.GroupBy(x =>
+                x.Filial.City + ", " + x.Filial.Street + " " + x.Filial.House + ", " +
+                shops.Last(y => y.id == x.Filial.Shop.Id).label)
             .ForEach(x => { ItemsToBuyList.Add(new ItemToBuyGroup(x.Key, x.ToList())); });
 
         HeaderText = "Доступно " + itemsToBuyListUngrouped.Count + " з " + ItemsToBuyListPreProcessed.Count;

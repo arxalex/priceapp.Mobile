@@ -16,7 +16,8 @@ public class SettingsViewModel : ISettingsViewModel
     private Dictionary<CartProcessingType, string> CartProcessingTypesDictionary { get; set; } =
         new()
         {
-            {CartProcessingType.MultipleMarketsLowest, "В різних магазинах"}
+            {CartProcessingType.MultipleMarketsLowest, "В різних магазинах"},
+            {CartProcessingType.OneMarketLowest, "В одному магазині"}
         };
 
     public int Radius

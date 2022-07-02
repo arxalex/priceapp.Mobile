@@ -1,6 +1,7 @@
 using System;
 using priceapp.Events.Models;
 using priceapp.ViewModels.Interfaces;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -22,7 +23,14 @@ namespace priceapp.Views
         {
             if (args.Success)
             {
-                Application.Current.MainPage = new MainPage();
+                if (VersionTracking.IsFirstLaunchEver)
+                {
+                    Application.Current.MainPage = new OnboardingPage();
+                }
+                else
+                {
+                    Application.Current.MainPage = new MainPage();
+                }
             }
             else
             {

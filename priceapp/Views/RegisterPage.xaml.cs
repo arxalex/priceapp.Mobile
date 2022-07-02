@@ -14,7 +14,7 @@ public partial class RegisterPage
     public RegisterPage()
     {
         InitializeComponent();
-        _registrationViewModel = DependencyService.Get<IRegistrationViewModel>();
+        _registrationViewModel = DependencyService.Get<IRegistrationViewModel>(DependencyFetchTarget.NewInstance);
         _registrationViewModel.RegisterSuccess += RegistrationViewModelOnRegisterSuccess;
     }
 

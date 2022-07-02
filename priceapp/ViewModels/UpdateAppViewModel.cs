@@ -6,6 +6,7 @@ using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
 using priceapp.WebServices;
 using RestSharp;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(UpdateAppViewModel))]
@@ -32,7 +33,7 @@ public class UpdateAppViewModel : IUpdateAppViewModel
     {
         var request = new RestRequest("be/check_version", Method.Post);
 
-        var json = JsonSerializer.Serialize(new {installed = Constants.Version});
+        var json = JsonSerializer.Serialize(new {installed = VersionTracking.CurrentVersion});
 
         request.AddHeader("Content-Type", "application/json");
         request.AddBody(json, "application/json");

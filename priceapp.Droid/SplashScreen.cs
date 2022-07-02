@@ -4,6 +4,7 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Widget;
+using Xamarin.Essentials;
 
 namespace priceapp.Droid
 {
@@ -22,7 +23,7 @@ namespace priceapp.Droid
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.SplashScreen);
             FindViewById<TextView>(Resource.Id.textView).Text =
-                $"Версія {PackageManager.GetPackageInfo(PackageName, 0).VersionName}";
+                $"Версія {VersionTracking.CurrentVersion}";
         }
 
         protected override void OnResume()

@@ -2,7 +2,8 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="priceapp.Views.AboutPage">
+             x:Class="priceapp.Views.AboutPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
     <ContentPage.Content>
         <StackLayout>
             <Grid Padding="15, 15">
@@ -18,7 +19,7 @@
                     <ImageButton.Source>
                         <FontImageSource FontFamily="MaterialOutlined"
                                          Glyph="&#xe2ea;"
-                                         Color="{AppThemeBinding Light=Black, Dark=White, Default=Black}"/>
+                                         Color="{AppThemeBinding Light=Black, Dark=White, Default=Black}" />
                     </ImageButton.Source>
                 </ImageButton>
                 <Label Grid.Column="1"
@@ -27,23 +28,24 @@
                        FontAttributes="Bold"
                        Margin="5,2,0,0"
                        HeightRequest="35"
-                       Text="Про додаток"/>
+                       Text="Про додаток" />
             </Grid>
-            <Image Source="{OnPlatform Android=splash_logo.png}"/>
+            <Image Source="{OnPlatform Android=splash_logo.png, iOS=splash_logo.png}" />
             <Label Text="PriceApp"
                    FontSize="30"
                    TextColor="Black"
                    FontAttributes="Bold"
-                   HorizontalOptions="Center"/>
+                   HorizontalOptions="Center" />
             <Label Text="by"
-                   HorizontalOptions="Center"/>
-            <Image Source="{OnPlatform Android=arxlogo.png}"
+                   HorizontalOptions="Center" />
+            <Image Source="arxlogo_light.png"
                    WidthRequest="70"
-                   VerticalOptions="StartAndExpand"/>
+                   VerticalOptions="StartAndExpand" 
+                   xct:IconTintColorEffect.TintColor="Gray"/>
             <Label Text="Версія"
                    Margin="0,0,0,20"
-                   HorizontalOptions="CenterAndExpand" 
-                   x:Name="Label"/>
+                   HorizontalOptions="CenterAndExpand"
+                   x:Name="Label" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

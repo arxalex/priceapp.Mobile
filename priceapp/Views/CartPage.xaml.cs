@@ -35,11 +35,17 @@ namespace priceapp.Views
             await Navigation.PushAsync(new ConnectionErrorPage(args));
         }
 
-        private void CartViewModelOnLoaded(object sender, LoadingArgs args)
+        private async void CartViewModelOnLoaded(object sender, LoadingArgs args)
         {
             ActivityIndicator.IsRunning = false;
             ActivityIndicator.IsVisible = false;
             CollectionView.IsVisible = true;
+            if (args.Success == false)
+            {
+                await DisplayAlert("Обрані товари відсутні в одному магазині",
+                    "Спробуйте змінити спосіб формування списку покупок або збільшити радіус пошуку у налаштуваннях",
+                    "Ок");
+            }
         }
 
         private async void CollectionView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

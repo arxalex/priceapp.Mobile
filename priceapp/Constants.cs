@@ -4,7 +4,6 @@ namespace priceapp;
 
 public class Constants
 {
-    public const string Version = "1.0.0";
     public const int DefaultRadius = 1000;
     private const string DatabaseFilename = "PriceAppSQLite.db3";
     private const string CacheDatabaseFilename = "PriceAppSQLiteCache.db3";

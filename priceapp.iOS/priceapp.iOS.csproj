@@ -179,14 +179,50 @@
       <Name>priceapp</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="System.Reflection.Emit" Version="4.7.0">
-      <ExcludeAssets>all</ExcludeAssets>
-      <IncludeAssets>none</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <LinkDescription Include="Linker.xml" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+    <ItemGroup>
+        <PackageReference Include="System.Reflection.Emit" Version="4.7.0">
+            <ExcludeAssets>all</ExcludeAssets>
+            <IncludeAssets>none</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <LinkDescription Include="Linker.xml"/>
+    </ItemGroup>
+    <ItemGroup>
+        <AndroidResource Include="Resources\drawable\arxlogo.png">
+            <SubType>Designer</SubType>
+            <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\arxlogo_dark.png">
+            <SubType>Designer</SubType>
+            <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\arxlogo_light.png">
+            <SubType>Designer</SubType>
+            <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\onboarding_1.png">
+            <SubType>Designer</SubType>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\onboarding_2.png">
+            <SubType>Designer</SubType>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\onboarding_3.png">
+            <SubType>Designer</SubType>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\onboarding_4.png">
+            <SubType>Designer</SubType>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\onboarding_5.png">
+            <SubType>Designer</SubType>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\onboarding_6.png">
+            <SubType>Designer</SubType>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\splash_logo.png">
+            <SubType>Designer</SubType>
+            <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+        </AndroidResource>
+    </ItemGroup>
+    <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets"/>
 </Project>
