@@ -19,13 +19,13 @@
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+      <DebugSymbols>true</DebugSymbols>
+      <DebugType>portable</DebugType>
+      <Optimize>false</Optimize>
+      <OutputPath>bin\Debug</OutputPath>
+      <DefineConstants>DEBUG;</DefineConstants>
+      <ErrorReport>prompt</ErrorReport>
+      <WarningLevel>4</WarningLevel>
       <AndroidLinkMode>None</AndroidLinkMode>
       <AotAssemblies>false</AotAssemblies>
       <EnableLLVM>false</EnableLLVM>
@@ -40,27 +40,27 @@
       <AndroidUseAapt2>true</AndroidUseAapt2>
       <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-      <DebugSymbols>false</DebugSymbols>
-      <DebugType>pdbonly</DebugType>
-      <Optimize>true</Optimize>
-      <OutputPath>bin\Release</OutputPath>
-      <ErrorReport>prompt</ErrorReport>
-      <WarningLevel>4</WarningLevel>
-      <AndroidManagedSymbols>true</AndroidManagedSymbols>
-      <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-      <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
-      <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
-      <AotAssemblies>false</AotAssemblies>
-      <EnableLLVM>false</EnableLLVM>
-      <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-      <BundleAssemblies>false</BundleAssemblies>
-      <AndroidPackageFormat>aab</AndroidPackageFormat>
-      <AndroidUseAapt2>true</AndroidUseAapt2>
-      <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
-      <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-      <AndroidLinkMode>None</AndroidLinkMode>
-  </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <DebugSymbols>false</DebugSymbols>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release</OutputPath>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <AndroidManagedSymbols>true</AndroidManagedSymbols>
+        <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+        <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
+        <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
+        <AotAssemblies>false</AotAssemblies>
+        <EnableLLVM>false</EnableLLVM>
+        <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+        <BundleAssemblies>false</BundleAssemblies>
+        <AndroidPackageFormat>aab</AndroidPackageFormat>
+        <AndroidUseAapt2>true</AndroidUseAapt2>
+        <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
+        <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+        <AndroidLinkMode>None</AndroidLinkMode>
+    </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
     <Reference Include="System" />
@@ -70,14 +70,14 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" />
-    <PackageReference Include="Xamarin.AndroidX.Browser" Version="1.3.0.6" />
-    <PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData" Version="2.3.1.1" />
-    <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2337" />
-    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.4.0.2" />
-    <PackageReference Include="Xamarin.AndroidX.Legacy.Support.V4" Version="1.0.0.8" />
-    <PackageReference Include="Xamarin.AndroidX.MediaRouter" Version="1.2.0" />
+      <PackageReference Include="System.Net.Http" Version="4.3.4"/>
+      <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337"/>
+      <PackageReference Include="Xamarin.AndroidX.Browser" Version="1.3.0.6"/>
+      <PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData" Version="2.3.1.1"/>
+      <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2337"/>
+      <PackageReference Include="Xamarin.Google.Android.Material" Version="1.4.0.2"/>
+      <PackageReference Include="Xamarin.AndroidX.Legacy.Support.V4" Version="1.0.0.8"/>
+      <PackageReference Include="Xamarin.AndroidX.MediaRouter" Version="1.2.0"/>
       <PackageReference Include="Xamarin.AndroidX.Palette" Version="1.0.0.5"/>
   </ItemGroup>
     <ItemGroup>
@@ -116,17 +116,17 @@
         <AndroidResource Include="Resources\values\styles.xml"/>
         <AndroidResource Include="Resources\values\colors.xml"/>
     </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\priceapp\priceapp.csproj">
-      <Project>{751F727B-98B5-4E45-BD97-675AA611529C}</Project>
-      <Name>priceapp</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-      <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml"/>
-  </ItemGroup>
-  <ItemGroup>
-      <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png"/>
+    <ItemGroup>
+        <ProjectReference Include="..\priceapp\priceapp.csproj">
+            <Project>{751F727B-98B5-4E45-BD97-675AA611529C}</Project>
+            <Name>priceapp</Name>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml"/>
+    </ItemGroup>
+    <ItemGroup>
+        <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png"/>
   </ItemGroup>
   <ItemGroup>
       <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_adaptive_back.png"/>

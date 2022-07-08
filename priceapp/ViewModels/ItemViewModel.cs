@@ -21,10 +21,14 @@ namespace priceapp.ViewModels;
 
 public class ItemViewModel : IItemViewModel
 {
+    private readonly IBrandAlertRepository _brandAlertRepository;
     private readonly GeolocationUtil _geolocationUtil;
     private readonly IItemRepository _itemRepository;
     private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository;
     private readonly IMapper _mapper;
+    private BrandAlert _brandAlert;
+    private Color _foreGroundColorBrandAlert;
+    private bool _isVisibleBrandAlert;
 
     private Item _item;
 
@@ -32,6 +36,7 @@ public class ItemViewModel : IItemViewModel
     {
         _mapper = DependencyService.Get<IMapper>();
         _itemRepository = DependencyService.Get<IItemRepository>();
+        _brandAlertRepository = DependencyService.Get<IBrandAlertRepository>();
         _geolocationUtil = DependencyService.Get<GeolocationUtil>();
         _itemsToBuyLocalRepository = DependencyService.Get<IItemsToBuyLocalRepository>();
 
@@ -55,6 +60,38 @@ public class ItemViewModel : IItemViewModel
 
     public ObservableCollection<ItemPriceInfo> PricesAndFilials { get; set; }
 
+    public BrandAlert BrandAlert
+    {
+        get => _brandAlert;
+        set
+        {
+            _brandAlert = value;
+            IsVisibleBrandAlert = BrandAlert is {Message.Length: > 0};
+            ForeGroundColorBrandAlert = ColorUtil.BlackOrWhiteFrontColorByBackground(BrandAlert.Color);
+            OnPropertyChanged();
+        }
+    }
+
+    public Color ForeGroundColorBrandAlert
+    {
+        get => _foreGroundColorBrandAlert;
+        set
+        {
+            _foreGroundColorBrandAlert = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsVisibleBrandAlert
+    {
+        get => _isVisibleBrandAlert;
+        set
+        {
+            _isVisibleBrandAlert = value;
+            OnPropertyChanged();
+        }
+    }
+
     public async Task LoadAsync(Item item)
     {
         var location = await _geolocationUtil.GetCurrentLocation();
@@ -71,6 +108,18 @@ public class ItemViewModel : IItemViewModel
         foreach (var priceInfo in priceInfos)
         {
             PricesAndFilials.Add(_mapper.Map<ItemPriceInfo>(priceInfo));
+        }
+
+        if (Xamarin.Essentials.Preferences.Get("showRussiaSupportBrandAlerts",
+                Constants.DefaultShowRussiaSupportBrandAlerts))
+        {
+            var alerts = await _brandAlertRepository.GetBrandAlerts(Item.Brand);
+            foreach (var alert in alerts)
+            {
+                if (alert.color != "#ff0000") continue;
+                BrandAlert = _mapper.Map<BrandAlert>(alert);
+                break;
+            }
         }
 
         Loaded?.Invoke(this, new LoadingArgs()

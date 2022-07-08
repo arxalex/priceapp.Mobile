@@ -27,4 +27,5 @@ public class Item
     public double PriceMax { get; set; }
 
     public string PriceText => (Math.Abs(PriceMax - PriceMin) < 0.01 ? PriceMax : PriceMin + " - " + PriceMax) + " грн";
+    public string UnitsText => Units + " " + PackageUnits;
 }

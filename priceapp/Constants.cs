@@ -5,6 +5,7 @@ namespace priceapp;
 public class Constants
 {
     public const int DefaultRadius = 1000;
+    public const bool DefaultShowRussiaSupportBrandAlerts = false;
     private const string DatabaseFilename = "PriceAppSQLite.db3";
     private const string CacheDatabaseFilename = "PriceAppSQLiteCache.db3";
 

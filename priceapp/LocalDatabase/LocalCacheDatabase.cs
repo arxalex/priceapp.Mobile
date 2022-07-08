@@ -7,6 +7,7 @@ namespace priceapp.LocalDatabase;
 public static class LocalCacheDatabase
 {
     private static SQLiteAsyncConnection _database;
+
     public static SQLiteAsyncConnection Database
     {
         get
@@ -20,6 +21,7 @@ public static class LocalCacheDatabase
                 await _database.CreateTableAsync<FilialLocalDatabaseModel>();
                 await _database.CreateTableAsync<ItemLocalDatabaseModel>();
                 await _database.CreateTableAsync<ShopLocalDatabaseModel>();
+                await _database.CreateTableAsync<BrandAlertLocalDatabaseModel>();
             });
 
             return _database;

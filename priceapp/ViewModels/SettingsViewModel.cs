@@ -30,6 +30,17 @@ public class SettingsViewModel : ISettingsViewModel
         }
     }
 
+    public bool ShowRussiaSupportBrandAlerts
+    {
+        get => Xamarin.Essentials.Preferences.Get("showRussiaSupportBrandAlerts",
+            Constants.DefaultShowRussiaSupportBrandAlerts);
+        set
+        {
+            Xamarin.Essentials.Preferences.Set("showRussiaSupportBrandAlerts", value);
+            OnPropertyChanged();
+        }
+    }
+
     public string CartProcessingTypeSetting
     {
         get

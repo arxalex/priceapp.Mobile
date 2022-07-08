@@ -38,7 +38,7 @@
                            FontSize="Medium"
                            TextColor="Black"
                            FontAttributes="Bold" />
-                    <Grid>
+                    <Grid Margin="0, 0, 0,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="60" />
@@ -61,7 +61,8 @@
                     <Label Text="Спосіб формування списку покупок"
                            FontSize="Medium"
                            TextColor="Black"
-                           FontAttributes="Bold" />
+                           FontAttributes="Bold" 
+                           Margin="0, 0, 0,5"/>
                     <Frame BorderColor="Accent"
                            Padding="1"
                            BackgroundColor="Transparent">
@@ -73,6 +74,19 @@
                                                Margin="10,0"/>
                     </Frame>
                     </Frame>
+                    <Grid Margin="0, 5, 0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" 
+                               Text="Відмічати бренди, що ще не вийшли з російського ринку"
+                               FontSize="Medium"
+                               TextColor="Black"
+                               FontAttributes="Bold" />
+                    <Switch Grid.Column="1" 
+                            IsToggled="{Binding ShowRussiaSupportBrandAlerts}"/>
+                    </Grid>
                 </StackLayout>
             </ScrollView>
         </StackLayout>

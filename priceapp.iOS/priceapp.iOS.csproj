@@ -169,16 +169,16 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" />
-    <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2337" />
+      <PackageReference Include="sqlite-net-pcl" Version="1.8.116"/>
+      <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337"/>
+      <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2337"/>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\priceapp\priceapp.csproj">
-      <Project>{751F727B-98B5-4E45-BD97-675AA611529C}</Project>
-      <Name>priceapp</Name>
-    </ProjectReference>
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\priceapp\priceapp.csproj">
+            <Project>{751F727B-98B5-4E45-BD97-675AA611529C}</Project>
+            <Name>priceapp</Name>
+        </ProjectReference>
+    </ItemGroup>
     <ItemGroup>
         <PackageReference Include="System.Reflection.Emit" Version="4.7.0">
             <ExcludeAssets>all</ExcludeAssets>

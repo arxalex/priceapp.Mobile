@@ -64,20 +64,30 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
                                 <Frame Grid.Row="0"
+                                       Grid.Column="0"
+                                       Grid.ColumnSpan="2"
                                        BackgroundColor="WhiteSmoke"
                                        CornerRadius="20"
                                        Padding="0">
                                     <Image Source="{Binding Image}" />
                                 </Frame>
                                 <Label Grid.Row="1"
+                                       Grid.Column="0"
+                                       Grid.ColumnSpan="2"
                                        Text="{Binding Label}"
                                        FontSize="16"
                                        VerticalOptions="End"
                                        HorizontalOptions="Start"
                                        TextColor="Black" />
                                 <Label Grid.Row="2"
+                                       Grid.Column="0"
                                        Text="{Binding PriceText}"
                                        FontSize="18"
                                        FontAttributes="Bold"
@@ -85,6 +95,10 @@
                                        HorizontalOptions="Start"
                                        Margin="0, 0, 0,3"
                                        TextColor="Accent" />
+                                <Label Grid.Row="2" 
+                                       Grid.Column="1"
+                                       Margin="3,5,0,0"
+                                       Text="{Binding UnitsText}"/>
                             </Grid>
                         </Frame>
                     </DataTemplate>

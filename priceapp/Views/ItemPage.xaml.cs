@@ -47,6 +47,7 @@ public partial class ItemPage
     private void ItemViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         var item = _itemViewModel.Item;
+        UnitsLabel.IsVisible = UnitsLabelValue.IsVisible = item.UnitsText.Length > 0;
         BrandLabel.IsVisible = BrandLabelValue.IsVisible = item.BrandLabel.Length > 0;
         CategoryLabel.IsVisible = CategoryLabelValue.IsVisible = item.CategoryLabel.Length > 0;
         PackageLabel.IsVisible = PackageLabelValue.IsVisible = item.PackageLabel.Length > 0;

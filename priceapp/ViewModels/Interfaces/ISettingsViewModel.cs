@@ -8,4 +8,5 @@ public interface ISettingsViewModel : INotifyPropertyChanged
     int Radius { get; set; }
     List<string> CartProcessingTypes { get; }
     string CartProcessingTypeSetting { get; set; }
+    bool ShowRussiaSupportBrandAlerts { get; set; }
 }

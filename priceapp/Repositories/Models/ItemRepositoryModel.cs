@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+
 // ReSharper disable InconsistentNaming
 
 namespace priceapp.Repositories.Models;
@@ -17,7 +17,7 @@ public class ItemRepositoryModel
     public string packageUnits { get; set; }
     public double units { get; set; }
     public double term { get; set; }
-    public object? consist { get; set; }
+    public int[] consist { get; set; }
     public double? calorie { get; set; }
     public double? carbohydrates { get; set; }
     public double? fat { get; set; }

@@ -33,6 +33,12 @@
                         </ImageButton>
                     </Grid>
                 </Grid>
+                <Label BackgroundColor="{Binding BrandAlert.Color}" 
+                       Text="{Binding BrandAlert.Message}"
+                       IsVisible="{Binding IsVisibleBrandAlert}"
+                       TextColor="{Binding ForeGroundColorBrandAlert}"
+                       HorizontalTextAlignment="Center"
+                       Margin="0,0,0,-12"/>
                 <Grid x:Name="ItemInfo" Margin="20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -76,6 +82,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
@@ -83,58 +90,66 @@
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0"
                                Grid.Row="0"
+                               Text="Кількість"
+                               x:Name="UnitsLabel" />
+                        <Label Grid.Column="1"
+                               Grid.Row="0"
+                               Text="{Binding Item.UnitsText}"
+                               x:Name="UnitsLabelValue" />
+                        <Label Grid.Column="0"
+                               Grid.Row="1"
                                Text="Бренд"
                                x:Name="BrandLabel" />
                         <Label Grid.Column="1"
-                               Grid.Row="0"
+                               Grid.Row="1"
                                Text="{Binding Item.BrandLabel}"
                                x:Name="BrandLabelValue" />
                         <Label Grid.Column="0"
-                               Grid.Row="1"
+                               Grid.Row="2"
                                Text="Категорія"
                                x:Name="CategoryLabel" />
                         <Label Grid.Column="1"
-                               Grid.Row="1"
+                               Grid.Row="2"
                                Text="{Binding Item.CategoryLabel}"
                                x:Name="CategoryLabelValue" />
                         <Label Grid.Column="0"
-                               Grid.Row="2"
+                               Grid.Row="3"
                                Text="Упаковка"
                                x:Name="PackageLabel" />
                         <Label Grid.Column="1"
-                               Grid.Row="2"
+                               Grid.Row="3"
                                Text="{Binding Item.PackageLabel}"
                                x:Name="PackageLabelValue" />
                         <Label Grid.Column="0"
-                               Grid.Row="3"
+                               Grid.Row="4"
                                Text="Калорійність"
                                x:Name="CalorieLabel" />
                         <Label Grid.Column="1"
-                               Grid.Row="3"
+                               Grid.Row="4"
                                Text="{Binding Item.Calorie}"
                                x:Name="CalorieLabelValue" />
                         <Label Grid.Column="0"
-                               Grid.Row="4"
+                               Grid.Row="5"
                                Text="Жири"
                                x:Name="FatLabel" />
                         <Label Grid.Column="1"
-                               Grid.Row="4"
+                               Grid.Row="5"
                                Text="{Binding Item.Fat}"
                                x:Name="FatLabelValue" />
                         <Label Grid.Column="0"
-                               Grid.Row="5"
+                               Grid.Row="6"
                                Text="Вуглеводи"
                                x:Name="CarbohydratesLabel" />
                         <Label Grid.Column="1"
-                               Grid.Row="5"
+                               Grid.Row="6"
                                Text="{Binding Item.Carbohydrates}"
                                x:Name="CarbohydratesLabelValue" />
                         <Label Grid.Column="0"
-                               Grid.Row="6"
+                               Grid.Row="7"
                                Text="Білки"
                                x:Name="ProteinsLabel" />
                         <Label Grid.Column="1"
-                               Grid.Row="6"
+                               Grid.Row="7"
                                Text="{Binding Item.Proteins}"
                                x:Name="ProteinsLabelValue" />
                     </Grid>
