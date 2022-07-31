@@ -22,9 +22,9 @@
 	<key>CFBundleDisplayName</key>
 	<string>priceapp</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.companyname.priceapp</string>
+	<string>co.arxalex.priceapp</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
@@ -33,5 +33,7 @@
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>App needs GPS to get shops near you</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.2</string>
 </dict>
 </plist>
