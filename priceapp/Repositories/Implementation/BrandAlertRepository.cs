@@ -36,24 +36,24 @@ public class BrandAlertRepository : IBrandAlertRepository
         _mapper = DependencyService.Get<IMapper>();
         var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler())
         {
-            BaseAddress = new Uri("https://priceapp.arxalex.co/")
+            BaseAddress = new Uri(Constants.ApiUrl)
         };
         _client = new RestClient(httpClient);
-        _client.AddDefaultHeader("Cookie", Xamarin.Essentials.SecureStorage.GetAsync("cookie").Result);
+        _client.AddDefaultHeader("Cookie", $"Bearer {Xamarin.Essentials.SecureStorage.GetAsync("token").Result}"); 
     }
 
     public event ConnectionErrorHandler BadConnectEvent;
 
     public async Task<IList<BrandAlertRepositoryModel>> GetBrandAlerts(int brandId)
     {
-        var json = JsonSerializer.Serialize(new {brandid = brandId, method = "GetAlertByBrandId"});
+        var requestUrl = $"Brands/{brandId}/alerts";
 
-        if (await _cacheRequestsLocalRepository.Exists("be/brands/get_brand_alert", json))
+        if (await _cacheRequestsLocalRepository.Exists(requestUrl, ""))
         {
             var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
                 .GetCacheRecords(x =>
-                    x.RequestName == "be/brands/get_brand_alert" &&
-                    x.RequestProperties == json &&
+                    x.RequestName == requestUrl &&
+                    x.RequestProperties == "" &&
                     x.Expires > DateTime.Now
                 )).First().ResponseItemIds);
 
@@ -63,10 +63,7 @@ public class BrandAlertRepository : IBrandAlertRepository
             return _mapper.Map<IList<BrandAlertRepositoryModel>>(responseCache);
         }
 
-        var request = new RestRequest("be/brands/get_brand_alert", Method.Post);
-
-        request.AddHeader("Content-Type", "application/json");
-        request.AddBody(json, "application/json");
+        var request = new RestRequest(requestUrl);
 
         var response = await _client.ExecuteAsync(request);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
@@ -87,8 +84,8 @@ public class BrandAlertRepository : IBrandAlertRepository
 
         await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
         {
-            RequestName = "be/brands/get_brand_alert",
-            RequestProperties = json,
+            RequestName = requestUrl,
+            RequestProperties = "",
             ResponseItemIds = JsonSerializer.Serialize(recordIds.ToArray()),
             Expires = DateTime.Now + TimeSpan.FromHours(5)
         });

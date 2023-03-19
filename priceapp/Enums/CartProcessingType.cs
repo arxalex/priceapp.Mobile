@@ -2,7 +2,7 @@ namespace priceapp.Enums;
 
 public enum CartProcessingType
 {
-    OneMarket,
-    OneMarketLowest,
-    MultipleMarketsLowest
+    OneMarket = 0,
+    OneMarketLowest = 1,
+    MultipleMarketsLowest = 2
 }

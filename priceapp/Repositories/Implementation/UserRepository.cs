@@ -25,22 +25,18 @@ public class UserRepository : IUserRepository
         var priceAppWebAccess = DependencyService.Get<IPriceAppWebAccess>();
         var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler())
         {
-            BaseAddress = new Uri("https://priceapp.arxalex.co/")
+            BaseAddress = new Uri(Constants.ApiUrl)
         };
         _client = new RestClient(httpClient);
-        _client.AddDefaultHeader("Cookie", Xamarin.Essentials.SecureStorage.GetAsync("cookie").Result);
+
+        _client.AddDefaultHeader("Cookie", $"Bearer {Xamarin.Essentials.SecureStorage.GetAsync("token").Result}");
     }
 
     public event ConnectionErrorHandler BadConnectEvent;
 
     public async Task<UserRepositoryModel> GetUser()
     {
-        var json = JsonSerializer.Serialize(new {source = 0});
-
-        var request = new RestRequest("be/user/get_user_info", Method.Post);
-
-        request.AddHeader("Content-Type", "application/json");
-        request.AddBody(json, "application/json");
+        var request = new RestRequest("User/info");
 
         var response = await _client.ExecuteAsync(request);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
@@ -51,5 +47,68 @@ public class UserRepository : IUserRepository
         }
 
         return JsonSerializer.Deserialize<UserRepositoryModel>(response.Content);
+    }
+
+    public async Task<LoginResultModel> Login(string username, string password)
+    {
+        var request = new RestRequest("User/login", Method.Post);
+
+        var body = new LoginRequestModel()
+        {
+            Username = username,
+            Password = password
+        };
+        
+        request.AddHeader("Content-Type", "application/json");
+        request.AddBody(body, "application/json");
+        
+        var response = await _client.ExecuteAsync(request);
+
+        if (response.Content == null)
+        {
+            return new LoginResultModel(){Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong};
+        }
+        
+        if (response.StatusCode == HttpStatusCode.BadRequest)
+        {
+            var result = JsonSerializer.Deserialize<ErrorResponseModel>(response.Content);
+
+            var resultModel = new LoginResultModel(){Succsess = false};
+            switch (result.Message)
+            {
+                case ExceptionMessages.UsernameIncorrect:
+                    resultModel.Message = ExceptionMessagesTranslated.UsernameIncorrect;
+                    break;
+                case ExceptionMessages.EmailIncorrect:
+                    resultModel.Message = ExceptionMessagesTranslated.EmailIncorrect;
+                    break;
+                case ExceptionMessages.PasswordIncorrect:
+                    resultModel.Message = ExceptionMessagesTranslated.PasswordIncorrect;
+                    break;
+                default:
+                    resultModel.Message = ExceptionMessagesTranslated.SomethingWentWrong;
+                    break;
+            }
+
+            return resultModel;
+        }
+        
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            var result = JsonSerializer.Deserialize<UserLoginRepositoryModel>(response.Content);
+            await Xamarin.Essentials.SecureStorage.SetAsync("token", result.Token);
+
+            return new LoginResultModel() { Succsess = true };
+        }
+
+        return new LoginResultModel() { Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong };
+    }
+
+    public async Task<bool> IsUserLoggedIn()
+    {
+        var request = new RestRequest("Info/authorize-check");
+        var response = await _client.ExecuteAsync(request);
+
+        return response.StatusCode == HttpStatusCode.OK;
     }
 }

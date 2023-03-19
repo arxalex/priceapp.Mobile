@@ -33,22 +33,24 @@ public class CategoryRepository : ICategoryRepository
         _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
         _categoriesLocalRepository = DependencyService.Get<ICategoriesLocalRepository>();
         _mapper = DependencyService.Get<IMapper>();
-        var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler()) {
-            BaseAddress = new Uri("https://priceapp.arxalex.co/")  
+        var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler())
+        {
+            BaseAddress = new Uri(Constants.ApiUrl)
         };
         _client = new RestClient(httpClient);
-        _client.AddDefaultHeader("Cookie", Xamarin.Essentials.SecureStorage.GetAsync("cookie").Result);
+        _client.AddDefaultHeader("Cookie", $"Bearer {Xamarin.Essentials.SecureStorage.GetAsync("token").Result}");
     }
+
     public async Task<IList<CategoryRepositoryModel>> GetCategories(int? parent = null)
     {
-        var json = JsonSerializer.Serialize(new { source = 0, parent });
-        
-        if (await _cacheRequestsLocalRepository.Exists("be/categories/get_categories", json))
+        var requestUrl = parent == null ? "Categories/base" : $"Categories/{parent}/child";
+
+        if (await _cacheRequestsLocalRepository.Exists(requestUrl, ""))
         {
             var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
                 .GetCacheRecords(x =>
-                    x.RequestName == "be/categories/get_categories" &&
-                    x.RequestProperties == json &&
+                    x.RequestName == requestUrl &&
+                    x.RequestProperties == "" &&
                     x.Expires > DateTime.Now
                 )).First().ResponseItemIds);
 
@@ -58,10 +60,7 @@ public class CategoryRepository : ICategoryRepository
             return _mapper.Map<IList<CategoryRepositoryModel>>(responseCache);
         }
         
-        var request = new RestRequest("be/categories/get_categories", Method.Post);
-        
-        request.AddHeader("Content-Type", "application/json");
-        request.AddBody(json, "application/json");
+        var request = new RestRequest(requestUrl);
 
         var response = await _client.ExecuteAsync(request);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
@@ -81,8 +80,8 @@ public class CategoryRepository : ICategoryRepository
 
         await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
         {
-            RequestName = "be/categories/get_categories",
-            RequestProperties = json,
+            RequestName = requestUrl,
+            RequestProperties = "",
             ResponseItemIds = JsonSerializer.Serialize(recordIds.ToArray()),
             Expires = DateTime.Now + TimeSpan.FromHours(480)
         });

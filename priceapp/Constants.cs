@@ -8,6 +8,7 @@ public class Constants
     public const bool DefaultShowRussiaSupportBrandAlerts = false;
     private const string DatabaseFilename = "PriceAppSQLite.db3";
     private const string CacheDatabaseFilename = "PriceAppSQLiteCache.db3";
+    public const string ApiUrl = "https://api.priceapp.co/";
 
     public const SQLite.SQLiteOpenFlags Flags =
         SQLite.SQLiteOpenFlags.ReadWrite |

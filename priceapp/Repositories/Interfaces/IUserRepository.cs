@@ -8,4 +8,6 @@ public interface IUserRepository
 {
     event ConnectionErrorHandler BadConnectEvent;
     Task<UserRepositoryModel> GetUser();
+    Task<LoginResultModel> Login(string username, string password);
+    Task<bool> IsUserLoggedIn();
 }

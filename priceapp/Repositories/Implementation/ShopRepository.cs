@@ -36,22 +36,21 @@ public class ShopRepository : IShopRepository
         _filialsLocalRepository = DependencyService.Get<IFilialsLocalRepository>();
         _mapper = DependencyService.Get<IMapper>();
         var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler()) {
-            BaseAddress = new Uri("https://priceapp.arxalex.co/")  
+            BaseAddress = new Uri(Constants.ApiUrl)  
         };
         _client = new RestClient(httpClient);
-        _client.AddDefaultHeader("Cookie", Xamarin.Essentials.SecureStorage.GetAsync("cookie").Result);
+        _client.AddDefaultHeader("Cookie", $"Bearer {Xamarin.Essentials.SecureStorage.GetAsync("token").Result}");
     }
 
     public async Task<IList<ShopRepositoryModel>> GetShops()
     {
-        var json = JsonSerializer.Serialize(new { source = 0 });
-        
-        if (await _cacheRequestsLocalRepository.Exists("be/shops/get_shops", json))
+        const string requestUrl = "Shops";
+        if (await _cacheRequestsLocalRepository.Exists(requestUrl, ""))
         {
             var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
                 .GetCacheRecords(x =>
-                    x.RequestName == "be/shops/get_shops" &&
-                    x.RequestProperties == json &&
+                    x.RequestName == requestUrl &&
+                    x.RequestProperties == "" &&
                     x.Expires > DateTime.Now
                 )).First().ResponseItemIds);
 
@@ -61,10 +60,7 @@ public class ShopRepository : IShopRepository
             return _mapper.Map<IList<ShopRepositoryModel>>(responseCache);
         }
         
-        var request = new RestRequest("be/shops/get_shops", Method.Post);
-        
-        request.AddHeader("Content-Type", "application/json");
-        request.AddBody(json, "application/json");
+        var request = new RestRequest(requestUrl);
 
         var response = await _client.ExecuteAsync(request);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
@@ -84,8 +80,8 @@ public class ShopRepository : IShopRepository
 
         await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
         {
-            RequestName = "be/shops/get_shops",
-            RequestProperties = json,
+            RequestName = requestUrl,
+            RequestProperties = "",
             ResponseItemIds = JsonSerializer.Serialize(recordIds.ToArray()),
             Expires = DateTime.Now + TimeSpan.FromHours(4080)
         });
@@ -95,14 +91,13 @@ public class ShopRepository : IShopRepository
 
     public async Task<IList<FilialRepositoryModel>> GetFilials()
     {
-        var json = JsonSerializer.Serialize(new { source = 0 });
-        
-        if (await _cacheRequestsLocalRepository.Exists("be/filials/get_filials", json))
+        const string requestUrl = "Filials";
+        if (await _cacheRequestsLocalRepository.Exists(requestUrl, ""))
         {
             var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
                 .GetCacheRecords(x =>
-                    x.RequestName == "be/filials/get_filials" &&
-                    x.RequestProperties == json &&
+                    x.RequestName == requestUrl &&
+                    x.RequestProperties == "" &&
                     x.Expires > DateTime.Now
                 )).First().ResponseItemIds);
 
@@ -112,11 +107,8 @@ public class ShopRepository : IShopRepository
             return _mapper.Map<IList<FilialRepositoryModel>>(responseCache);
         }
         
-        var request = new RestRequest("be/filials/get_filials", Method.Post);
+        var request = new RestRequest(requestUrl);
         
-        request.AddHeader("Content-Type", "application/json");
-        request.AddBody(json, "application/json");
-
         var response = await _client.ExecuteAsync(request);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
@@ -135,7 +127,64 @@ public class ShopRepository : IShopRepository
 
         await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
         {
-            RequestName = "be/filials/get_filials",
+            RequestName = requestUrl,
+            RequestProperties = "",
+            ResponseItemIds = JsonSerializer.Serialize(recordIds.ToArray()),
+            Expires = DateTime.Now + TimeSpan.FromHours(480)
+        });
+        
+        return list;
+    }
+
+    // TODO: Add location method
+    public async Task<IList<FilialRepositoryModel>> GetFilialsAround(double xCord, double yCord, int radius)
+    {
+        const string requestUrl = "Filials/location";
+        var json = JsonSerializer.Serialize(new
+        {
+            xCord,
+            yCord,
+            radius
+        });
+
+        if (await _cacheRequestsLocalRepository.Exists(requestUrl, json))
+        {
+            var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
+                .GetCacheRecords(x =>
+                    x.RequestName == requestUrl &&
+                    x.RequestProperties == json &&
+                    x.Expires > DateTime.Now
+                )).First().ResponseItemIds);
+
+            var responseCache = await _filialsLocalRepository
+                .GetFilials(x => responseCacheIds.Contains(x.RecordId));
+
+            return _mapper.Map<IList<FilialRepositoryModel>>(responseCache);
+        }
+        
+        var request = new RestRequest(requestUrl, Method.Post);
+        request.AddHeader("Content-Type", "application/json");
+        request.AddBody(json, "application/json");
+        
+        var response = await _client.ExecuteAsync(request);
+        if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
+        {
+            BadConnectEvent?.Invoke(this, new ConnectionErrorArgs(){Success = false, StatusCode = (int) response.StatusCode});
+            return new List<FilialRepositoryModel>();
+        }
+
+        var list = JsonSerializer.Deserialize<List<FilialRepositoryModel>>(response.Content) ?? new List<FilialRepositoryModel>();
+        list.RemoveAll(x => x.id == 0);
+        
+        var recordIds = new List<int>();
+        foreach (var item in list)
+        {
+            recordIds.Add(await _filialsLocalRepository.AddFilial(_mapper.Map<FilialLocalDatabaseModel>(item)));
+        }
+
+        await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
+        {
+            RequestName = requestUrl,
             RequestProperties = json,
             ResponseItemIds = JsonSerializer.Serialize(recordIds.ToArray()),
             Expires = DateTime.Now + TimeSpan.FromHours(480)

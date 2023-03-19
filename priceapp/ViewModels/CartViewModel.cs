@@ -142,7 +142,7 @@ public class CartViewModel : ICartViewModel
 
         var location = await _geolocationUtil.GetCurrentLocation();
         var (itemsResult, economy) = await _itemRepository.GetShoppingList(
-            _mapper.Map<List<ItemToBuyRepositoryModel>>(ItemsToBuyListPreProcessed),
+            _mapper.Map<List<ShoppingListRepositoryModel>>(ItemsToBuyListPreProcessed),
             location.Longitude, location.Latitude,
             Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius),
             (CartProcessingType) Xamarin.Essentials.Preferences.Get("cartProcessingType",
@@ -164,14 +164,14 @@ public class CartViewModel : ICartViewModel
 
         foreach (var item in ItemsToBuyListPreProcessed)
         {
-            PriceAndFilialRepositoryModel itemResult;
+            PriceRepositoryModel itemResult;
             if (item.Filial == null)
             {
-                itemResult = itemsResult.First(x => x.itemId == item.Item.Id);
+                itemResult = itemsResult.First(x => x.itemid == item.Item.Id);
             }
             else
             {
-                itemResult = itemsResult.First(x => x.itemId == item.Item.Id && x.filialId == item.Filial.Id);
+                itemResult = itemsResult.First(x => x.itemid == item.Item.Id && x.filialid == item.Filial.Id);
             }
 
             var itemToBuy = new ItemToBuy()
@@ -179,7 +179,7 @@ public class CartViewModel : ICartViewModel
                 RecordId = item.RecordId,
                 Added = true,
                 Count = item.Count,
-                Filial = _mapper.Map<Filial>(filials.Last(x => x.id == itemResult.filialId)),
+                Filial = _mapper.Map<Filial>(filials.Last(x => x.id == itemResult.filialid)),
                 Item = item.Item
             };
 

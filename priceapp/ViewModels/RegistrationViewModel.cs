@@ -26,7 +26,7 @@ namespace priceapp.ViewModels
             var priceAppWebAccess = DependencyService.Get<IPriceAppWebAccess>();
             var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler())
             {
-                BaseAddress = new Uri("https://priceapp.arxalex.co/")
+                BaseAddress = new Uri("https://api.priceapp.co/")
             };
 
             _client = new RestClient(httpClient);

@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -25,6 +27,7 @@ public class ItemViewModel : IItemViewModel
     private readonly GeolocationUtil _geolocationUtil;
     private readonly IItemRepository _itemRepository;
     private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository;
+    private readonly IShopRepository _shopRepository;
     private readonly IMapper _mapper;
     private BrandAlert _brandAlert;
     private Color _foreGroundColorBrandAlert;
@@ -39,6 +42,7 @@ public class ItemViewModel : IItemViewModel
         _brandAlertRepository = DependencyService.Get<IBrandAlertRepository>();
         _geolocationUtil = DependencyService.Get<GeolocationUtil>();
         _itemsToBuyLocalRepository = DependencyService.Get<IItemsToBuyLocalRepository>();
+        _shopRepository = DependencyService.Get<IShopRepository>();
 
         _itemRepository.BadConnectEvent += ItemRepositoryOnBadConnectEvent;
 
@@ -94,20 +98,29 @@ public class ItemViewModel : IItemViewModel
 
     public async Task LoadAsync(Item item)
     {
+        var shops = _mapper.Map<IList<Shop>>(await _shopRepository.GetShops());
+        var filials = _mapper.Map<IList<Filial>>(await _shopRepository.GetFilials());
         var location = await _geolocationUtil.GetCurrentLocation();
         Item = item;
 
-        var priceInfos = await _itemRepository
+        var priceInfos = _mapper.Map<IList<PriceModel>>(await _itemRepository
             .GetPricesAndFilials(
                 Item.Id,
                 location.Longitude,
                 location.Latitude,
                 Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius)
-            );
+            ));
 
         foreach (var priceInfo in priceInfos)
         {
-            PricesAndFilials.Add(_mapper.Map<ItemPriceInfo>(priceInfo));
+            PricesAndFilials.Add(new ItemPriceInfo()
+            {
+                Price = priceInfo.Price,
+                ItemId = priceInfo.ItemId,
+                Quantity = priceInfo.Quantity,
+                Filial = filials.Last(f => f.Id == priceInfo.FilialId),
+                Shop = shops.Last(s => s.Id == priceInfo.ShopId)
+            });
         }
 
         if (Xamarin.Essentials.Preferences.Get("showRussiaSupportBrandAlerts",

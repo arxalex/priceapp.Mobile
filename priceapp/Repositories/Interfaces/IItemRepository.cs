@@ -14,10 +14,10 @@ public interface IItemRepository
     Task<ItemRepositoryModel> GetItem(int itemId, double? xCord = null,
         double? yCord = null, double? radius = null);
 
-    Task<IList<PriceAndFilialRepositoryModel>> GetPricesAndFilials(int itemId, double xCord, double yCord, int radius);
+    Task<IList<PriceRepositoryModel>> GetPricesAndFilials(int itemId, double xCord, double yCord, int radius);
     event ConnectionErrorHandler BadConnectEvent;
 
-    Task<(IList<PriceAndFilialRepositoryModel>, double)> GetShoppingList(List<ItemToBuyRepositoryModel> items,
+    Task<(IList<PriceRepositoryModel>, double)> GetShoppingList(List<ShoppingListRepositoryModel> items,
         double xCord,
         double yCord,
         int radius, CartProcessingType type);

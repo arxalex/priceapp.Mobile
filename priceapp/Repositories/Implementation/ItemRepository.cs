@@ -37,10 +37,10 @@ public class ItemRepository : IItemRepository
         _mapper = DependencyService.Get<IMapper>();
         var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler())
         {
-            BaseAddress = new Uri("https://priceapp.arxalex.co/")
+            BaseAddress = new Uri(Constants.ApiUrl)
         };
         _client = new RestClient(httpClient);
-        _client.AddDefaultHeader("Cookie", Xamarin.Essentials.SecureStorage.GetAsync("cookie").Result);
+        _client.AddDefaultHeader("Cookie", $"Bearer {Xamarin.Essentials.SecureStorage.GetAsync("token").Result}");
     }
 
     public event ConnectionErrorHandler BadConnectEvent;
@@ -52,39 +52,42 @@ public class ItemRepository : IItemRepository
         double? yCord = null,
         double? radius = null)
     {
-        string json;
+        string json = null;
+        string requestUrl;
         string requestProperty;
         if (xCord == null || yCord == null || radius == null)
         {
-            json = JsonSerializer.Serialize(new
-                {source = 0, category = categoryId, from, to, method = "viewModelByCategory"});
-            requestProperty = json;
+            requestUrl = $"Items/category/{categoryId}/extended";
+            requestProperty = JsonSerializer.Serialize(new
+            {
+                from,
+                to
+            });
         }
         else
         {
+            requestUrl = $"Items/category/{categoryId}/location/extended";
             json = JsonSerializer.Serialize(new
             {
-                source = 0, category = categoryId, from, to, method = "viewModelByCategoryAndLocation", xCord, yCord,
+                xCord,
+                yCord,
                 radius
             });
             requestProperty = JsonSerializer.Serialize(new
             {
-                source = 0,
-                category = categoryId,
                 from,
                 to,
-                method = "viewModelByCategoryAndLocation",
-                xCord = Math.Round((double) xCord, 3),
-                yCord = Math.Round((double) yCord, 3),
+                xCord = Math.Round((double)xCord, 3),
+                yCord = Math.Round((double)yCord, 3),
                 radius
             });
         }
 
-        if (await _cacheRequestsLocalRepository.Exists("be/items/get_items", requestProperty))
+        if (await _cacheRequestsLocalRepository.Exists(requestUrl, requestProperty))
         {
             var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
                 .GetCacheRecords(x =>
-                    x.RequestName == "be/items/get_items" &&
+                    x.RequestName == requestUrl &&
                     x.RequestProperties == requestProperty &&
                     x.Expires > DateTime.Now
                 )).First().ResponseItemIds);
@@ -95,16 +98,21 @@ public class ItemRepository : IItemRepository
             return _mapper.Map<IList<ItemRepositoryModel>>(responseCache);
         }
 
-        var request = new RestRequest("be/items/get_items", Method.Post);
+        var request = new RestRequest(requestUrl, json != null ? Method.Post : Method.Get);
 
         request.AddHeader("Content-Type", "application/json");
-        request.AddBody(json, "application/json");
+        request.AddQueryParameter("from", from);
+        request.AddQueryParameter("to", to);
+        if (json != null)
+        {
+            request.AddBody(json, "application/json");
+        }
 
         var response = await _client.ExecuteAsync(request);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
             BadConnectEvent?.Invoke(this,
-                new ConnectionErrorArgs() {Success = false, StatusCode = (int) response.StatusCode});
+                new ConnectionErrorArgs() { Success = false, StatusCode = (int)response.StatusCode });
             return new List<ItemRepositoryModel>();
         }
 
@@ -119,7 +127,7 @@ public class ItemRepository : IItemRepository
 
         await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
         {
-            RequestName = "be/items/get_items",
+            RequestName = requestUrl,
             RequestProperties = requestProperty,
             ResponseItemIds = JsonSerializer.Serialize(recordIds.ToArray()),
             Expires = DateTime.Now + TimeSpan.FromHours(5)
@@ -137,41 +145,48 @@ public class ItemRepository : IItemRepository
     {
         string json;
         string requestProperty;
+        string requestUrl;
+
         if (xCord == null || yCord == null || radius == null)
         {
+            requestUrl = "Items/search/extended";
             json = JsonSerializer.Serialize(new
             {
-                source = 0,
-                search, from, to, method = "viewModelBySearch"
+                search
             });
-            requestProperty = json;
+            requestProperty = JsonSerializer.Serialize(new
+            {
+                search,
+                from,
+                to
+            });
         }
         else
         {
+            requestUrl = "Items/search/location/extended";
             json = JsonSerializer.Serialize(new
             {
-                source = 0,
-                search, from, to, method = "viewModelBySearchAndLocation", xCord, yCord,
+                search,
+                xCord,
+                yCord,
                 radius
             });
             requestProperty = JsonSerializer.Serialize(new
             {
-                source = 0,
                 search,
                 from,
                 to,
-                method = "viewModelBySearchAndLocation",
-                xCord = Math.Round((double) xCord, 3),
-                yCord = Math.Round((double) yCord, 3),
+                xCord = Math.Round((double)xCord, 3),
+                yCord = Math.Round((double)yCord, 3),
                 radius
             });
         }
 
-        if (await _cacheRequestsLocalRepository.Exists("be/items/get_items", requestProperty))
+        if (await _cacheRequestsLocalRepository.Exists(requestUrl, requestProperty))
         {
             var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
                 .GetCacheRecords(x =>
-                    x.RequestName == "be/items/get_items" &&
+                    x.RequestName == requestUrl &&
                     x.RequestProperties == requestProperty &&
                     x.Expires > DateTime.Now
                 )).First().ResponseItemIds);
@@ -182,7 +197,7 @@ public class ItemRepository : IItemRepository
             return _mapper.Map<IList<ItemRepositoryModel>>(responseCache);
         }
 
-        var request = new RestRequest("be/items/get_items", Method.Post);
+        var request = new RestRequest(requestUrl, Method.Post);
 
         request.AddHeader("Content-Type", "application/json");
         request.AddBody(json, "application/json");
@@ -191,7 +206,7 @@ public class ItemRepository : IItemRepository
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
             BadConnectEvent?.Invoke(this,
-                new ConnectionErrorArgs() {Success = false, StatusCode = (int) response.StatusCode});
+                new ConnectionErrorArgs() { Success = false, StatusCode = (int)response.StatusCode });
             return new List<ItemRepositoryModel>();
         }
 
@@ -206,7 +221,7 @@ public class ItemRepository : IItemRepository
 
         await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
         {
-            RequestName = "be/items/get_items",
+            RequestName = requestUrl,
             RequestProperties = requestProperty,
             ResponseItemIds = JsonSerializer.Serialize(recordIds.ToArray()),
             Expires = DateTime.Now + TimeSpan.FromHours(5)
@@ -220,35 +235,37 @@ public class ItemRepository : IItemRepository
         double? yCord = null,
         double? radius = null)
     {
-        string json;
+        string json = null;
         string requestProperty;
+        string requestUrl;
+
         if (xCord == null || yCord == null || radius == null)
         {
-            json = JsonSerializer.Serialize(new {source = 0, id = itemId, method = "viewModelById"});
-            requestProperty = json;
+            requestUrl = $"Items/{itemId}/extended";
+            requestProperty = "";
         }
         else
         {
+            requestUrl = $"Items/{itemId}/location/extended";
             json = JsonSerializer.Serialize(new
             {
-                source = 0, id = itemId, method = "viewModelByIdAndLocation", xCord, yCord, radius
+                xCord,
+                yCord,
+                radius
             });
             requestProperty = JsonSerializer.Serialize(new
             {
-                source = 0,
-                id = itemId,
-                method = "viewModelByIdAndLocation",
-                xCord = Math.Round((double) xCord, 3),
-                yCord = Math.Round((double) yCord, 3),
+                xCord = Math.Round((double)xCord, 3),
+                yCord = Math.Round((double)yCord, 3),
                 radius
             });
         }
 
-        if (await _cacheRequestsLocalRepository.Exists("be/items/get_item", requestProperty))
+        if (await _cacheRequestsLocalRepository.Exists(requestUrl, requestProperty))
         {
             var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
                 .GetCacheRecords(x =>
-                    x.RequestName == "be/items/get_item" &&
+                    x.RequestName == requestUrl &&
                     x.RequestProperties == requestProperty &&
                     x.Expires > DateTime.Now
                 )).First().ResponseItemIds);
@@ -264,27 +281,31 @@ public class ItemRepository : IItemRepository
             return _mapper.Map<ItemRepositoryModel>(responseCache.First());
         }
 
-        var request = new RestRequest("be/items/get_item", Method.Post);
+        var request = new RestRequest(requestUrl, json != null ? Method.Post : Method.Get);
 
         request.AddHeader("Content-Type", "application/json");
-        request.AddBody(json, "application/json");
+        if (json != null)
+        {
+            request.AddBody(json, "application/json");
+        }
 
         var response = await _client.ExecuteAsync(request);
 
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
             BadConnectEvent?.Invoke(this,
-                new ConnectionErrorArgs() {Success = false, StatusCode = (int) response.StatusCode});
+                new ConnectionErrorArgs() { Success = false, StatusCode = (int)response.StatusCode });
             return null;
         }
 
         var item = JsonSerializer.Deserialize<ItemRepositoryModel>(response.Content);
 
-        var recordIds = new List<int> {await _itemsLocalRepository.AddItem(_mapper.Map<ItemLocalDatabaseModel>(item))};
+        var recordIds = new List<int>
+            { await _itemsLocalRepository.AddItem(_mapper.Map<ItemLocalDatabaseModel>(item)) };
 
         await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
         {
-            RequestName = "be/items/get_item",
+            RequestName = requestUrl,
             RequestProperties = requestProperty,
             ResponseItemIds = JsonSerializer.Serialize(recordIds.ToArray()),
             Expires = DateTime.Now + TimeSpan.FromHours(5)
@@ -292,20 +313,18 @@ public class ItemRepository : IItemRepository
 
         return item;
     }
-
-    public async Task<IList<PriceAndFilialRepositoryModel>> GetPricesAndFilials(int itemId, double xCord, double yCord,
+    
+    public async Task<IList<PriceRepositoryModel>> GetPricesAndFilials(int itemId, double xCord, double yCord,
         int radius)
     {
-        var request = new RestRequest("be/items/get_item", Method.Post);
+        var requestUrl = $"Prices/{itemId}/location";
+        var request = new RestRequest(requestUrl, Method.Post);
 
         var json = JsonSerializer.Serialize(new
         {
-            source = 0,
-            id = itemId,
             xCord,
             yCord,
-            radius,
-            method = "pricesAndFilialsViewModelById"
+            radius
         });
         request.AddHeader("Content-Type", "application/json");
         request.AddBody(json, "application/json");
@@ -314,55 +333,39 @@ public class ItemRepository : IItemRepository
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
             BadConnectEvent?.Invoke(this,
-                new ConnectionErrorArgs() {Success = false, StatusCode = (int) response.StatusCode});
-            return new List<PriceAndFilialRepositoryModel>();
+                new ConnectionErrorArgs() { Success = false, StatusCode = (int)response.StatusCode });
+            return new List<PriceRepositoryModel>();
         }
 
-        var list = JsonSerializer.Deserialize<List<PriceAndFilialRepositoryModel>>(response.Content) ??
-                   new List<PriceAndFilialRepositoryModel>();
+        var list = JsonSerializer.Deserialize<List<PriceRepositoryModel>>(response.Content) ??
+                   new List<PriceRepositoryModel>();
         return list;
     }
-
-    public async Task<(IList<PriceAndFilialRepositoryModel>, double)> GetShoppingList(
-        List<ItemToBuyRepositoryModel> items,
+    
+    public async Task<(IList<PriceRepositoryModel>, double)> GetShoppingList(
+        List<ShoppingListRepositoryModel> items,
         double xCord, double yCord,
         int radius, CartProcessingType type)
     {
-        var request = new RestRequest("be/items/get_shopping_list", Method.Post);
-
-        var method = "";
-
-        switch (type)
-        {
-            case CartProcessingType.OneMarket:
-                break;
-            case CartProcessingType.OneMarketLowest:
-                method = "oneLowest";
-                break;
-            case CartProcessingType.MultipleMarketsLowest:
-                method = "multipleLowest";
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(type), type, null);
-        }
+        var request = new RestRequest("ShoppingList/location", Method.Post);
 
         var json = JsonSerializer.Serialize(new
         {
             xCord,
             yCord,
             radius,
-            method,
             items
         });
         request.AddHeader("Content-Type", "application/json");
         request.AddBody(json, "application/json");
+        request.AddQueryParameter("type", type);
 
         var response = await _client.ExecuteAsync(request);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
             BadConnectEvent?.Invoke(this,
-                new ConnectionErrorArgs() {Success = false, StatusCode = (int) response.StatusCode});
-            return (new List<PriceAndFilialRepositoryModel>(), 0);
+                new ConnectionErrorArgs() { Success = false, StatusCode = (int)response.StatusCode });
+            return (new List<PriceRepositoryModel>(), 0);
         }
 
         var content = JsonSerializer.Deserialize<ShoppingListResponse>(response.Content, new JsonSerializerOptions()
@@ -370,7 +373,7 @@ public class ItemRepository : IItemRepository
             PropertyNameCaseInsensitive = true,
         }) ?? new ShoppingListResponse()
         {
-            ShoppingList = new List<PriceAndFilialRepositoryModel>(),
+            ShoppingList = new List<PriceRepositoryModel>(),
             Economy = 0
         };
 
@@ -379,7 +382,7 @@ public class ItemRepository : IItemRepository
 
     private class ShoppingListResponse
     {
-        public List<PriceAndFilialRepositoryModel> ShoppingList { get; set; } = new();
+        public List<PriceRepositoryModel> ShoppingList { get; set; } = new();
         public double Economy { get; set; }
     }
 }
