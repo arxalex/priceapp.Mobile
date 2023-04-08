@@ -152,7 +152,7 @@ public class ItemViewModel : IItemViewModel
             Filial = filialId != null ? new Filial {Id = (int) filialId} : null,
             Item = Item
         };
-        await _itemsToBuyLocalRepository.AddItem(_mapper.Map<ItemToBuyLocalDatabaseModel>(itemToBuy));
+        await _itemsToBuyLocalRepository.InsertAsync(_mapper.Map<ItemToBuyLocalDatabaseModel>(itemToBuy));
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

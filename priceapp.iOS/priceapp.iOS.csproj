@@ -26,6 +26,9 @@
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
+    <CodesignKey>Apple Development: Oleksandr Yushchenko (5548TQ8LW3)</CodesignKey>
+    <CodesignProvision>Automatic</CodesignProvision>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -175,7 +178,7 @@
   </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\priceapp\priceapp.csproj">
-            <Project>{751F727B-98B5-4E45-BD97-675AA611529C}</Project>
+            <Project>{B10041EB-CF47-4A68-8A87-BBA757C959BD}</Project>
             <Name>priceapp</Name>
         </ProjectReference>
     </ItemGroup>

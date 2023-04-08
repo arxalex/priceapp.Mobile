@@ -22,29 +22,34 @@ public class ItemsLocalRepository : IItemsLocalRepository
         _connection = LocalCacheDatabase.Database;
     }
 
-    public async Task<int> AddItem(ItemLocalDatabaseModel model)
+    public async Task<int> InsertAsync(ItemLocalDatabaseModel model)
     {
         await _connection.InsertAsync(model);
         return model.RecordId;
     }
 
-    public async Task RemoveItem(int id)
+    public async Task DeleteAsync(int id)
     {
         await _connection.DeleteAsync<ItemLocalDatabaseModel>(id);
     }
 
-    public async Task<List<ItemLocalDatabaseModel>> GetItems()
+    public async Task<List<ItemLocalDatabaseModel>> GetAsync()
     {
         return await _connection.Table<ItemLocalDatabaseModel>().ToListAsync();
     }
 
-    public async Task<List<ItemLocalDatabaseModel>> GetItems(Expression<Func<ItemLocalDatabaseModel, bool>> expression)
+    public async Task<List<ItemLocalDatabaseModel>> GetAsync(Expression<Func<ItemLocalDatabaseModel, bool>> expression)
     {
         return await _connection.Table<ItemLocalDatabaseModel>().Where(expression).ToListAsync();
     }
 
-    public async Task UpdateItem(ItemLocalDatabaseModel model)
+    public async Task UpdateAsync(ItemLocalDatabaseModel model)
     {
         await _connection.UpdateAsync(model);
+    }
+    
+    public async Task DeleteAllAsync()
+    {
+        await _connection.DeleteAllAsync<ItemLocalDatabaseModel>();
     }
 }

@@ -4,6 +4,6 @@ namespace priceapp.Services.Interfaces;
 
 public interface IConnectionService
 {
-    bool IsConnected();
     Task<bool> IsConnectedAsync();
+    Task<bool> IsAppNeedsUpdateAsync();
 }

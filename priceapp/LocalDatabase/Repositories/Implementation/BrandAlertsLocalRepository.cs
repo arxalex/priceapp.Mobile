@@ -24,30 +24,35 @@ public class BrandAlertsLocalRepository : IBrandAlertsLocalRepository
 
     public event ConnectionErrorHandler BadConnectEvent;
 
-    public async Task<int> AddItem(BrandAlertLocalDatabaseModel model)
+    public async Task<int> InsertAsync(BrandAlertLocalDatabaseModel model)
     {
         await _connection.InsertAsync(model);
         return model.RecordId;
     }
 
-    public async Task RemoveItem(int id)
+    public async Task DeleteAsync(int id)
     {
         await _connection.DeleteAsync<BrandAlertLocalDatabaseModel>(id);
     }
 
-    public async Task<List<BrandAlertLocalDatabaseModel>> GetItems()
+    public async Task<List<BrandAlertLocalDatabaseModel>> GetAsync()
     {
         return await _connection.Table<BrandAlertLocalDatabaseModel>().ToListAsync();
     }
 
-    public async Task<List<BrandAlertLocalDatabaseModel>> GetItems(
+    public async Task<List<BrandAlertLocalDatabaseModel>> GetAsync(
         Expression<Func<BrandAlertLocalDatabaseModel, bool>> expression)
     {
         return await _connection.Table<BrandAlertLocalDatabaseModel>().Where(expression).ToListAsync();
     }
 
-    public async Task UpdateItem(BrandAlertLocalDatabaseModel model)
+    public async Task UpdateAsync(BrandAlertLocalDatabaseModel model)
     {
         await _connection.UpdateAsync(model);
+    }
+    
+    public async Task DeleteAllAsync()
+    {
+        await _connection.DeleteAllAsync<BrandAlertLocalDatabaseModel>();
     }
 }

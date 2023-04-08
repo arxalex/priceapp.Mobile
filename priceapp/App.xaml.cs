@@ -1,5 +1,5 @@
-﻿using priceapp.Utils;
-using priceapp.ViewModels.Interfaces;
+﻿using priceapp.Services.Interfaces;
+using priceapp.Utils;
 using priceapp.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -21,41 +21,50 @@ namespace priceapp
         {
             InitializeComponent();
             DependencyService.RegisterSingleton(MapperUtil.CreateMapper());
-
-            var updateAppViewModel = DependencyService.Get<IUpdateAppViewModel>();
-            var loginViewModel = DependencyService.Get<ILoginViewModel>();
-
-            if (updateAppViewModel.IsAppNeedUpdate())
-            {
-                MainPage = new UpdateAppPage();
-            }
-            else
-            {
-                var isLoggedIn = loginViewModel.IsUserLoggedIn();
-                if (isLoggedIn)
-                {
-                    if (VersionTracking.IsFirstLaunchEver)
-                    {
-                        MainPage = new OnboardingPage();
-                    }
-                    else
-                    {
-                        MainPage = new MainPage();
-                    }
-                }
-                else
-                {
-                    MainPage = new NavigationPage(new LoginPage());
-                }
-            }
-
-            var geolocationUtil = DependencyService.Get<GeolocationUtil>();
-            geolocationUtil?.GetCurrentLocationNow();
+            MainPage = new Page();
         }
 
-        protected override void OnStart()
+        protected override async void OnStart()
         {
-            // Handle when your app starts
+            var connectionService = DependencyService.Get<IConnectionService>(DependencyFetchTarget.NewInstance);
+            var userService = DependencyService.Get<IUserService>(DependencyFetchTarget.NewInstance);
+            var geolocationUtil = DependencyService.Get<GeolocationUtil>();
+            await geolocationUtil.GetCurrentLocationNow();
+
+            var isConnected = await connectionService.IsConnectedAsync();
+            if (!isConnected)
+            {
+                var isUserWasLoggedIn = await userService.IsUserWasLoggedIn();
+                if (isUserWasLoggedIn)
+                {
+                    MainPage = new MainPage();
+                    return;
+                }
+                
+                MainPage = new NavigationPage(new LoginPage());
+                return;
+            }
+            
+            if (await connectionService.IsAppNeedsUpdateAsync())
+            {
+                MainPage = new UpdateAppPage();
+                return;
+            }
+            
+            var isLoggedIn = await userService.IsUserLoggedIn();
+            if (isLoggedIn)
+            {
+                if (VersionTracking.IsFirstLaunchEver)
+                {
+                    MainPage = new OnboardingPage();
+                    return;
+                }
+
+                MainPage = new MainPage();
+                return;
+            }
+            
+            MainPage = new NavigationPage(new LoginPage());
         }
 
         protected override void OnSleep()

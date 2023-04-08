@@ -11,21 +11,22 @@ namespace priceapp.Views;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class AccountPage
 {
+    private readonly IAccountViewModel _accountViewModel;
     public AccountPage()
     {
         InitializeComponent();
 
-        var accountViewModel = DependencyService.Get<IAccountViewModel>(DependencyFetchTarget.NewInstance);
+        _accountViewModel = DependencyService.Get<IAccountViewModel>(DependencyFetchTarget.NewInstance);
 
-        accountViewModel.Loaded += AccountViewModelOnLoaded;
-        accountViewModel.BadConnectEvent += AccountViewModelOnBadConnectEvent;
+        _accountViewModel.Loaded += AccountViewModelOnLoaded;
+        _accountViewModel.BadConnectEvent += AccountViewModelOnBadConnectEvent;
 
         ActivityIndicator.IsRunning = true;
         ActivityIndicator.IsVisible = true;
 
-        accountViewModel.LoadAsync();
+        _accountViewModel.LoadAsync();
 
-        BindingContext = accountViewModel;
+        BindingContext = _accountViewModel;
     }
 
     private async void AccountViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
@@ -52,10 +53,7 @@ public partial class AccountPage
                 await Navigation.PushAsync(new AboutPage());
                 break;
             case "Змінити акаунт":
-                SecureStorage.Remove("cookie");
-                SecureStorage.Remove("username");
-                SecureStorage.Remove("email");
-                Application.Current.MainPage = new LoginPage();
+                await _accountViewModel.ChangeAccount();
                 break;
             case "Підказки":
                 Application.Current.MainPage = new OnboardingPage();

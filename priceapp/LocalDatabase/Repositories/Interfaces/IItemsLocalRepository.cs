@@ -9,10 +9,11 @@ namespace priceapp.LocalDatabase.Repositories.Interfaces;
 
 public interface IItemsLocalRepository
 {
-    Task<int> AddItem(ItemLocalDatabaseModel model);
-    Task RemoveItem(int id);
-    Task<List<ItemLocalDatabaseModel>> GetItems();
-    Task<List<ItemLocalDatabaseModel>> GetItems(Expression<Func<ItemLocalDatabaseModel, bool>> expression);
-    Task UpdateItem(ItemLocalDatabaseModel model);
+    Task<int> InsertAsync(ItemLocalDatabaseModel model);
+    Task DeleteAsync(int id);
+    Task<List<ItemLocalDatabaseModel>> GetAsync();
+    Task<List<ItemLocalDatabaseModel>> GetAsync(Expression<Func<ItemLocalDatabaseModel, bool>> expression);
+    Task UpdateAsync(ItemLocalDatabaseModel model);
     event ConnectionErrorHandler BadConnectEvent;
+    Task DeleteAllAsync();
 }

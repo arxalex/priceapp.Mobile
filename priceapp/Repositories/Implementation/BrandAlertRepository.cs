@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -13,7 +12,7 @@ using priceapp.LocalDatabase.Repositories.Interfaces;
 using priceapp.Repositories.Implementation;
 using priceapp.Repositories.Interfaces;
 using priceapp.Repositories.Models;
-using priceapp.WebServices;
+using priceapp.Utils;
 using RestSharp;
 using Xamarin.Forms;
 
@@ -30,16 +29,10 @@ public class BrandAlertRepository : IBrandAlertRepository
 
     public BrandAlertRepository()
     {
-        var priceAppWebAccess = DependencyService.Get<IPriceAppWebAccess>();
         _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
         _brandAlertsLocalRepository = DependencyService.Get<IBrandAlertsLocalRepository>();
         _mapper = DependencyService.Get<IMapper>();
-        var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler())
-        {
-            BaseAddress = new Uri(Constants.ApiUrl)
-        };
-        _client = new RestClient(httpClient);
-        _client.AddDefaultHeader("Cookie", $"Bearer {Xamarin.Essentials.SecureStorage.GetAsync("token").Result}"); 
+        _client = ConnectionUtil.GetRestClient();
     }
 
     public event ConnectionErrorHandler BadConnectEvent;
@@ -48,17 +41,17 @@ public class BrandAlertRepository : IBrandAlertRepository
     {
         var requestUrl = $"Brands/{brandId}/alerts";
 
-        if (await _cacheRequestsLocalRepository.Exists(requestUrl, ""))
+        if (await _cacheRequestsLocalRepository.ExistsAsync(requestUrl, ""))
         {
             var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
-                .GetCacheRecords(x =>
+                .GetAsync(x =>
                     x.RequestName == requestUrl &&
                     x.RequestProperties == "" &&
                     x.Expires > DateTime.Now
                 )).First().ResponseItemIds);
 
             var responseCache = await _brandAlertsLocalRepository
-                .GetItems(x => responseCacheIds.Contains(x.RecordId));
+                .GetAsync(x => responseCacheIds.Contains(x.RecordId));
 
             return _mapper.Map<IList<BrandAlertRepositoryModel>>(responseCache);
         }
@@ -79,10 +72,10 @@ public class BrandAlertRepository : IBrandAlertRepository
         var recordIds = new List<int>();
         foreach (var item in list)
         {
-            recordIds.Add(await _brandAlertsLocalRepository.AddItem(_mapper.Map<BrandAlertLocalDatabaseModel>(item)));
+            recordIds.Add(await _brandAlertsLocalRepository.InsertAsync(_mapper.Map<BrandAlertLocalDatabaseModel>(item)));
         }
 
-        await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
+        await _cacheRequestsLocalRepository.InsertAsync(new CacheRequestsLocalDatabaseModel
         {
             RequestName = requestUrl,
             RequestProperties = "",

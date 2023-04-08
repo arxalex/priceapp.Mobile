@@ -7,7 +7,6 @@ namespace priceapp.ViewModels.Interfaces
     {
         event LoginHandler LoginSuccess;
         Task LoginUser(string email, string password);
-        bool IsUserLoggedIn();
         Task LoginAsGuest();
     }
 }

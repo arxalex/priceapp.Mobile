@@ -16,14 +16,31 @@ public class ConnectionService : IConnectionService
     {
         _infoRepository = DependencyService.Get<IInfoRepository>();
     }
-    
-    public bool IsConnected()
-    {
-        return _infoRepository.GetInfo().Result != null;
-    }
-    
+
     public async Task<bool> IsConnectedAsync()
     {
         return await _infoRepository.GetInfo() != null;
+    }
+
+    public async Task<bool> IsAppNeedsUpdateAsync()
+    {
+        return false;
+        // var request = new RestRequest("be/check_version", Method.Post);
+        //
+        // var json = JsonSerializer.Serialize(new {installed = VersionTracking.CurrentVersion});
+        //
+        // request.AddHeader("Content-Type", "application/json");
+        // request.AddBody(json, "application/json");
+        //
+        // var response = _client.ExecuteAsync(request).Result;
+        //
+        // if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
+        // {
+        //     return false;
+        // }
+        //
+        // var result = JsonSerializer.Deserialize<bool>(response.Content, new JsonSerializerOptions());
+        //
+        // return !result;
     }
 }

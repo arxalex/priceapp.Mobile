@@ -25,46 +25,46 @@ public class ItemsToBuyLocalRepository : IItemsToBuyLocalRepository
 
     public event ConnectionErrorHandler BadConnectEvent;
 
-    public async Task AddItem(ItemToBuyLocalDatabaseModel model)
+    public async Task InsertAsync(ItemToBuyLocalDatabaseModel model)
     {
-        if (await Exists(model.ItemId, model.FilialId))
+        if (await ExistsAsync(model.ItemId, model.FilialId))
         {
-            var item = (await GetItems(x => x.ItemId == model.ItemId && x.FilialId == model.FilialId)).First();
+            var item = (await GetAsync(x => x.ItemId == model.ItemId && x.FilialId == model.FilialId)).First();
             item.Count++;
-            await UpdateItem(item);
+            await UpdateAsync(item);
             return;
         }
 
         await _connection.InsertAsync(model);
     }
 
-    public async Task RemoveItem(int id)
+    public async Task DeleteAsync(int id)
     {
         await _connection.DeleteAsync<ItemToBuyLocalDatabaseModel>(id);
     }
 
-    public async Task RemoveAll()
+    public async Task DeleteAllAsync()
     {
         await _connection.DeleteAllAsync<ItemToBuyLocalDatabaseModel>();
     }
 
-    public async Task<List<ItemToBuyLocalDatabaseModel>> GetItems()
+    public async Task<List<ItemToBuyLocalDatabaseModel>> GetAsync()
     {
         return await _connection.Table<ItemToBuyLocalDatabaseModel>().ToListAsync();
     }
 
-    public async Task<List<ItemToBuyLocalDatabaseModel>> GetItems(
+    public async Task<List<ItemToBuyLocalDatabaseModel>> GetAsync(
         Expression<Func<ItemToBuyLocalDatabaseModel, bool>> expression)
     {
         return await _connection.Table<ItemToBuyLocalDatabaseModel>().Where(expression).ToListAsync();
     }
 
-    public async Task<bool> Exists(int itemId, int? filialId = null)
+    public async Task<bool> ExistsAsync(int itemId, int? filialId = null)
     {
-        return (await GetItems(x => x.ItemId == itemId && x.FilialId == filialId)).Count > 0;
+        return (await GetAsync(x => x.ItemId == itemId && x.FilialId == filialId)).Count > 0;
     }
 
-    public async Task UpdateItem(ItemToBuyLocalDatabaseModel model)
+    public async Task UpdateAsync(ItemToBuyLocalDatabaseModel model)
     {
         if (model.Count > 0)
         {
@@ -72,6 +72,6 @@ public class ItemsToBuyLocalRepository : IItemsToBuyLocalRepository
             return;
         }
 
-        await RemoveItem(model.ItemId);
+        await DeleteAsync(model.ItemId);
     }
 }

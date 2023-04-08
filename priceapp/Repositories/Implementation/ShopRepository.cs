@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -13,7 +12,7 @@ using priceapp.LocalDatabase.Repositories.Interfaces;
 using priceapp.Repositories.Implementation;
 using priceapp.Repositories.Interfaces;
 using priceapp.Repositories.Models;
-using priceapp.WebServices;
+using priceapp.Utils;
 using RestSharp;
 using Xamarin.Forms;
 
@@ -28,34 +27,30 @@ public class ShopRepository : IShopRepository
     private readonly IShopsLocalRepository _shopsLocalRepository;
     private readonly IFilialsLocalRepository _filialsLocalRepository;
     private readonly IMapper _mapper;
+
     public ShopRepository()
     {
-        var priceAppWebAccess = DependencyService.Get<IPriceAppWebAccess>();
         _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
         _shopsLocalRepository = DependencyService.Get<IShopsLocalRepository>();
         _filialsLocalRepository = DependencyService.Get<IFilialsLocalRepository>();
         _mapper = DependencyService.Get<IMapper>();
-        var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler()) {
-            BaseAddress = new Uri(Constants.ApiUrl)  
-        };
-        _client = new RestClient(httpClient);
-        _client.AddDefaultHeader("Cookie", $"Bearer {Xamarin.Essentials.SecureStorage.GetAsync("token").Result}");
+        _client = ConnectionUtil.GetRestClient();
     }
 
     public async Task<IList<ShopRepositoryModel>> GetShops()
     {
         const string requestUrl = "Shops";
-        if (await _cacheRequestsLocalRepository.Exists(requestUrl, ""))
+        if (await _cacheRequestsLocalRepository.ExistsAsync(requestUrl, ""))
         {
             var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
-                .GetCacheRecords(x =>
+                .GetAsync(x =>
                     x.RequestName == requestUrl &&
                     x.RequestProperties == "" &&
                     x.Expires > DateTime.Now
                 )).First().ResponseItemIds);
 
             var responseCache = await _shopsLocalRepository
-                .GetShops(x => responseCacheIds.Contains(x.RecordId));
+                .GetAsync(x => responseCacheIds.Contains(x.RecordId));
 
             return _mapper.Map<IList<ShopRepositoryModel>>(responseCache);
         }
@@ -75,10 +70,10 @@ public class ShopRepository : IShopRepository
         var recordIds = new List<int>();
         foreach (var item in list)
         {
-            recordIds.Add(await _shopsLocalRepository.AddShop(_mapper.Map<ShopLocalDatabaseModel>(item)));
+            recordIds.Add(await _shopsLocalRepository.InsertAsync(_mapper.Map<ShopLocalDatabaseModel>(item)));
         }
 
-        await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
+        await _cacheRequestsLocalRepository.InsertAsync(new CacheRequestsLocalDatabaseModel
         {
             RequestName = requestUrl,
             RequestProperties = "",
@@ -92,17 +87,17 @@ public class ShopRepository : IShopRepository
     public async Task<IList<FilialRepositoryModel>> GetFilials()
     {
         const string requestUrl = "Filials";
-        if (await _cacheRequestsLocalRepository.Exists(requestUrl, ""))
+        if (await _cacheRequestsLocalRepository.ExistsAsync(requestUrl, ""))
         {
             var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
-                .GetCacheRecords(x =>
+                .GetAsync(x =>
                     x.RequestName == requestUrl &&
                     x.RequestProperties == "" &&
                     x.Expires > DateTime.Now
                 )).First().ResponseItemIds);
 
             var responseCache = await _filialsLocalRepository
-                .GetFilials(x => responseCacheIds.Contains(x.RecordId));
+                .GetAsync(x => responseCacheIds.Contains(x.RecordId));
 
             return _mapper.Map<IList<FilialRepositoryModel>>(responseCache);
         }
@@ -122,10 +117,10 @@ public class ShopRepository : IShopRepository
         var recordIds = new List<int>();
         foreach (var item in list)
         {
-            recordIds.Add(await _filialsLocalRepository.AddFilial(_mapper.Map<FilialLocalDatabaseModel>(item)));
+            recordIds.Add(await _filialsLocalRepository.InsertAsync(_mapper.Map<FilialLocalDatabaseModel>(item)));
         }
 
-        await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
+        await _cacheRequestsLocalRepository.InsertAsync(new CacheRequestsLocalDatabaseModel
         {
             RequestName = requestUrl,
             RequestProperties = "",
@@ -147,17 +142,17 @@ public class ShopRepository : IShopRepository
             radius
         });
 
-        if (await _cacheRequestsLocalRepository.Exists(requestUrl, json))
+        if (await _cacheRequestsLocalRepository.ExistsAsync(requestUrl, json))
         {
             var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
-                .GetCacheRecords(x =>
+                .GetAsync(x =>
                     x.RequestName == requestUrl &&
                     x.RequestProperties == json &&
                     x.Expires > DateTime.Now
                 )).First().ResponseItemIds);
 
             var responseCache = await _filialsLocalRepository
-                .GetFilials(x => responseCacheIds.Contains(x.RecordId));
+                .GetAsync(x => responseCacheIds.Contains(x.RecordId));
 
             return _mapper.Map<IList<FilialRepositoryModel>>(responseCache);
         }
@@ -179,10 +174,10 @@ public class ShopRepository : IShopRepository
         var recordIds = new List<int>();
         foreach (var item in list)
         {
-            recordIds.Add(await _filialsLocalRepository.AddFilial(_mapper.Map<FilialLocalDatabaseModel>(item)));
+            recordIds.Add(await _filialsLocalRepository.InsertAsync(_mapper.Map<FilialLocalDatabaseModel>(item)));
         }
 
-        await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
+        await _cacheRequestsLocalRepository.InsertAsync(new CacheRequestsLocalDatabaseModel
         {
             RequestName = requestUrl,
             RequestProperties = json,

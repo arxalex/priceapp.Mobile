@@ -14,4 +14,5 @@ public interface IAccountViewModel : INotifyPropertyChanged
     event ConnectionErrorHandler BadConnectEvent;
     Task LoadAsync();
     event LoadingHandler Loaded;
+    Task ChangeAccount();
 }

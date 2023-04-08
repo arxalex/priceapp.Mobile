@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -14,7 +13,7 @@ using priceapp.LocalDatabase.Repositories.Interfaces;
 using priceapp.Repositories.Implementation;
 using priceapp.Repositories.Interfaces;
 using priceapp.Repositories.Models;
-using priceapp.WebServices;
+using priceapp.Utils;
 using RestSharp;
 using Xamarin.Forms;
 
@@ -31,16 +30,10 @@ public class ItemRepository : IItemRepository
 
     public ItemRepository()
     {
-        var priceAppWebAccess = DependencyService.Get<IPriceAppWebAccess>();
         _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
         _itemsLocalRepository = DependencyService.Get<IItemsLocalRepository>();
         _mapper = DependencyService.Get<IMapper>();
-        var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler())
-        {
-            BaseAddress = new Uri(Constants.ApiUrl)
-        };
-        _client = new RestClient(httpClient);
-        _client.AddDefaultHeader("Cookie", $"Bearer {Xamarin.Essentials.SecureStorage.GetAsync("token").Result}");
+        _client = ConnectionUtil.GetRestClient();
     }
 
     public event ConnectionErrorHandler BadConnectEvent;
@@ -83,17 +76,17 @@ public class ItemRepository : IItemRepository
             });
         }
 
-        if (await _cacheRequestsLocalRepository.Exists(requestUrl, requestProperty))
+        if (await _cacheRequestsLocalRepository.ExistsAsync(requestUrl, requestProperty))
         {
             var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
-                .GetCacheRecords(x =>
+                .GetAsync(x =>
                     x.RequestName == requestUrl &&
                     x.RequestProperties == requestProperty &&
                     x.Expires > DateTime.Now
                 )).First().ResponseItemIds);
 
             var responseCache = await _itemsLocalRepository
-                .GetItems(x => responseCacheIds.Contains(x.RecordId));
+                .GetAsync(x => responseCacheIds.Contains(x.RecordId));
 
             return _mapper.Map<IList<ItemRepositoryModel>>(responseCache);
         }
@@ -122,10 +115,10 @@ public class ItemRepository : IItemRepository
         var recordIds = new List<int>();
         foreach (var item in list)
         {
-            recordIds.Add(await _itemsLocalRepository.AddItem(_mapper.Map<ItemLocalDatabaseModel>(item)));
+            recordIds.Add(await _itemsLocalRepository.InsertAsync(_mapper.Map<ItemLocalDatabaseModel>(item)));
         }
 
-        await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
+        await _cacheRequestsLocalRepository.InsertAsync(new CacheRequestsLocalDatabaseModel
         {
             RequestName = requestUrl,
             RequestProperties = requestProperty,
@@ -182,17 +175,17 @@ public class ItemRepository : IItemRepository
             });
         }
 
-        if (await _cacheRequestsLocalRepository.Exists(requestUrl, requestProperty))
+        if (await _cacheRequestsLocalRepository.ExistsAsync(requestUrl, requestProperty))
         {
             var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
-                .GetCacheRecords(x =>
+                .GetAsync(x =>
                     x.RequestName == requestUrl &&
                     x.RequestProperties == requestProperty &&
                     x.Expires > DateTime.Now
                 )).First().ResponseItemIds);
 
             var responseCache = await _itemsLocalRepository
-                .GetItems(x => responseCacheIds.Contains(x.RecordId));
+                .GetAsync(x => responseCacheIds.Contains(x.RecordId));
 
             return _mapper.Map<IList<ItemRepositoryModel>>(responseCache);
         }
@@ -216,10 +209,10 @@ public class ItemRepository : IItemRepository
         var recordIds = new List<int>();
         foreach (var item in list)
         {
-            recordIds.Add(await _itemsLocalRepository.AddItem(_mapper.Map<ItemLocalDatabaseModel>(item)));
+            recordIds.Add(await _itemsLocalRepository.InsertAsync(_mapper.Map<ItemLocalDatabaseModel>(item)));
         }
 
-        await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
+        await _cacheRequestsLocalRepository.InsertAsync(new CacheRequestsLocalDatabaseModel
         {
             RequestName = requestUrl,
             RequestProperties = requestProperty,
@@ -261,17 +254,17 @@ public class ItemRepository : IItemRepository
             });
         }
 
-        if (await _cacheRequestsLocalRepository.Exists(requestUrl, requestProperty))
+        if (await _cacheRequestsLocalRepository.ExistsAsync(requestUrl, requestProperty))
         {
             var responseCacheIds = JsonSerializer.Deserialize<int[]>((await _cacheRequestsLocalRepository
-                .GetCacheRecords(x =>
+                .GetAsync(x =>
                     x.RequestName == requestUrl &&
                     x.RequestProperties == requestProperty &&
                     x.Expires > DateTime.Now
                 )).First().ResponseItemIds);
 
             var responseCache = await _itemsLocalRepository
-                .GetItems(x => responseCacheIds.Contains(x.RecordId));
+                .GetAsync(x => responseCacheIds.Contains(x.RecordId));
 
             if (responseCache.Count != 1)
             {
@@ -301,9 +294,9 @@ public class ItemRepository : IItemRepository
         var item = JsonSerializer.Deserialize<ItemRepositoryModel>(response.Content);
 
         var recordIds = new List<int>
-            { await _itemsLocalRepository.AddItem(_mapper.Map<ItemLocalDatabaseModel>(item)) };
+            { await _itemsLocalRepository.InsertAsync(_mapper.Map<ItemLocalDatabaseModel>(item)) };
 
-        await _cacheRequestsLocalRepository.AddCacheRecord(new CacheRequestsLocalDatabaseModel
+        await _cacheRequestsLocalRepository.InsertAsync(new CacheRequestsLocalDatabaseModel
         {
             RequestName = requestUrl,
             RequestProperties = requestProperty,
@@ -368,21 +361,13 @@ public class ItemRepository : IItemRepository
             return (new List<PriceRepositoryModel>(), 0);
         }
 
-        var content = JsonSerializer.Deserialize<ShoppingListResponse>(response.Content, new JsonSerializerOptions()
+        var content = JsonSerializer.Deserialize<ShoppingListResponse>(response.Content) ?? new ShoppingListResponse()
         {
-            PropertyNameCaseInsensitive = true,
-        }) ?? new ShoppingListResponse()
-        {
-            ShoppingList = new List<PriceRepositoryModel>(),
-            Economy = 0
+            shoppingList = new List<PriceRepositoryModel>(),
+            economy = 0,
+            itemIdsNotFound = new List<int>()
         };
 
-        return (content.ShoppingList, content.Economy);
-    }
-
-    private class ShoppingListResponse
-    {
-        public List<PriceRepositoryModel> ShoppingList { get; set; } = new();
-        public double Economy { get; set; }
+        return (content.shoppingList, content.economy);
     }
 }

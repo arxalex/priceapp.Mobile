@@ -23,30 +23,35 @@ public class CategoriesLocalRepository : ICategoriesLocalRepository
         _connection = LocalCacheDatabase.Database;
     }
 
-    public async Task<int> AddCategory(CategoryLocalDatabaseModel model)
+    public async Task<int> InsertAsync(CategoryLocalDatabaseModel model)
     {
         await _connection.InsertAsync(model);
         return model.RecordId;
     }
 
-    public async Task RemoveCategory(int id)
+    public async Task DeleteAsync(int id)
     {
         await _connection.DeleteAsync<CategoryLocalDatabaseModel>(id);
     }
 
-    public async Task<List<CategoryLocalDatabaseModel>> GetCategories()
+    public async Task<List<CategoryLocalDatabaseModel>> GetAsync()
     {
         return await _connection.Table<CategoryLocalDatabaseModel>().ToListAsync();
     }
 
-    public async Task<List<CategoryLocalDatabaseModel>> GetCategories(
+    public async Task<List<CategoryLocalDatabaseModel>> GetAsync(
         Expression<Func<CategoryLocalDatabaseModel, bool>> expression)
     {
         return await _connection.Table<CategoryLocalDatabaseModel>().Where(expression).ToListAsync();
     }
 
-    public async Task UpdateCategory(ItemToBuyLocalDatabaseModel model)
+    public async Task UpdateAsync(CategoryLocalDatabaseModel model)
     {
         await _connection.UpdateAsync(model);
+    }
+    
+    public async Task DeleteAllAsync()
+    {
+        await _connection.DeleteAllAsync<CategoryLocalDatabaseModel>();
     }
 }

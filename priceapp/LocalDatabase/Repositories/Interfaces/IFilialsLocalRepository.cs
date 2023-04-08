@@ -9,10 +9,11 @@ namespace priceapp.LocalDatabase.Repositories.Interfaces;
 
 public interface IFilialsLocalRepository
 {
-    Task<int> AddFilial(FilialLocalDatabaseModel model);
-    Task RemoveFilial(int id);
-    Task<List<FilialLocalDatabaseModel>> GetFilials();
-    Task<List<FilialLocalDatabaseModel>> GetFilials(Expression<Func<FilialLocalDatabaseModel, bool>> expression);
-    Task UpdateFilial(FilialLocalDatabaseModel model);
+    Task<int> InsertAsync(FilialLocalDatabaseModel model);
+    Task DeleteAsync(int id);
+    Task<List<FilialLocalDatabaseModel>> GetAsync();
+    Task<List<FilialLocalDatabaseModel>> GetAsync(Expression<Func<FilialLocalDatabaseModel, bool>> expression);
+    Task UpdateAsync(FilialLocalDatabaseModel model);
     event ConnectionErrorHandler BadConnectEvent;
+    Task DeleteAllAsync();
 }

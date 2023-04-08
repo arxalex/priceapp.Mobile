@@ -6,6 +6,7 @@ using priceapp.Annotations;
 using priceapp.Events.Delegates;
 using priceapp.Events.Models;
 using priceapp.Repositories.Interfaces;
+using priceapp.Services.Interfaces;
 using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
@@ -18,6 +19,8 @@ namespace priceapp.ViewModels;
 public class AccountViewModel : IAccountViewModel
 {
     private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
+    private readonly ICacheService _cacheService;
     private string _email;
 
     private string _username;
@@ -25,6 +28,8 @@ public class AccountViewModel : IAccountViewModel
     public AccountViewModel()
     {
         _userRepository = DependencyService.Get<IUserRepository>(DependencyFetchTarget.NewInstance);
+        _userService = DependencyService.Get<IUserService>();
+        _cacheService = DependencyService.Get<ICacheService>();
 
         MenuItems.Add(new MenuItem {Label = "Налаштування", Glyph = "\ue8b8"});
         MenuItems.Add(new MenuItem {Label = "Підказки", Glyph = "\ue79a"});
@@ -79,6 +84,12 @@ public class AccountViewModel : IAccountViewModel
 
         Loaded?.Invoke(this,
             new LoadingArgs() {Success = true, LoadedCount = 1, Total = 1});
+    }
+
+    public async Task ChangeAccount()
+    {
+        await _cacheService.ClearAsync();
+        _userService.LogoutUser();
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

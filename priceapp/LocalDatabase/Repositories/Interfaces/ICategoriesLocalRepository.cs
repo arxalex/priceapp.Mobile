@@ -9,10 +9,11 @@ namespace priceapp.LocalDatabase.Repositories.Interfaces;
 
 public interface ICategoriesLocalRepository
 {
-    Task<int> AddCategory(CategoryLocalDatabaseModel model);
-    Task RemoveCategory(int id);
-    Task<List<CategoryLocalDatabaseModel>> GetCategories();
-    Task<List<CategoryLocalDatabaseModel>> GetCategories(Expression<Func<CategoryLocalDatabaseModel, bool>> expression);
-    Task UpdateCategory(ItemToBuyLocalDatabaseModel model);
+    Task<int> InsertAsync(CategoryLocalDatabaseModel model);
+    Task DeleteAsync(int id);
+    Task<List<CategoryLocalDatabaseModel>> GetAsync();
+    Task<List<CategoryLocalDatabaseModel>> GetAsync(Expression<Func<CategoryLocalDatabaseModel, bool>> expression);
+    Task UpdateAsync(CategoryLocalDatabaseModel model);
     event ConnectionErrorHandler BadConnectEvent;
+    Task DeleteAllAsync();
 }

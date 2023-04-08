@@ -111,7 +111,7 @@ public class CartViewModel : ICartViewModel
     {
         ItemsToBuyListPreProcessed = new List<ItemToBuy>();
         ItemsToBuyList = new ObservableCollection<ItemToBuyGroup>();
-        var items = await _itemsToBuyLocalRepository.GetItems();
+        var items = await _itemsToBuyLocalRepository.GetAsync();
         var filials = await _shopRepository.GetFilials();
         var shops = await _shopRepository.GetShops();
 
@@ -167,11 +167,11 @@ public class CartViewModel : ICartViewModel
             PriceRepositoryModel itemResult;
             if (item.Filial == null)
             {
-                itemResult = itemsResult.First(x => x.itemid == item.Item.Id);
+                itemResult = itemsResult.First(x => x.itemId == item.Item.Id);
             }
             else
             {
-                itemResult = itemsResult.First(x => x.itemid == item.Item.Id && x.filialid == item.Filial.Id);
+                itemResult = itemsResult.First(x => x.itemId == item.Item.Id && x.filialId == item.Filial.Id);
             }
 
             var itemToBuy = new ItemToBuy()
@@ -179,7 +179,7 @@ public class CartViewModel : ICartViewModel
                 RecordId = item.RecordId,
                 Added = true,
                 Count = item.Count,
-                Filial = _mapper.Map<Filial>(filials.Last(x => x.id == itemResult.filialid)),
+                Filial = _mapper.Map<Filial>(filials.Last(x => x.id == itemResult.filialId)),
                 Item = item.Item
             };
 
@@ -202,13 +202,13 @@ public class CartViewModel : ICartViewModel
 
     public async Task ChangeCartItem(ItemToBuy model)
     {
-        await _itemsToBuyLocalRepository.UpdateItem(_mapper.Map<ItemToBuyLocalDatabaseModel>(model));
+        await _itemsToBuyLocalRepository.UpdateAsync(_mapper.Map<ItemToBuyLocalDatabaseModel>(model));
         await LoadAsync();
     }
 
     public async Task DeleteCartItem(ItemToBuy model)
     {
-        await _itemsToBuyLocalRepository.RemoveItem(model.RecordId);
+        await _itemsToBuyLocalRepository.DeleteAsync(model.RecordId);
         await LoadAsync();
     }
 
@@ -217,7 +217,7 @@ public class CartViewModel : ICartViewModel
         ItemsToBuyList = new ObservableCollection<ItemToBuyGroup>();
         ItemsToBuyListPreProcessed = new List<ItemToBuy>();
         HeaderText = "Доступно 0 з 0";
-        await _itemsToBuyLocalRepository.RemoveAll();
+        await _itemsToBuyLocalRepository.DeleteAllAsync();
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

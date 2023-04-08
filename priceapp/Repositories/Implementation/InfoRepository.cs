@@ -1,12 +1,10 @@
-using System;
 using System.Net;
-using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using priceapp.Repositories.Implementation;
 using priceapp.Repositories.Interfaces;
 using priceapp.Repositories.Models;
-using priceapp.WebServices;
+using priceapp.Utils;
 using RestSharp;
 using Xamarin.Forms;
 
@@ -20,14 +18,7 @@ public class InfoRepository : IInfoRepository
 
     public InfoRepository()
     {
-        var priceAppWebAccess = DependencyService.Get<IPriceAppWebAccess>();
-        var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler())
-        {
-            BaseAddress = new Uri(Constants.ApiUrl)
-        };
-        _client = new RestClient(httpClient);
-
-        _client.AddDefaultHeader("Cookie", $"Bearer {Xamarin.Essentials.SecureStorage.GetAsync("token").Result}");
+        _client = ConnectionUtil.GetRestClient();
     }
     
 

@@ -9,10 +9,11 @@ namespace priceapp.LocalDatabase.Repositories.Interfaces;
 
 public interface IBrandAlertsLocalRepository
 {
-    Task<int> AddItem(BrandAlertLocalDatabaseModel model);
-    Task RemoveItem(int id);
-    Task<List<BrandAlertLocalDatabaseModel>> GetItems();
-    Task<List<BrandAlertLocalDatabaseModel>> GetItems(Expression<Func<BrandAlertLocalDatabaseModel, bool>> expression);
-    Task UpdateItem(BrandAlertLocalDatabaseModel model);
+    Task<int> InsertAsync(BrandAlertLocalDatabaseModel model);
+    Task DeleteAsync(int id);
+    Task<List<BrandAlertLocalDatabaseModel>> GetAsync();
+    Task<List<BrandAlertLocalDatabaseModel>> GetAsync(Expression<Func<BrandAlertLocalDatabaseModel, bool>> expression);
+    Task UpdateAsync(BrandAlertLocalDatabaseModel model);
     event ConnectionErrorHandler BadConnectEvent;
+    Task DeleteAllAsync();
 }

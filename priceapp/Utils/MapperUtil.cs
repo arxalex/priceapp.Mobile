@@ -16,8 +16,8 @@ public static class MapperUtil
             /* Base - Repository */
             cfg.CreateMap<BrandAlert, BrandAlertRepositoryModel>().ReverseMap();
             cfg.CreateMap<Category, CategoryRepositoryModel>().ReverseMap();
-            cfg.CreateMap<Filial, FilialRepositoryModel>().BeforeMap((s, d) => { d.shopid = s.Shop.Id; });
-            cfg.CreateMap<FilialRepositoryModel, Filial>().BeforeMap((s, d) => { d.Shop = new Shop {Id = s.shopid}; });
+            cfg.CreateMap<Filial, FilialRepositoryModel>().BeforeMap((s, d) => { d.shopId = s.Shop.Id; });
+            cfg.CreateMap<FilialRepositoryModel, Filial>().BeforeMap((s, d) => { d.Shop = new Shop {Id = s.shopId}; });
             cfg.CreateMap<Item, ItemRepositoryModel>().ReverseMap();
             cfg.CreateMap<ItemToBuy, ShoppingListRepositoryModel>().BeforeMap((s, d) =>
             {

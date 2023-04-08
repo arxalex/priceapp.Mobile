@@ -1,7 +1,8 @@
+// ReSharper disable InconsistentNaming
 namespace priceapp.Repositories.Models;
 
 public class InfoRepositoryModel
 {
-    public string Name { get; set; }
-    public string Version { get; set; }
+    public string name { get; set; }
+    public string version { get; set; }
 }

@@ -1,6 +1,4 @@
-using System;
 using System.Net;
-using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using priceapp.Events.Delegates;
@@ -8,7 +6,7 @@ using priceapp.Events.Models;
 using priceapp.Repositories.Implementation;
 using priceapp.Repositories.Interfaces;
 using priceapp.Repositories.Models;
-using priceapp.WebServices;
+using priceapp.Utils;
 using RestSharp;
 using Xamarin.Forms;
 
@@ -22,14 +20,7 @@ public class UserRepository : IUserRepository
 
     public UserRepository()
     {
-        var priceAppWebAccess = DependencyService.Get<IPriceAppWebAccess>();
-        var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler())
-        {
-            BaseAddress = new Uri(Constants.ApiUrl)
-        };
-        _client = new RestClient(httpClient);
-
-        _client.AddDefaultHeader("Cookie", $"Bearer {Xamarin.Essentials.SecureStorage.GetAsync("token").Result}");
+        _client = ConnectionUtil.GetRestClient();
     }
 
     public event ConnectionErrorHandler BadConnectEvent;
@@ -55,8 +46,8 @@ public class UserRepository : IUserRepository
 
         var body = new LoginRequestModel()
         {
-            Username = username,
-            Password = password
+            username = username,
+            password = password
         };
         
         request.AddHeader("Content-Type", "application/json");
@@ -74,7 +65,7 @@ public class UserRepository : IUserRepository
             var result = JsonSerializer.Deserialize<ErrorResponseModel>(response.Content);
 
             var resultModel = new LoginResultModel(){Succsess = false};
-            switch (result.Message)
+            switch (result.message)
             {
                 case ExceptionMessages.UsernameIncorrect:
                     resultModel.Message = ExceptionMessagesTranslated.UsernameIncorrect;
@@ -96,7 +87,8 @@ public class UserRepository : IUserRepository
         if (response.StatusCode == HttpStatusCode.OK)
         {
             var result = JsonSerializer.Deserialize<UserLoginRepositoryModel>(response.Content);
-            await Xamarin.Essentials.SecureStorage.SetAsync("token", result.Token);
+
+            await ConnectionUtil.UpdateToken(result.token);
 
             return new LoginResultModel() { Succsess = true };
         }

@@ -9,11 +9,12 @@ namespace priceapp.LocalDatabase.Repositories.Interfaces;
 
 public interface ICacheRequestsLocalRepository
 {
-    Task AddCacheRecord(CacheRequestsLocalDatabaseModel model);
-    Task RemoveCacheRecord(int id);
-    Task<List<CacheRequestsLocalDatabaseModel>> GetCacheRecords();
-    Task<List<CacheRequestsLocalDatabaseModel>> GetCacheRecords(
+    Task InsertAsync(CacheRequestsLocalDatabaseModel model);
+    Task DeleteAsync(int id);
+    Task<List<CacheRequestsLocalDatabaseModel>> GetAsync();
+    Task<List<CacheRequestsLocalDatabaseModel>> GetAsync(
         Expression<Func<CacheRequestsLocalDatabaseModel, bool>> expression);
-    Task<bool> Exists(string requestName, string requestProperties);
+    Task<bool> ExistsAsync(string requestName, string requestProperties);
     event ConnectionErrorHandler BadConnectEvent;
+    Task DeleteAllAsync();
 }
