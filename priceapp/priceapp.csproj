@@ -68,4 +68,8 @@
             <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Controls\ViewModels\" />
+    </ItemGroup>
 </Project>

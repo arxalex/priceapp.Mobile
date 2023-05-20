@@ -1,7 +1,5 @@
 using System;
-using System.Linq;
 using priceapp.Events.Models;
-using priceapp.Models;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -20,8 +18,8 @@ namespace priceapp.Views
             
             ActivityIndicator.IsRunning = true;
             ActivityIndicator.IsVisible = true;
-            CollectionView.IsVisible = false;
-            categoryViewModel.LoadAsync();
+            CollectionGrid.IsVisible = false;
+            categoryViewModel.LoadAsync(Navigation);
 
             BindingContext = categoryViewModel;
         }
@@ -35,20 +33,12 @@ namespace priceapp.Views
         {
             ActivityIndicator.IsRunning = false;
             ActivityIndicator.IsVisible = false;
-            CollectionView.IsVisible = true;
+            CollectionGrid.IsVisible = true;
         }
 
         private async void SearchButton_OnTapped(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new SearchPage());
-        }
-
-        private async void SelectableItemsView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (CollectionView.SelectedItem == null) return;
-            var category = (Category) e.CurrentSelection.FirstOrDefault()!;
-            await Navigation.PushAsync(new ItemsListPage(category.Id, category.Label));
-            CollectionView.SelectedItem = null;
         }
     }
 }

@@ -5,7 +5,8 @@
              x:Class="priceapp.Views.AccountPage"
              xmlns:viewsModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
-             x:DataType="viewsModels:IAccountViewModel">
+             x:DataType="viewsModels:IAccountViewModel"
+             Padding="0">
     <ContentPage.Resources>
         <Style TargetType="Grid">
             <Setter Property="VisualStateManager.VisualStateGroups">
@@ -25,11 +26,16 @@
     </ContentPage.Resources>
     <StackLayout>
         <Grid BackgroundColor="WhiteSmoke"
-              Padding="15,10, 15, 60"
               Margin="0,0,0,0">
+            <Grid.Padding>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <On Platform="iOS" Value="15,50, 15, 60" />
+                    <On Platform="Android" Value="15,10, 15, 60" />
+                </OnPlatform>
+            </Grid.Padding>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
             <ActivityIndicator Grid.Row="0"
                                Grid.RowSpan="2"
@@ -42,11 +48,11 @@
                    Text="{Binding Username}"
                    FontSize="40"
                    Margin="0,0,0,-40"
-                   TextColor="Black"/>
+                   TextColor="Black" />
             <Label Grid.Row="1"
                    Text="{Binding Email}"
                    Margin="0,40,0,-50"
-                   TextColor="Black"/>
+                   TextColor="Black" />
         </Grid>
         <CollectionView x:Name="CollectionView"
                         ItemsSource="{Binding MenuItems}"
@@ -59,23 +65,25 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Frame Grid.Column="0" 
-                               CornerRadius="50"
+                        <Frame Grid.Column="0"
+                               CornerRadius="14"
                                Padding="15, 5"
-                               BackgroundColor="Accent">
-                        <Image>
-                            <Image.Source>
-                                <FontImageSource FontFamily="MaterialOutlined"
-                                                 Size="18"
-                                                 Glyph="{Binding  Glyph}" />
-                            </Image.Source>
-                        </Image>
+                               BackgroundColor="Accent"
+                               HasShadow="False">
+                            <Image>
+                                <Image.Source>
+                                    <FontImageSource FontFamily="MaterialOutlined"
+                                                     Size="18"
+                                                     Glyph="{Binding  Glyph}"
+                                                     Color="White"/>
+                                </Image.Source>
+                            </Image>
                         </Frame>
                         <Label Grid.Column="1"
                                Margin="10, 0, 0,0"
-                               Text="{Binding Label}" 
+                               Text="{Binding Label}"
                                FontSize="Medium"
-                               VerticalOptions="Center"/>
+                               VerticalOptions="Center" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using priceapp.Annotations;
 
 namespace priceapp.Models;
 

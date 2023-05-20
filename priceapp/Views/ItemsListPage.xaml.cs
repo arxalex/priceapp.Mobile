@@ -1,7 +1,5 @@
 using System;
-using System.Linq;
 using priceapp.Events.Models;
-using priceapp.Models;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -26,15 +24,15 @@ public partial class ItemsListPage
         _itemsListViewModel.Loaded += ItemsListViewModelOnLoaded;
         _itemsListViewModel.BadConnectEvent += ItemsListViewModelOnBadConnectEvent;
 
-        CollectionView.RemainingItemsThreshold = 2;
-        CollectionView.RemainingItemsThresholdReached += CollectionViewOnRemainingThresholdReached;
+        CollectionGrid.RemainingItemsThreshold = 2;
+        CollectionGrid.RemainingItemsThresholdReached += CollectionViewOnRemainingThresholdReached;
 
         BindingContext = _itemsListViewModel;
 
         ActivityIndicator.IsRunning = true;
         ActivityIndicator.IsVisible = true;
-        CollectionView.IsVisible = false;
-        _itemsListViewModel.LoadAsync();
+        CollectionGrid.IsVisible = false;
+        _itemsListViewModel.LoadAsync(Navigation);
     }
 
     private string CategoryName { get; set; }
@@ -49,10 +47,10 @@ public partial class ItemsListPage
         _isBusy = false;
         ActivityIndicator.IsRunning = false;
         ActivityIndicator.IsVisible = false;
-        CollectionView.IsVisible = true;
+        CollectionGrid.IsVisible = true;
         if (!args.Success)
         {
-            CollectionView.RemainingItemsThreshold = -1;
+            CollectionGrid.RemainingItemsThreshold = -1;
         }
     }
 
@@ -66,19 +64,11 @@ public partial class ItemsListPage
         _isBusy = true;
         ActivityIndicator.IsRunning = true;
         ActivityIndicator.IsVisible = true;
-        _itemsListViewModel.LoadAsync();
+        _itemsListViewModel.LoadAsync(Navigation);
     }
 
     private async void ImageButton_OnClicked(object sender, EventArgs e)
     {
         await Navigation.PopAsync();
-    }
-
-    private async void CollectionView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (CollectionView.SelectedItem == null) return;
-        var item = (Item) e.CurrentSelection.FirstOrDefault()!;
-        await Navigation.PushAsync(new ItemPage(item));
-        CollectionView.SelectedItem = null;
     }
 }

@@ -88,7 +88,8 @@ public class ItemRepository : IItemRepository
             var responseCache = await _itemsLocalRepository
                 .GetAsync(x => responseCacheIds.Contains(x.RecordId));
 
-            return _mapper.Map<IList<ItemRepositoryModel>>(responseCache);
+            var result = _mapper.Map<List<ItemRepositoryModel>>(responseCache);
+            return result;
         }
 
         var request = new RestRequest(requestUrl, json != null ? Method.Post : Method.Get);

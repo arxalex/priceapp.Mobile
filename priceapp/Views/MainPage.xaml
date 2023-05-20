@@ -5,8 +5,14 @@
        xmlns:views="clr-namespace:priceapp.Views;assembly=priceapp"
        x:Class="priceapp.Views.MainPage"
        NavBarIsVisible="False"
-       TabBarIsVisible="True">
-    <TabBar>
+       TabBarIsVisible="True"
+       TabBarBackgroundColor="Transparent"
+       Title="priceapp"
+       NavBarHasShadow="False"
+       BackgroundColor="Transparent"
+       Padding="0"
+       HeightRequest="10" >
+    <TabBar Title="sds">
         <Tab Title="Товари">
             <Tab.Icon>
                 <FontImageSource FontFamily="MaterialOutlined"

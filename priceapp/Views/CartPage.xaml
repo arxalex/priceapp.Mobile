@@ -5,8 +5,13 @@
              xmlns:models="clr-namespace:priceapp.Models;assembly=priceapp"
              x:Class="priceapp.Views.CartPage"
              xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
-             x:DataType="viewModels:ICartViewModel"
-             Padding="0">
+             x:DataType="viewModels:ICartViewModel">
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="iOS" Value="0,50,0,0" />
+            <On Platform="Android" Value="0,20,0,0" />
+        </OnPlatform>
+    </ContentPage.Padding>
     <ContentPage.Resources>
         <Style TargetType="Grid">
             <Setter Property="VisualStateManager.VisualStateGroups">
