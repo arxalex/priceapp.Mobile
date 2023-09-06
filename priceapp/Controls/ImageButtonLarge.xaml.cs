@@ -22,23 +22,7 @@ public partial class ImageButtonLarge
         get => (string)GetValue(PrimaryTextProperty);
         set => SetValue(PrimaryTextProperty, value);
     }
-    
-    public static readonly BindableProperty SecondaryTextProperty = BindableProperty.Create("SecondaryText", typeof(string), typeof(ImageButtonLarge));
 
-    public string SecondaryText
-    {
-        get => (string)GetValue(SecondaryTextProperty);
-        set => SetValue(SecondaryTextProperty, value);
-    }
-    
-    public static readonly BindableProperty AccentTextProperty = BindableProperty.Create("AccentText", typeof(string), typeof(ImageButtonLarge));
-
-    public string AccentText
-    {
-        get => (string)GetValue(AccentTextProperty);
-        set => SetValue(AccentTextProperty, value);
-    }
-    
     public static readonly BindableProperty ImageSourceProperty = BindableProperty.Create("ImageSource", typeof(ImageSource), typeof(ImageButtonLarge));
 
     public ImageSource ImageSource

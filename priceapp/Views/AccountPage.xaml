@@ -7,25 +7,8 @@
              xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
              x:DataType="viewsModels:IAccountViewModel"
              Padding="0">
-    <ContentPage.Resources>
-        <Style TargetType="Grid">
-            <Setter Property="VisualStateManager.VisualStateGroups">
-                <VisualStateGroupList>
-                    <VisualStateGroup x:Name="CommonStates">
-                        <VisualState x:Name="Normal" />
-                        <VisualState x:Name="Selected">
-                            <VisualState.Setters>
-                                <Setter Property="BackgroundColor"
-                                        Value="WhiteSmoke" />
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateGroupList>
-            </Setter>
-        </Style>
-    </ContentPage.Resources>
     <StackLayout>
-        <Grid BackgroundColor="WhiteSmoke"
+        <Grid BackgroundColor="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}"
               Margin="0,0,0,0">
             <Grid.Padding>
                 <OnPlatform x:TypeArguments="Thickness">
@@ -40,19 +23,16 @@
             <ActivityIndicator Grid.Row="0"
                                Grid.RowSpan="2"
                                x:Name="ActivityIndicator"
-                               IsRunning="False"
-                               IsVisible="False"
-                               VerticalOptions="CenterAndExpand"
-                               Color="{AppThemeBinding Light=Accent, Dark=DarkGreen, Default=Accent}" />
+                               Style="{StaticResource ActivityIndicatorStyle}" />
             <Label Grid.Row="0"
                    Text="{Binding Username}"
                    FontSize="40"
                    Margin="0,0,0,-40"
-                   TextColor="Black" />
+                   TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" />
             <Label Grid.Row="1"
                    Text="{Binding Email}"
                    Margin="0,40,0,-50"
-                   TextColor="Black" />
+                   TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" />
         </Grid>
         <CollectionView x:Name="CollectionView"
                         ItemsSource="{Binding MenuItems}"
@@ -68,8 +48,8 @@
                         <Frame Grid.Column="0"
                                CornerRadius="14"
                                Padding="15, 5"
-                               BackgroundColor="Accent"
-                               HasShadow="False">
+                               BackgroundColor="{ StaticResource ColorPrimary}"
+                               Style="{StaticResource FrameStyle}">
                             <Image>
                                 <Image.Source>
                                     <FontImageSource FontFamily="MaterialOutlined"

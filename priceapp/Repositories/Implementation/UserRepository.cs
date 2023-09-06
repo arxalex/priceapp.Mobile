@@ -16,12 +16,7 @@ namespace priceapp.Repositories.Implementation;
 
 public class UserRepository : IUserRepository
 {
-    private readonly RestClient _client;
-
-    public UserRepository()
-    {
-        _client = ConnectionUtil.GetRestClient();
-    }
+    private readonly RestClient _client = ConnectionUtil.GetRestClient();
 
     public event ConnectionErrorHandler BadConnectEvent;
 
@@ -91,6 +86,62 @@ public class UserRepository : IUserRepository
             await ConnectionUtil.UpdateToken(result.token);
 
             return new LoginResultModel() { Succsess = true };
+        }
+
+        return new LoginResultModel() { Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong };
+    }
+
+    public async Task<LoginResultModel> Register(string username, string email, string password)
+    {
+        var request = new RestRequest("User/register", Method.Post);
+
+        var body = JsonSerializer.Serialize(new
+        {
+            username, email, password
+        });
+        
+        request.AddHeader("Content-Type", "application/json");
+        request.AddBody(body, "application/json");
+
+        var response = await _client.ExecuteAsync(request);
+        
+        if (response.Content == null)
+        {
+            return new LoginResultModel(){Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong};
+        }
+        
+        if (response.StatusCode == HttpStatusCode.BadRequest)
+        {
+            var result = JsonSerializer.Deserialize<ErrorResponseModel>(response.Content);
+
+            var resultModel = new LoginResultModel(){Succsess = false};
+            switch (result.message)
+            {
+                case ExceptionMessages.UsernameRegisterIncorrect:
+                    resultModel.Message = ExceptionMessagesTranslated.UsernameRegisterIncorrect;
+                    break;
+                case ExceptionMessages.UserAlreadyExists:
+                    resultModel.Message = ExceptionMessagesTranslated.UserAlreadyExists;
+                    break;
+                case ExceptionMessages.UserAlreadyExists2:
+                    resultModel.Message = ExceptionMessagesTranslated.UserAlreadyExists;
+                    break;
+                default:
+                    resultModel.Message = ExceptionMessagesTranslated.SomethingWentWrong;
+                    break;
+            }
+
+            return resultModel;
+        }
+        
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            var result = JsonSerializer.Deserialize<SuccessRepositoryModel>(response.Content, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            return new LoginResultModel() { Succsess = result.Status };
         }
 
         return new LoginResultModel() { Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong };

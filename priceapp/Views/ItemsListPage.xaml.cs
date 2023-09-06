@@ -17,7 +17,7 @@ public partial class ItemsListPage
         InitializeComponent();
         CategoryName = categoryName;
         IsBusy = false;
-        CategoryLabel.Text = CategoryName;
+        HeaderBackButton.Label = CategoryName;
 
         _itemsListViewModel = DependencyService.Get<IItemsListViewModel>(DependencyFetchTarget.NewInstance);
         _itemsListViewModel.CategoryId = categoryId;

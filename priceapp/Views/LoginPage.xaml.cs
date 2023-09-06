@@ -49,9 +49,9 @@ namespace priceapp.Views
             await _loginViewModel.LoginAsGuest();
         }
 
-        private async void ButtonRegistration_OnClicked(object sender, EventArgs e)
+        private void ButtonRegistration_OnClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new RegisterPage());
+            Application.Current.MainPage = new RegisterPage();
         }
     }
 }

@@ -5,38 +5,23 @@
              xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
              x:Class="priceapp.Views.SettingPage"
              xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
+             xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
              x:DataType="viewModels:ISettingsViewModel">
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="iOS" Value="0,50,0,0" />
+            <On Platform="Android" Value="0,20,0,0" />
+        </OnPlatform>
+    </ContentPage.Padding>
     <ContentPage.Content>
         <StackLayout>
-            <Grid Padding="15, 15">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="45" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <ImageButton Grid.Column="0"
-                             BackgroundColor="Transparent"
-                             Clicked="ImageButton_OnClicked"
-                             Padding="10,0">
-                    <ImageButton.Source>
-                        <FontImageSource FontFamily="MaterialOutlined"
-                                         Glyph="&#xe2ea;"
-                                         Color="{AppThemeBinding Light=Black, Dark=White, Default=Black}" />
-                    </ImageButton.Source>
-                </ImageButton>
-                <Label Grid.Column="1"
-                       FontSize="20"
-                       TextColor="Black"
-                       FontAttributes="Bold"
-                       Margin="5,2,0,0"
-                       HeightRequest="35"
-                       Text="Налаштування" />
-            </Grid>
+            <controls:HeaderBackButton BackButtonClicked="ImageButton_OnClicked"
+                                       Label="Налаштування"/>
             <ScrollView>
                 <StackLayout Margin="20, 0">
                     <Label Text="Радіус пошуку (в метрах)"
                            FontSize="Medium"
-                           TextColor="Black"
+                           TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
                            FontAttributes="Bold" />
                     <Grid Margin="0, 0, 0,5">
                         <Grid.ColumnDefinitions>
@@ -44,48 +29,51 @@
                             <ColumnDefinition Width="60" />
                         </Grid.ColumnDefinitions>
                         <Frame Grid.Column="0"
+                               Style="{StaticResource FrameStyle}"
                                BackgroundColor="Transparent"
                                Padding="0"
-                               Margin="-10,0">
+                               Margin="0,0">
                             <ui:RdSliderBorderless Maximum="10000"
                                                    Minimum="0"
-                                                   ThumbColor="{AppThemeBinding Light=Accent, Dark=DarkGreen, Default=Accent}"
+                                                   ThumbColor="{AppThemeBinding Light={ StaticResource ColorPrimary}, Dark={ StaticResource ColorPrimaryDark}, Default={ StaticResource ColorPrimary}}"
                                                    MinimumTrackColor="Gray"
-                                                   Value="{Binding Radius}"/>
+                                                   Value="{Binding Radius}" />
                         </Frame>
                         <ui:RdEntryBorderless Grid.Column="1"
                                               Keyboard="Numeric"
                                               MaxLength="5"
-                                              Text="{Binding Radius}"/>
+                                              Text="{Binding Radius}" />
                     </Grid>
                     <Label Text="Спосіб формування списку покупок"
                            FontSize="Medium"
-                           TextColor="Black"
-                           FontAttributes="Bold" 
-                           Margin="0, 0, 0,5"/>
-                    <Frame BorderColor="Accent"
+                           TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
+                           FontAttributes="Bold"
+                           Margin="0, 0, 0,5" />
+                    <Frame BorderColor="{ StaticResource ColorPrimary}"
+                           Style="{StaticResource FrameStyle}"
                            Padding="1"
                            BackgroundColor="Transparent">
-                        <Frame BorderColor="Accent"
-                               Padding="0"
+                        <Frame BorderColor="{ StaticResource ColorPrimary}"
+                               Style="{StaticResource FrameStyle}"
+                               Padding="5"
                                BackgroundColor="Transparent">
-                        <ui:RdPickerBorderless ItemsSource="{Binding CartProcessingTypes}"
-                                               SelectedItem="{Binding CartProcessingTypeSetting}"
-                                               Margin="10,0"/>
-                    </Frame>
+                            <ui:RdPickerBorderless ItemsSource="{Binding CartProcessingTypes}"
+                                                   SelectedItem="{Binding CartProcessingTypeSetting}"
+                                                   Margin="10,0" />
+                        </Frame>
                     </Frame>
                     <Grid Margin="0, 5, 0,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" 
+                        <Label Grid.Column="0"
                                Text="Відмічати бренди, що ще не вийшли з російського ринку"
                                FontSize="Medium"
-                               TextColor="Black"
+                               TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
                                FontAttributes="Bold" />
-                    <Switch Grid.Column="1" 
-                            IsToggled="{Binding ShowRussiaSupportBrandAlerts}"/>
+                        <Switch Grid.Column="1"
+                                IsToggled="{Binding ShowRussiaSupportBrandAlerts}" />
                     </Grid>
                 </StackLayout>
             </ScrollView>

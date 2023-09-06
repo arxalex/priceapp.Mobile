@@ -10,4 +10,5 @@ public interface IUserRepository
     Task<UserRepositoryModel> GetUser();
     Task<LoginResultModel> Login(string username, string password);
     Task<bool> IsUserLoggedIn();
+    Task<LoginResultModel> Register(string username, string email, string password);
 }

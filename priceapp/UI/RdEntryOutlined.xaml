@@ -9,24 +9,24 @@
     <ContentView.Content>
         <StackLayout>
             <Grid>
-                <Frame HasShadow="False"
+                <Frame Style="{StaticResource FrameStyle}"
                        BorderColor="{Binding BorderColor, Source={x:Reference this}}"
                        CornerRadius="{OnPlatform Android=3}"
                        Padding="1"
                        Margin="0"
-                       BackgroundColor="White">
-                    <Frame HasShadow="False"
+                       BackgroundColor="{AppThemeBinding Default=White, Light=White, Dark=Black}">
+                    <Frame Style="{StaticResource FrameStyle}"
                            x:Name="EntryFrame"
                            BorderColor="{Binding BorderColor, Source={x:Reference this}}"
                            CornerRadius="{OnPlatform Android=3}"
                            Padding="{OnPlatform Android='5, 30', iOS='8,30'}"
                            Margin="0"
-                           BackgroundColor="White">
+                           BackgroundColor="{AppThemeBinding Default=White, Light=White, Dark=Black}">
                     </Frame>
                 </Frame>
 
                 <Label x:Name="PlaceHolderLabel"
-                       BackgroundColor="White" HorizontalOptions="Start"
+                       BackgroundColor="{AppThemeBinding Default=White, Light=White, Dark=Black}" HorizontalOptions="Start"
                        TextColor="{Binding PlaceholderColor, Source={x:Reference this}}"
                        Text="{Binding Placeholder,Source={x:Reference this}}"
                        Margin="10,0,0,0"

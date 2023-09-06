@@ -1,7 +1,5 @@
 using System;
-using System.Globalization;
 using priceapp.Events.Models;
-using priceapp.Models;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -21,10 +19,10 @@ namespace priceapp.Views
 
             _cartViewModel.Loaded += CartViewModelOnLoaded;
             _cartViewModel.BadConnectEvent += CartViewModelOnBadConnectEvent;
+            _cartViewModel.Page = this;
 
             ActivityIndicator.IsRunning = true;
             ActivityIndicator.IsVisible = true;
-            CollectionView.IsVisible = false;
             _cartViewModel.LoadAsync();
 
             BindingContext = _cartViewModel;
@@ -39,36 +37,12 @@ namespace priceapp.Views
         {
             ActivityIndicator.IsRunning = false;
             ActivityIndicator.IsVisible = false;
-            CollectionView.IsVisible = true;
             if (args.Success == false)
             {
                 await DisplayAlert("Обрані товари відсутні в одному магазині",
                     "Спробуйте змінити спосіб формування списку покупок або збільшити радіус пошуку у налаштуваннях",
                     "Ок");
             }
-        }
-
-        private async void CollectionView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (CollectionView.SelectedItem == null) return;
-            const string changeQuantity = "Змінити кількість";
-            const string delete = "Видалити з кошика";
-            var action = await DisplayActionSheet("Дії:", "Закрити", null, changeQuantity, delete);
-            var item = (ItemToBuy) CollectionView.SelectedItem;
-            switch (action)
-            {
-                case changeQuantity:
-                    var result = await DisplayPromptAsync(changeQuantity, "Введіть кількість",
-                        initialValue: item.Count.ToString(CultureInfo.InvariantCulture), keyboard: Keyboard.Numeric);
-                    item.Count = double.Parse(result);
-                    await _cartViewModel.ChangeCartItem(item);
-                    break;
-                case delete:
-                    await _cartViewModel.DeleteCartItem(item);
-                    break;
-            }
-
-            CollectionView.SelectedItem = null;
         }
 
         private async void Button_OnClicked(object sender, EventArgs e)

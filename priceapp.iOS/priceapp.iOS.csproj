@@ -53,6 +53,7 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchExtraArgs>--interpreter</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -94,75 +95,18 @@
     <AppExtensionDebugBundleId />
   </PropertyGroup>
   <ItemGroup>
-      <Compile Include="Main.cs"/>
-      <Compile Include="AppDelegate.cs"/>
-      <Compile Include="UI\RdEntryBorderlessRenderer.cs"/>
-      <Compile Include="UI\RdPickerBorderlessRenderer.cs"/>
-      <Compile Include="UI\RdSliderBorderlessRenderer.cs"/>
-      <Compile Include="WebServices\PriceAppWebAccess.cs"/>
-      <None Include="Entitlements.plist"/>
-      <None Include="Info.plist"/>
-      <Compile Include="Properties\AssemblyInfo.cs"/>
+      <Compile Include="Main.cs" />
+      <Compile Include="AppDelegate.cs" />
+      <Compile Include="UI\RdEntryBorderlessRenderer.cs" />
+      <Compile Include="UI\RdPickerBorderlessRenderer.cs" />
+      <Compile Include="UI\RdSliderBorderlessRenderer.cs" />
+      <Compile Include="WebServices\PriceAppWebAccess.cs" />
+      <None Include="Entitlements.plist" />
+      <None Include="Info.plist" />
+      <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\1024.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\120.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\1201.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\152.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\167.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\180.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\20.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\29.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\40.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\401.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\402.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\58.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\581.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\60.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\76.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\80.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\801.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\87.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -172,9 +116,9 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-      <PackageReference Include="sqlite-net-pcl" Version="1.8.116"/>
-      <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337"/>
-      <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2337"/>
+      <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+      <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" />
+      <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2337" />
   </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\priceapp\priceapp.csproj">
@@ -189,43 +133,86 @@
         </PackageReference>
     </ItemGroup>
     <ItemGroup>
-        <LinkDescription Include="Linker.xml"/>
+        <LinkDescription Include="Linker.xml" />
     </ItemGroup>
     <ItemGroup>
-        <AndroidResource Include="Resources\drawable\arxlogo.png">
-            <SubType>Designer</SubType>
-            <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+        <AndroidResource Include="Resources\values\colors.xml">
+          <SubType>Designer</SubType>
+          <Generator>MSBuild:UpdateGeneratedFiles</Generator>
         </AndroidResource>
-        <AndroidResource Include="Resources\drawable\arxlogo_dark.png">
-            <SubType>Designer</SubType>
-            <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-        </AndroidResource>
-        <AndroidResource Include="Resources\drawable\arxlogo_light.png">
-            <SubType>Designer</SubType>
-            <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-        </AndroidResource>
-        <AndroidResource Include="Resources\drawable\onboarding_1.png">
-            <SubType>Designer</SubType>
-        </AndroidResource>
-        <AndroidResource Include="Resources\drawable\onboarding_2.png">
-            <SubType>Designer</SubType>
-        </AndroidResource>
-        <AndroidResource Include="Resources\drawable\onboarding_3.png">
-            <SubType>Designer</SubType>
-        </AndroidResource>
-        <AndroidResource Include="Resources\drawable\onboarding_4.png">
-            <SubType>Designer</SubType>
-        </AndroidResource>
-        <AndroidResource Include="Resources\drawable\onboarding_5.png">
-            <SubType>Designer</SubType>
-        </AndroidResource>
-        <AndroidResource Include="Resources\drawable\onboarding_6.png">
-            <SubType>Designer</SubType>
-        </AndroidResource>
-        <AndroidResource Include="Resources\drawable\splash_logo.png">
-            <SubType>Designer</SubType>
-            <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+        <AndroidResource Include="Resources\values\styles.xml">
+          <SubType>Designer</SubType>
+          <Generator>MSBuild:UpdateGeneratedFiles</Generator>
         </AndroidResource>
     </ItemGroup>
-    <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets"/>
+    <ItemGroup>
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\100.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\102.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\1024.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\114.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\120.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\128.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\144.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\152.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\16.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\167.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\172.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\180.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\196.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\20.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\216.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\256.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\29.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\32.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\40.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\48.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\50.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\512.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\55.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\57.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\58.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\60.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\64.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\66.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\72.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\76.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\80.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\87.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\88.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\92.png" />
+      <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
+      <ImageAsset Include="Assets.xcassets\arxlogo.imageset\arxlogo.png" />
+      <ImageAsset Include="Assets.xcassets\arxlogo.imageset\arxlogo_dark.png" />
+      <ImageAsset Include="Assets.xcassets\arxlogo.imageset\arxlogo_light.png" />
+      <ImageAsset Include="Assets.xcassets\arxlogo.imageset\Contents.json" />
+      <ImageAsset Include="Assets.xcassets\onboarding_1.imageset\Contents.json" />
+      <ImageAsset Include="Assets.xcassets\onboarding_1.imageset\onboarding_1-1.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_1.imageset\onboarding_1.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_1.imageset\onboarding_1_dark.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_2.imageset\Contents.json" />
+      <ImageAsset Include="Assets.xcassets\onboarding_2.imageset\onboarding_2-1.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_2.imageset\onboarding_2.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_2.imageset\onboarding_2_dark.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_3.imageset\Contents.json" />
+      <ImageAsset Include="Assets.xcassets\onboarding_3.imageset\onboarding_3-1.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_3.imageset\onboarding_3.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_3.imageset\onboarding_3_dark.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_4.imageset\Contents.json" />
+      <ImageAsset Include="Assets.xcassets\onboarding_4.imageset\onboarding_4-1.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_4.imageset\onboarding_4.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_4.imageset\onboarding_4_dark.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_5.imageset\Contents.json" />
+      <ImageAsset Include="Assets.xcassets\onboarding_5.imageset\onboarding_5-1.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_5.imageset\onboarding_5.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_5.imageset\onboarding_5_dark.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_6.imageset\Contents.json" />
+      <ImageAsset Include="Assets.xcassets\onboarding_6.imageset\onboarding_6-1.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_6.imageset\onboarding_6.png" />
+      <ImageAsset Include="Assets.xcassets\onboarding_6.imageset\onboarding_6_dark.png" />
+      <ImageAsset Include="Assets.xcassets\splash_logo.imageset\Contents.json" />
+      <ImageAsset Include="Assets.xcassets\splash_logo.imageset\splash_logo-1.png" />
+      <ImageAsset Include="Assets.xcassets\splash_logo.imageset\splash_logo-2.png" />
+      <ImageAsset Include="Assets.xcassets\splash_logo.imageset\splash_logo.png" />
+    </ItemGroup>
+    <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

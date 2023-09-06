@@ -2,9 +2,9 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:models="clr-namespace:priceapp.Models;assembly=priceapp"
              x:Class="priceapp.Views.CartPage"
              xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
+             xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
              x:DataType="viewModels:ICartViewModel">
     <ContentPage.Padding>
         <OnPlatform x:TypeArguments="Thickness">
@@ -12,28 +12,11 @@
             <On Platform="Android" Value="0,20,0,0" />
         </OnPlatform>
     </ContentPage.Padding>
-    <ContentPage.Resources>
-        <Style TargetType="Grid">
-            <Setter Property="VisualStateManager.VisualStateGroups">
-                <VisualStateGroupList>
-                    <VisualStateGroup x:Name="CommonStates">
-                        <VisualState x:Name="Normal" />
-                        <VisualState x:Name="Selected">
-                            <VisualState.Setters>
-                                <Setter Property="BackgroundColor"
-                                        Value="Transparent" />
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateGroupList>
-            </Setter>
-        </Style>
-    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
             <RefreshView IsRefreshing="{Binding IsRefreshing}"
                          Command="{Binding RefreshCommand}"
-                         RefreshColor="Accent">
+                         RefreshColor="{ StaticResource ColorPrimary}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -49,14 +32,11 @@
                                        Grid.ColumnSpan="2"
                                        Grid.RowSpan="2"
                                        x:Name="ActivityIndicator"
-                                       IsRunning="False"
-                                       IsVisible="False"
-                                       VerticalOptions="CenterAndExpand"
-                                       Color="{AppThemeBinding Light=Accent, Dark=DarkGreen, Default=Accent}" />
+                                       Style="{StaticResource ActivityIndicatorStyle}" />
                     <Label Grid.Row="0"
                            Grid.Column="0"
                            FontSize="20"
-                           TextColor="Black"
+                           TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
                            FontAttributes="Bold"
                            Margin="15,0,0,0"
                            VerticalOptions="Center"
@@ -64,9 +44,9 @@
                     <Frame Grid.Row="0"
                            Grid.Column="1"
                            Padding="0"
-                           BorderColor="White"
+                           BorderColor="Transparent"
                            BackgroundColor="Transparent"
-                           HasShadow="False">
+                           Style="{StaticResource FrameStyle}">
                         <Button WidthRequest="50"
                                 BackgroundColor="Transparent"
                                 Clicked="Button_OnClicked">
@@ -77,73 +57,15 @@
                             </Button.ImageSource>
                         </Button>
                     </Frame>
-                    <CollectionView Grid.Row="1"
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="2"
-                                    x:Name="CollectionView"
-                                    ItemsSource="{Binding ItemsToBuyList}"
-                                    Margin="7, 0"
-                                    ItemsLayout="VerticalGrid, 1"
-                                    SelectionMode="Single"
-                                    IsGrouped="true"
-                                    SelectionChanged="CollectionView_OnSelectionChanged">
-                        <CollectionView.GroupHeaderTemplate>
-                            <DataTemplate x:DataType="models:ItemToBuyGroup">
-                                <Label Text="{Binding Name}"
-                                       FontAttributes="Bold"
-                                       Padding="5,0,0,0" />
-                            </DataTemplate>
-                        </CollectionView.GroupHeaderTemplate>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:ItemToBuy">
-                                <Frame Padding="7"
-                                       BackgroundColor="White">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="80" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="42" />
-                                            <RowDefinition Height="38" />
-                                        </Grid.RowDefinitions>
-                                        <Frame Grid.Column="0"
-                                               Grid.Row="0"
-                                               Grid.RowSpan="2"
-                                               BackgroundColor="WhiteSmoke"
-                                               CornerRadius="5"
-                                               Padding="0">
-                                            <Image Source="{Binding Item.Image}" />
-                                        </Frame>
-                                        <Label Grid.Column="1"
-                                               Grid.Row="0"
-                                               Grid.ColumnSpan="2"
-                                               Text="{Binding Item.Label}"
-                                               FontSize="16"
-                                               VerticalOptions="End"
-                                               HorizontalOptions="Start"
-                                               Margin="2, 0, 0,5"
-                                               TextColor="Black" />
-                                        <Label Grid.Column="1"
-                                               Grid.Row="1"
-                                               Text="{Binding Item.PriceText}"
-                                               TextColor="Accent" />
-                                        <Label Grid.Column="2"
-                                               Grid.Row="1"
-                                               Text="{Binding CountLabel}" />
-                                        <Label Grid.Column="2"
-                                               Grid.Row="1"
-                                               Text="{Binding Filial.Shop.Label}" />
-                                    </Grid>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                    <controls:CollectionGroupedList Grid.Row="1"
+                                                    Grid.Column="0"
+                                                    Grid.ColumnSpan="2"
+                                                    Margin="15,0"
+                                                    ItemsSource="{Binding ImageButtons}" />
                     <Grid Grid.Row="2"
                           Grid.Column="0"
                           ColumnSpan="2"
-                          Margin="15, 10, 0, 10">
+                          Margin="15, 10, 0, 60">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />

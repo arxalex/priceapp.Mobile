@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using AutoMapper;
 using priceapp.Annotations;
+using priceapp.Controls.Models;
 using priceapp.Enums;
 using priceapp.Events.Delegates;
 using priceapp.Events.Models;
@@ -39,7 +41,7 @@ public class CartViewModel : ICartViewModel
 
     private string _headerText;
     private bool _isRefreshing;
-    private ObservableCollection<ItemToBuyGroup> _itemsToBuyList = new();
+    private ObservableCollection<ImageButtonsGroup> _imageButtons = new();
 
     public CartViewModel()
     {
@@ -75,12 +77,12 @@ public class CartViewModel : ICartViewModel
         IsRefreshing = false;
     });
 
-    public ObservableCollection<ItemToBuyGroup> ItemsToBuyList
+    public ObservableCollection<ImageButtonsGroup> ImageButtons
     {
-        get => _itemsToBuyList;
+        get => _imageButtons;
         set
         {
-            _itemsToBuyList = value;
+            _imageButtons = value;
             OnPropertyChanged();
         }
     }
@@ -95,6 +97,8 @@ public class CartViewModel : ICartViewModel
         }
     }
 
+    public Page Page { get; set; }
+
     public string HeaderText
     {
         get => _headerText;
@@ -105,12 +109,9 @@ public class CartViewModel : ICartViewModel
         }
     }
 
-    public List<ItemToBuy> ItemsToBuyListPreProcessed { get; set; }
-
     public async Task LoadAsync()
     {
-        ItemsToBuyListPreProcessed = new List<ItemToBuy>();
-        ItemsToBuyList = new ObservableCollection<ItemToBuyGroup>();
+        ImageButtons = new ObservableCollection<ImageButtonsGroup>();
         var items = await _itemsToBuyLocalRepository.GetAsync();
         var filials = await _shopRepository.GetFilials();
         var shops = await _shopRepository.GetShops();
@@ -118,13 +119,15 @@ public class CartViewModel : ICartViewModel
         if (items.Count < 1)
         {
             Economy = "0.00 грн";
-            HeaderText = "Доступно 0 з " + ItemsToBuyListPreProcessed.Count;
+            HeaderText = "Доступно 0 з 0";
             Loaded?.Invoke(this,
                 new LoadingArgs()
-                    {Success = true, LoadedCount = items.Count, Total = ItemsToBuyListPreProcessed.Count});
+                    { Success = true, LoadedCount = items.Count, Total = 0 });
             return;
         }
 
+        var itemsToBuyListPreProcessed = new List<ItemToBuy>();
+        
         foreach (var item in items)
         {
             var itemToBuy = _mapper.Map<ItemToBuy>(item);
@@ -137,24 +140,24 @@ public class CartViewModel : ICartViewModel
                     _mapper.Map<Shop>(shops.Last(x => x.id == itemToBuy.Filial.Shop.Id));
             }
 
-            ItemsToBuyListPreProcessed.Add(itemToBuy);
+            itemsToBuyListPreProcessed.Add(itemToBuy);
         }
 
         var location = await _geolocationUtil.GetCurrentLocation();
         var (itemsResult, economy) = await _itemRepository.GetShoppingList(
-            _mapper.Map<List<ShoppingListRepositoryModel>>(ItemsToBuyListPreProcessed),
+            _mapper.Map<List<ShoppingListRepositoryModel>>(itemsToBuyListPreProcessed),
             location.Longitude, location.Latitude,
             Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius),
-            (CartProcessingType) Xamarin.Essentials.Preferences.Get("cartProcessingType",
-                (int) CartProcessingType.MultipleMarketsLowest));
+            (CartProcessingType)Xamarin.Essentials.Preferences.Get("cartProcessingType",
+                (int)CartProcessingType.MultipleMarketsLowest));
 
         if (itemsResult.Count == 0)
         {
             Economy = "0.00 грн";
-            HeaderText = "Доступно 0 з " + ItemsToBuyListPreProcessed.Count;
+            HeaderText = "Доступно 0 з " + itemsToBuyListPreProcessed.Count;
             Loaded?.Invoke(this,
                 new LoadingArgs()
-                    {Success = false, LoadedCount = items.Count, Total = ItemsToBuyListPreProcessed.Count});
+                    { Success = false, LoadedCount = items.Count, Total = itemsToBuyListPreProcessed.Count });
             return;
         }
 
@@ -162,16 +165,21 @@ public class CartViewModel : ICartViewModel
 
         var itemsToBuyListUngrouped = new List<ItemToBuy>();
 
-        foreach (var item in ItemsToBuyListPreProcessed)
+        foreach (var item in itemsToBuyListPreProcessed)
         {
             PriceRepositoryModel itemResult;
             if (item.Filial == null)
             {
-                itemResult = itemsResult.First(x => x.itemId == item.Item.Id);
+                itemResult = itemsResult.FirstOrDefault(x => x.itemId == item.Item.Id);
             }
             else
             {
-                itemResult = itemsResult.First(x => x.itemId == item.Item.Id && x.filialId == item.Filial.Id);
+                itemResult = itemsResult.FirstOrDefault(x => x.itemId == item.Item.Id && x.filialId == item.Filial.Id);
+            }
+
+            if (itemResult == null)
+            {
+                continue;
             }
 
             var itemToBuy = new ItemToBuy()
@@ -188,25 +196,59 @@ public class CartViewModel : ICartViewModel
 
             itemsToBuyListUngrouped.Add(itemToBuy);
         }
+        
+        var query = from item in itemsToBuyListUngrouped
+            group item by item.Filial.City + ", " + item.Filial.Street + " " + item.Filial.House + ", " +
+            shops.Last(y => y.id == item.Filial.Shop.Id).label into grouped
+            select new
+            {
+                grouped.Key,
+                Result = grouped.Select(x =>
+                {
+                    return new ImageButtonModel()
+                    {
+                        Id = x.RecordId,
+                        Image = x.Item.Image,
+                        PrimaryText = x.Item.Label,
+                        SecondaryText = x.CountLabel,
+                        AccentText = x.Item.PriceText,
+                        Command = new Command(async () =>
+                        {
+                            const string changeQuantity = "Змінити кількість";
+                            const string delete = "Видалити з кошика";
+                            var action = await Page.DisplayActionSheet("Дії:", "Закрити", null, changeQuantity, delete);
+                            switch (action)
+                            {
+                                case changeQuantity:
+                                    var result = await Page.DisplayPromptAsync(changeQuantity, "Введіть кількість",
+                                        initialValue: x.Count.ToString(CultureInfo.InvariantCulture), keyboard: Keyboard.Numeric);
+                                    x.Count = double.Parse(result);
+                                    await ChangeCartItem(x);
+                                    break;
+                                case delete:
+                                    await DeleteCartItem(x);
+                                    break;
+                            }
+                        })
+                    };
+                })
+            };
+        
+        query.ForEach(x => { ImageButtons.Add(new ImageButtonsGroup(x.Key, x.Result.ToList())); });
 
-        itemsToBuyListUngrouped.GroupBy(x =>
-                x.Filial.City + ", " + x.Filial.Street + " " + x.Filial.House + ", " +
-                shops.Last(y => y.id == x.Filial.Shop.Id).label)
-            .ForEach(x => { ItemsToBuyList.Add(new ItemToBuyGroup(x.Key, x.ToList())); });
-
-        HeaderText = "Доступно " + itemsToBuyListUngrouped.Count + " з " + ItemsToBuyListPreProcessed.Count;
+        HeaderText = "Доступно " + itemsToBuyListUngrouped.Count + " з " + itemsToBuyListPreProcessed.Count;
 
         Loaded?.Invoke(this,
-            new LoadingArgs() {Success = true, LoadedCount = items.Count, Total = ItemsToBuyListPreProcessed.Count});
+            new LoadingArgs() { Success = true, LoadedCount = items.Count, Total = itemsToBuyListPreProcessed.Count });
     }
 
-    public async Task ChangeCartItem(ItemToBuy model)
+    private async Task ChangeCartItem(ItemToBuy model)
     {
         await _itemsToBuyLocalRepository.UpdateAsync(_mapper.Map<ItemToBuyLocalDatabaseModel>(model));
         await LoadAsync();
     }
 
-    public async Task DeleteCartItem(ItemToBuy model)
+    private async Task DeleteCartItem(ItemToBuy model)
     {
         await _itemsToBuyLocalRepository.DeleteAsync(model.RecordId);
         await LoadAsync();
@@ -214,8 +256,7 @@ public class CartViewModel : ICartViewModel
 
     public async Task ClearShoppingList()
     {
-        ItemsToBuyList = new ObservableCollection<ItemToBuyGroup>();
-        ItemsToBuyListPreProcessed = new List<ItemToBuy>();
+        ImageButtons = new ObservableCollection<ImageButtonsGroup>();
         HeaderText = "Доступно 0 з 0";
         await _itemsToBuyLocalRepository.DeleteAllAsync();
     }

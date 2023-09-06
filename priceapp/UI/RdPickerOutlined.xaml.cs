@@ -17,7 +17,7 @@ namespace priceapp.UI
             BindableProperty.Create(nameof(PlaceholderColor), typeof(Color), typeof(RdPickerOutlined), Color.DimGray);
 
         public static readonly BindableProperty BorderColorProperty =
-            BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(RdPickerOutlined), Color.Accent);
+            BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(RdPickerOutlined), (Color)Application.Current.Resources["ColorPrimary"]);
 
         public static readonly BindableProperty FontSizeProperty =
             BindableProperty.Create(nameof(FontSize), typeof(int), typeof(RdPickerOutlined), 18);

@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="priceapp.Controls.ImageButtonWide">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Hello, world!"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand" />
+             x:Class="priceapp.Controls.ImageButtonWide"
+             x:Name="Page">
+    <StackLayout Padding="0"
+                 Orientation="Horizontal">
+        <Frame BackgroundColor="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}"
+               CornerRadius="20"
+               Padding="0"
+               HasShadow="False"
+               IsClippedToBounds="True">
+            <Image Aspect="AspectFill"
+                   WidthRequest="80"
+                   HeightRequest="80"
+                   Source="{Binding Source={x:Reference Page}, Path=ImageSource}" />
+        </Frame>
+        <StackLayout HorizontalOptions="FillAndExpand">
+            <Label Text="{Binding Source={x:Reference Page}, Path=PrimaryText}"
+                   FontSize="16"
+                   Margin="2, 0, 0,0"
+                   TextColor="{AppThemeBinding Light=Black, Dark=White, Default=Black}"
+                   HorizontalOptions="FillAndExpand"
+                   MinimumWidthRequest="80" />
+            <Label Text="{Binding Source={x:Reference Page}, Path=AccentText}"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="{ StaticResource ColorPrimary}"
+                   MinimumWidthRequest="80"
+                   HeightRequest="18" />
         </StackLayout>
-    </ContentPage.Content>
-</ContentPage>
+        <Label HorizontalTextAlignment="End"
+               HorizontalOptions="End"
+               MinimumWidthRequest="80"
+               TextColor="#aaa"
+               Text="{Binding Source={x:Reference Page}, Path=SecondaryText}" />
+    </StackLayout>
+</ContentView>

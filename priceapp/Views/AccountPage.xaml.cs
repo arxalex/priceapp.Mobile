@@ -44,6 +44,7 @@ public partial class AccountPage
     {
         if (CollectionView.SelectedItem == null) return;
         var item = (MenuItem) e.CurrentSelection.FirstOrDefault()!;
+        CollectionView.SelectedItem = null;
         switch (item.Label)
         {
             case "Налаштування":
@@ -59,10 +60,10 @@ public partial class AccountPage
                 Application.Current.MainPage = new OnboardingPage();
                 break;
             case "Питання та відповіді":
-                await Browser.OpenAsync("https://priceapp.arxalex.co/documents/faq", BrowserLaunchMode.SystemPreferred);
+                await Browser.OpenAsync("https://priceapp.co/documents/faq", BrowserLaunchMode.SystemPreferred);
                 break;
             case "Політика конфіденційності":
-                await Browser.OpenAsync("https://priceapp.arxalex.co/documents/privacy",
+                await Browser.OpenAsync("https://priceapp.co/documents/privacy",
                     BrowserLaunchMode.SystemPreferred);
                 break;
             case "Новини":
@@ -70,6 +71,6 @@ public partial class AccountPage
                 break;
         }
 
-        CollectionView.SelectedItem = null;
+        
     }
 }

@@ -8,10 +8,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("priceapp.iOS")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("CompanyName")]
+[assembly: AssemblyCompany("Arxalex")]
 [assembly: AssemblyProduct("priceapp.iOS")]
-[assembly: AssemblyCopyright("Copyright © CompanyName Year")]
-[assembly: AssemblyTrademark("CompanyTrademark")]
+[assembly: AssemblyCopyright("Copyright © Arxalex 2023")]
+[assembly: AssemblyTrademark("Arxalex")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 

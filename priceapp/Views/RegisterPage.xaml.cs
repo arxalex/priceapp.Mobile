@@ -36,8 +36,8 @@ public partial class RegisterPage
         await _registrationViewModel.RegisterUser(EntryUsername.Text, EntryEmail.Text, EntryPassword.Text);
     }
 
-    private async void ButtonLogin_OnClicked(object sender, EventArgs e)
+    private void ButtonLogin_OnClicked(object sender, EventArgs e)
     {
-        await Navigation.PopAsync();
+        Application.Current.MainPage = new LoginPage();
     }
 }

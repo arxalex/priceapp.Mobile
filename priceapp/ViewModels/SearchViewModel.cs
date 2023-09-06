@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using priceapp.Controls.Models;
 using priceapp.Events.Delegates;
 using priceapp.Events.Models;
 using priceapp.Models;
@@ -8,7 +10,9 @@ using priceapp.Repositories.Interfaces;
 using priceapp.Utils;
 using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
+using priceapp.Views;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 [assembly: Dependency(typeof(SearchViewModel))]
 
@@ -24,7 +28,6 @@ public class SearchViewModel : ISearchViewModel
 
     public SearchViewModel()
     {
-        Items = new ObservableCollection<Item>();
         _mapper = DependencyService.Get<IMapper>();
         _itemRepository = DependencyService.Get<IItemRepository>();
         _geolocationUtil = DependencyService.Get<GeolocationUtil>();
@@ -34,12 +37,12 @@ public class SearchViewModel : ISearchViewModel
 
     public event LoadingHandler Loaded;
     public event ConnectionErrorHandler BadConnectEvent;
-    public ObservableCollection<Item> Items { get; set; }
     public string Search { get; set; }
+    public ObservableCollection<ImageButtonModel> ItemButtons { get; set; } = new();
 
-    public async Task LoadAsync()
+    public async Task LoadAsync(INavigation navigation)
     {
-        Items.Clear();
+        ItemButtons.Clear();
 
         var location = await _geolocationUtil.GetCurrentLocation();
 
@@ -54,12 +57,21 @@ public class SearchViewModel : ISearchViewModel
             );
 
 
-        foreach (var item in items)
+        items.Select(y =>
         {
-            Items.Add(_mapper.Map<Item>(item));
-        }
+            var x = _mapper.Map<Item>(y);
+            return new ImageButtonModel()
+            {
+                Id = x.Id,
+                Image = x.Image,
+                PrimaryText = x.Label,
+                SecondaryText = x.UnitsText,
+                AccentText = x.PriceText,
+                Command = new Command(async () => { await navigation.PushAsync(new ItemPage(x)); })
+            };
+        }).ForEach(x => ItemButtons.Add(x));
 
-        Loaded?.Invoke(this, new LoadingArgs() {Success = true, Total = Items.Count, LoadedCount = items.Count});
+        Loaded?.Invoke(this, new LoadingArgs() {Success = true, Total = ItemButtons.Count, LoadedCount = items.Count});
     }
 
     private void ItemRepositoryOnBadConnectEvent(object sender, ConnectionErrorArgs args)

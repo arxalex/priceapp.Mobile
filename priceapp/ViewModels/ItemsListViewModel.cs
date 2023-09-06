@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using priceapp.Controls.Models;
@@ -30,7 +28,6 @@ public class ItemsListViewModel : IItemsListViewModel
 
     public ItemsListViewModel()
     {
-        Items = new ObservableCollection<Item>();
         CanLoadMode = true;
         ItemsLoadingNow = false;
         _mapper = DependencyService.Get<IMapper>();
@@ -44,7 +41,6 @@ public class ItemsListViewModel : IItemsListViewModel
     private bool ItemsLoadingNow { get; set; }
     public event LoadingHandler Loaded;
     public event ConnectionErrorHandler BadConnectEvent;
-    public ObservableCollection<Item> Items { get; set; }
     public ObservableCollection<ImageButtonModel> ItemButtons { get; set; } = new();
     public int CategoryId { get; set; }
 
@@ -52,7 +48,7 @@ public class ItemsListViewModel : IItemsListViewModel
     {
         if (ItemsLoadingNow)
         {
-            Loaded?.Invoke(this, new LoadingArgs() { Success = false, Total = Items.Count });
+            Loaded?.Invoke(this, new LoadingArgs() { Success = false, Total = ItemButtons.Count });
             return;
         }
 
@@ -61,7 +57,7 @@ public class ItemsListViewModel : IItemsListViewModel
         if (!CanLoadMode)
         {
             ItemsLoadingNow = false;
-            Loaded?.Invoke(this, new LoadingArgs() { Success = false, Total = Items.Count });
+            Loaded?.Invoke(this, new LoadingArgs() { Success = false, Total = ItemButtons.Count });
             return;
         }
 
@@ -69,8 +65,8 @@ public class ItemsListViewModel : IItemsListViewModel
 
         var items = await _itemRepository.GetItems(
             CategoryId,
-            Items.Count,
-            Items.Count + PageSize,
+            ItemButtons.Count,
+            ItemButtons.Count + PageSize,
             location.Longitude,
             location.Latitude,
             Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius)
@@ -78,7 +74,6 @@ public class ItemsListViewModel : IItemsListViewModel
 
         var i = 0;
         
-        items.ForEach(x => { Items.Add(_mapper.Map<Item>(x)); });
         items.Select(y =>
         {
             var x = _mapper.Map<Item>(y);
@@ -95,7 +90,7 @@ public class ItemsListViewModel : IItemsListViewModel
 
         CanLoadMode = items.Count >= PageSize;
         ItemsLoadingNow = false;
-        Loaded?.Invoke(this, new LoadingArgs() { Success = true, Total = Items.Count, LoadedCount = items.Count });
+        Loaded?.Invoke(this, new LoadingArgs() { Success = true, Total = ItemButtons.Count, LoadedCount = items.Count });
     }
 
     private void ItemRepositoryOnBadConnectEvent(object sender, ConnectionErrorArgs args)

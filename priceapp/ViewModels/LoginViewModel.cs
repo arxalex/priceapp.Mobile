@@ -11,12 +11,7 @@ namespace priceapp.ViewModels
 {
     public class LoginViewModel : ILoginViewModel
     {
-        private readonly IUserService _userService;
-
-        public LoginViewModel()
-        {
-            _userService = DependencyService.Get<IUserService>(DependencyFetchTarget.NewInstance);
-        }
+        private readonly IUserService _userService = DependencyService.Get<IUserService>(DependencyFetchTarget.NewInstance);
 
         public event LoginHandler LoginSuccess;
         public async Task LoginUser(string email, string password)

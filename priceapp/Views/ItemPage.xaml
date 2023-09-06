@@ -5,13 +5,14 @@
              xmlns:models="clr-namespace:priceapp.Models;assembly=priceapp"
              xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
              x:Class="priceapp.Views.ItemPage"
              x:DataType="viewModels:IItemViewModel">
     <ContentPage.Content>
         <ScrollView>
             <StackLayout>
                 <Grid>
-                    <Image Source="{Binding Item.Image}" BackgroundColor="WhiteSmoke"/>
+                    <Image Source="{Binding Item.Image}" BackgroundColor="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}"/>
                     <Grid Padding="15, 15">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="65" />
@@ -19,11 +20,10 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="40" />
                         </Grid.RowDefinitions>
-
                         <ImageButton Grid.Column="0"
-                                     BackgroundColor="#FAFAFA"
+                                     BackgroundColor="{AppThemeBinding Default=#FAFAFA, Light=#FAFAFA, Dark=#132f13}"
                                      Clicked="ImageButton_OnClicked"
-                                     CornerRadius="2000"
+                                     CornerRadius="20"
                                      Padding="17,7, 20, 7">
                             <ImageButton.Source>
                                 <FontImageSource FontFamily="MaterialOutlined"
@@ -56,14 +56,14 @@
                            Grid.ColumnSpan="2"
                            Text="{Binding Item.Label}"
                            FontSize="22"
-                           TextColor="Black"
+                           TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
                            FontAttributes="Bold" />
                     <Label Grid.Row="1"
                            Grid.Column="0"
                            Text="{Binding Item.PriceText}"
                            FontAttributes="Bold"
                            FontSize="30"
-                           TextColor="Accent" />
+                           TextColor="{ StaticResource ColorPrimary}" />
                     <Button Grid.Row="1" Grid.Column="1" 
                             Text="Додати"
                             Style="{StaticResource ButtonStyle}"
@@ -73,7 +73,8 @@
                             Clicked="Button_OnClicked"/>
                     <Grid Grid.Row="2"
                           Grid.Column="0"
-                          Grid.ColumnSpan="2">
+                          Grid.ColumnSpan="2"
+                          Margin="0,0,0,10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -153,85 +154,12 @@
                                Text="{Binding Item.Proteins}"
                                x:Name="ProteinsLabelValue" />
                     </Grid>
-                    <CollectionView Grid.Row="3"
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="2"
-                                    x:Name="CollectionView"
-                                    ItemsSource="{Binding PricesAndFilials}"
-                                    ItemsLayout="VerticalGrid"
-                                    HeightRequest="150"
-                                    SelectionMode="Single"
-                                    SelectionChanged="CollectionView_OnSelectionChanged">
-                        <CollectionView.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Column="1" Text="Магазин" />
-                                <Label Grid.Column="2"
-                                       Text="Ціна" />
-                            </Grid>
-                        </CollectionView.Header>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:ItemPriceInfo">
-                                <Frame Padding="0"
-                                       Margin="0, 7"
-                                       BackgroundColor="White"
-                                       BorderColor="White">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="50" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <Image Grid.Column="0"
-                                               Source="{Binding Shop.Icon}" />
-                                        <Grid Grid.Column="1">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="24" />
-                                                <RowDefinition Height="18" />
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <Label Grid.Row="0"
-                                                   Grid.Column="0"
-                                                   Grid.ColumnSpan="2"
-                                                   FontSize="18"
-                                                   Text="{Binding Shop.Label}" />
-                                            <Label Grid.Row="1"
-                                                   Grid.Column="0"
-                                                   Text="{Binding Filial.Street}" />
-                                            <Label Grid.Row="1"
-                                                   Grid.Column="1"
-                                                   Text="{Binding Filial.House}" />
-                                        </Grid>
-                                        <Grid Grid.Column="2">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="26" />
-                                                <RowDefinition Height="16" />
-                                            </Grid.RowDefinitions>
-                                            <Label Grid.Row="0"
-                                                   Text="{Binding PriceView}"
-                                                   FontSize="20"
-                                                   FontAttributes="Bold"
-                                                   HorizontalTextAlignment="End" />
-                                            <Label Grid.Row="1"
-                                                   Text="{Binding QuantityView}"
-                                                   TextColor="{Binding QuantityViewColor}"
-                                                   FontSize="14"
-                                                   FontAttributes="Bold"
-                                                   HorizontalTextAlignment="End" />
-                                        </Grid>
-
-                                    </Grid>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                    <controls:CollectionListMini Grid.Row="3"
+                                                 Grid.Column="0"
+                                                 Grid.ColumnSpan="2"
+                                                 HeightRequest="150"
+                                                 Margin="0, 0,0,10"
+                                                 ItemsSource="{Binding ItemButtons}"/>
                     <maps:Map Grid.Row="4"
                               Grid.Column="0"
                               Grid.ColumnSpan="2"
@@ -250,10 +178,7 @@
                     </maps:Map>
                 </Grid>
                 <ActivityIndicator x:Name="ActivityIndicator"
-                                   IsRunning="False"
-                                   IsVisible="False"
-                                   VerticalOptions="CenterAndExpand"
-                                   Color="{AppThemeBinding Light=Accent, Dark=DarkGreen, Default=Accent}" />
+                                   Style="{StaticResource ActivityIndicatorStyle}" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

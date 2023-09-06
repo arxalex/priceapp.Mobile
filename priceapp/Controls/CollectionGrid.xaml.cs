@@ -18,8 +18,6 @@ public partial class CollectionGrid
         InitializeComponent();
         CollectionView.SetBinding(ItemsView.RemainingItemsThresholdProperty, new Binding("RemainingItemsThreshold", source:this));
         CollectionView.RemainingItemsThresholdReached += CollectionViewOnRemainingThresholdReached;
-        var size = Measure(Double.PositiveInfinity, Double.PositiveInfinity);
-        ItemWidth += (size.Request.Width - 45) / 2;
     }
 
     public event EventHandler RemainingItemsThresholdReached;
@@ -44,8 +42,7 @@ public partial class CollectionGrid
     }
     
     public ObservableCollection<ObservableCollection<ImageButtonModel>> ItemsSourcePerRow { get; set; } = new();
-    public double ItemWidth { get; set; } = 0;
-    
+
     private void CollectionViewOnRemainingThresholdReached(object sender, EventArgs e)
     {
         RemainingItemsThresholdReached?.Invoke(this, e);

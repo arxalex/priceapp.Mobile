@@ -38,32 +38,22 @@ namespace priceapp.ViewModels
             BadConnectEvent?.Invoke(this, args);
         }
 
-        public ObservableCollection<Category> Categories { get; set; } = new();
         public ObservableCollection<ImageButtonModel> CategoryButtons { get; set; } = new();
 
         public async Task LoadAsync(INavigation navigation)
         {
-            _mapper.Map<List<Category>>(await _categoryRepository.GetCategories()).ForEach(x =>
-            {
-                Categories.Add(x);
-            });
-            Categories.Select(x => new ImageButtonModel()
-            {
-                Id = x.Id,
-                Image = x.Image, 
-                PrimaryText = x.Label, 
-                SecondaryText = null, 
-                Command = new Command(async () =>
+            _mapper.Map<List<Category>>(await _categoryRepository.GetCategories())
+                .Select(x => new ImageButtonModel
                 {
-                    await navigation.PushAsync(new ItemsListPage(x.Id, x.Label));
-                })
-            }).ForEach(x =>
-            {
-                CategoryButtons.Add(x);
-            });
+                    Id = x.Id,
+                    Image = x.Image,
+                    PrimaryText = x.Label,
+                    Command = new Command(async () => { await navigation.PushAsync(new ItemsListPage(x.Id, x.Label)); })
+                }).ForEach(x => { CategoryButtons.Add(x); });
 
             Loaded?.Invoke(this,
-                new LoadingArgs() { Success = true, LoadedCount = Categories.Count, Total = Categories.Count });
+                new LoadingArgs()
+                    { Success = true, LoadedCount = CategoryButtons.Count, Total = CategoryButtons.Count });
         }
     }
 }

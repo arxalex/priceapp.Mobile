@@ -7,6 +7,7 @@ public static class ExceptionMessages
     public const string PasswordIncorrect = "Password is incorrect";
     public const string UsernameRegisterIncorrect = "Username, email or password invalid";
     public const string UserAlreadyExists = "User with this username or email already exists";
+    public const string UserAlreadyExists2 = "This username or email already registered";
     public const string ConfirmationIncorrect = "Confirmation token does not exist";
     public const string ChangePasswordIncorrect = "Old or new password is invalid";
     public const string UserDoesNotExists = "User does not exist";

@@ -13,14 +13,8 @@ namespace priceapp.Services.Implementation;
 
 public class UserService : IUserService
 {
-    private readonly IUserRepository _userRepository;
-    private readonly IConnectionService _connectionService;
-
-    public UserService()
-    {
-        _userRepository = DependencyService.Get<IUserRepository>(DependencyFetchTarget.NewInstance);
-        _connectionService = DependencyService.Get<IConnectionService>();
-    }
+    private readonly IUserRepository _userRepository = DependencyService.Get<IUserRepository>(DependencyFetchTarget.NewInstance);
+    private readonly IConnectionService _connectionService = DependencyService.Get<IConnectionService>();
 
     public async Task<bool> IsUserLoggedIn()
     {
@@ -73,6 +67,39 @@ public class UserService : IUserService
 
         return new ProcessedArgs { Success = true, Message = "Вхід виконано" };
     }
+    
+    public async Task<ProcessedArgs> RegisterUser(string username, string email, string password)
+        {
+            if (username == null || password == null || email == null)
+            {
+                return new ProcessedArgs() {Success = false, Message = "Усі поля обов'язкові до заповнення"};
+            }
+
+            if (!StringUtil.IsValidUsername(username))
+            {
+                return new ProcessedArgs()
+                    {
+                        Success = false,
+                        Message =
+                            "Ім'я користувача містить недопустимі символи. Використовуйте лише малі літери латинського алфавіту, цифри та символи \".\" і \"_\""
+                    };
+            }
+
+            if (!StringUtil.IsValidEmail(email))
+            {
+                return new ProcessedArgs() {Success = false, Message = "E-mail вказано некорректно"};
+            }
+
+            var loginStatus = await _userRepository.Register(username, email, password);
+            
+            if (!loginStatus.Succsess)
+            {
+                return new ProcessedArgs { Success = false, Message = loginStatus.Message };
+            }
+
+            return new ProcessedArgs { Success = true, Message = "Реєстрація успішна" };
+        }
+
 
     public async Task<ProcessedArgs> LoginAsGuest()
     {

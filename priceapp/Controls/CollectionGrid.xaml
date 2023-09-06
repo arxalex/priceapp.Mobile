@@ -6,37 +6,25 @@
              x:Class="priceapp.Controls.CollectionGrid"
              x:Name="Page"
              VerticalOptions="FillAndExpand"
-             Margin="7, 0, 7, 0">
+             Margin="15, 0, 15, 0">
     <CollectionView x:Name="CollectionView"
-                    ItemSizingStrategy="MeasureAllItems"
+                    ItemSizingStrategy="MeasureFirstItem"
                     VerticalScrollBarVisibility="Never"
                     SelectionMode="None"
                     VerticalOptions="FillAndExpand"
-                    ItemsSource="{Binding Source={x:Reference Page}, Path=ItemsSourcePerRow}">
+                    ItemsSource="{Binding Source={x:Reference Page}, Path=ItemsSource}">
         <CollectionView.ItemsLayout>
             <GridItemsLayout Orientation="Vertical"
-                             Span="1"
-                             VerticalItemSpacing="15" />
+                             Span="2"
+                             HorizontalItemSpacing="13"
+                             VerticalItemSpacing="13"/>
         </CollectionView.ItemsLayout>
         <CollectionView.ItemTemplate>
             <DataTemplate>
-                <StackLayout BindableLayout.ItemsSource="{Binding}" 
-                             Orientation="Horizontal"
-                             HorizontalOptions="FillAndExpand">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <controls:ImageButtonLarge PrimaryText="{Binding PrimaryText}"
-                                                       ImageSource="{Binding Image}"
-                                                       AccentText="{Binding AccentText}"
-                                                       SecondaryText="{Binding SecondaryText}"
-                                                       Id="{Binding Id}"
-                                                       Command="{Binding Command}"
-                                                       WidthRequest="{Binding Source={x:Reference Page}, Path=ItemWidth}"
-                                                       HorizontalOptions="FillAndExpand"
-                                                       Margin="7,0"/>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </StackLayout>
+                <controls:ImageButtonLarge PrimaryText="{Binding PrimaryText}"
+                                           ImageSource="{Binding Image}"
+                                           Id="{Binding Id}"
+                                           Command="{Binding Command}"/>
             </DataTemplate>
         </CollectionView.ItemTemplate>
     </CollectionView>

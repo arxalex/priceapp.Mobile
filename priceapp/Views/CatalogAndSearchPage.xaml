@@ -15,12 +15,12 @@
     </ContentPage.Padding>
     <ContentPage.Content>
         <StackLayout>
-            <ui:ContentButton Margin="14,0,14,7"
+            <ui:ContentButton Margin="15,0,15,7"
                               Tapped="SearchButton_OnTapped">
-                <Frame BackgroundColor="{StaticResource ColorSecondary}"
+                <Frame BackgroundColor="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}"
                        Padding="20, 15"
                        CornerRadius="20"
-                       HasShadow="False">
+                       Style="{StaticResource FrameStyle}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="40" />
@@ -32,7 +32,7 @@
                             <Image.Source>
                                 <FontImageSource FontFamily="MaterialOutlined"
                                                  Glyph="&#xe8b6;"
-                                                 Color="Accent" />
+                                                 Color="{ StaticResource ColorPrimary}" />
                             </Image.Source>
                         </Image>
                         <Label Grid.Column="1"
@@ -46,10 +46,7 @@
             <controls:CollectionGrid x:Name="CollectionGrid" 
                                      ItemsSource="{Binding CategoryButtons}"/>
             <ActivityIndicator x:Name="ActivityIndicator"
-                               IsRunning="False"
-                               IsVisible="False"
-                               VerticalOptions="CenterAndExpand"
-                               Color="{AppThemeBinding Light=Accent, Dark=DarkGreen, Default=Accent}"/>
+                               Style="{StaticResource ActivityIndicatorStyle}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

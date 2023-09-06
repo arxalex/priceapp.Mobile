@@ -6,7 +6,7 @@
     <ContentPage.Content>
         <StackLayout VerticalOptions="CenterAndExpand">
             <Label Text="Упс, сало впало"
-                   TextColor="Accent"
+                   TextColor="{ StaticResource ColorPrimary}"
                    Style="{StaticResource PageTitle}"
                    HorizontalTextAlignment="Center" />
             <Label Text="Щось пішло не так"

@@ -49,21 +49,21 @@ public class OnboardingViewModel : IOnboardingViewModel
             {
                 Title = "Перегляньте ціни на мапі",
                 Content = "Опустіться нижче щоб побачити ціни навколо вас.",
-                ImageUrl = "onboarding_4.png"
+                ImageUrl = "onboarding_6.png"
             },
             new()
             {
                 Title = "Список покупок",
                 Content =
                     "Натисніть на \"Кошик\" щоб переглянути товари у списку покупок. Тут відображаються найнижчі ціни та адреси магазинів. Проведіть зверху донизу щоб оновити список.",
-                ImageUrl = "onboarding_5.png"
+                ImageUrl = "onboarding_4.png"
             },
             new()
             {
                 Title = "Налаштуйте під себе",
                 Content =
                     "Натисніть \"Акаунт\" та перейдіть до налаштувань. Тут ви можете змінити радіус пошуку та змінити спосіб формування списку покупок.",
-                ImageUrl = "onboarding_6.png"
+                ImageUrl = "onboarding_5.png"
             }
         };
     }

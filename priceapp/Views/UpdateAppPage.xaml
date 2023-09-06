@@ -6,12 +6,13 @@
     <ContentPage.Content>
         <StackLayout VerticalOptions="CenterAndExpand">
             <Label Text="Доступна нова версія додатку"
-                   TextColor="Accent"
+                   TextColor="{ StaticResource ColorPrimary}"
                    Style="{StaticResource PageTitle}"
                    HorizontalTextAlignment="Center" />
             <Label
                 Text="Схоже, що вийшла нова версія додатку, яка має нову функціональність або виправлення помилок. Щоб продовжити користуватись усіма перевагами priceapp - бідь ласка, оновіть додаток."
-                HorizontalTextAlignment="Center" />
+                HorizontalTextAlignment="Center"
+                TextColor="{AppThemeBinding Light=Black, Dark=White, Default=Black}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -13,13 +13,14 @@
                    VerticalOptions="CenterAndExpand"
                    HorizontalTextAlignment="Center"
                    HorizontalOptions="CenterAndExpand" />
-            <Label Text="Для продовження вам необхідно підтвердити реєстрацію. Вам було надіслано лист на вказану електронну пошту з посиланням для підтвердження реєстрації. Перейдіть за посиланням. Після цього можете зробити вхід у цьому додатку"
+            <Label Text="Для продовження вам необхідно підтвердити реєстрацію. Вам було надіслано лист на вказану електронну пошту (можливе потрапляння до спаму) з посиланням для підтвердження реєстрації. Перейдіть за посиланням. Після цього можете зробити вхід у цьому додатку"
                    VerticalOptions="CenterAndExpand"
+                   TextColor="{AppThemeBinding Light=Black, Dark=White, Default=Black}"
                    HorizontalOptions="CenterAndExpand" />
             <Button Style="{StaticResource ButtonStyle}"
                     BackgroundColor="{AppThemeBinding Light=White, Dark=#222, Default=White}"
-                    TextColor="Accent"
-                    BorderColor="Accent"
+                    TextColor="{ StaticResource ColorPrimary}"
+                    BorderColor="{ StaticResource ColorPrimary}"
                     BorderWidth="1"
                     Text="Вхід"
                     VerticalOptions="EndAndExpand"

@@ -195,6 +195,8 @@ public class ItemRepository : IItemRepository
 
         request.AddHeader("Content-Type", "application/json");
         request.AddBody(json, "application/json");
+        request.AddQueryParameter("from", from);
+        request.AddQueryParameter("to", to);
 
         var response = await _client.ExecuteAsync(request);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
@@ -352,7 +354,7 @@ public class ItemRepository : IItemRepository
         });
         request.AddHeader("Content-Type", "application/json");
         request.AddBody(json, "application/json");
-        request.AddQueryParameter("type", type);
+        request.AddQueryParameter("method", type);
 
         var response = await _client.ExecuteAsync(request);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)

@@ -65,20 +65,12 @@ namespace priceapp.Views
             ActivityIndicator.IsVisible = true;
             CollectionView.IsVisible = false;
             _searchViewModel.Search = SearchEntry.Text;
-            await _searchViewModel.LoadAsync();
+            await _searchViewModel.LoadAsync(Navigation);
         }
 
         private async void SearchEntry_OnCompleted(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new SearchItemsListPage(SearchEntry.Text));
-        }
-
-        private async void CollectionView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (CollectionView.SelectedItem == null) return;
-            var item = (Item) e.CurrentSelection.FirstOrDefault()!;
-            await Navigation.PushAsync(new ItemPage(item));
-            CollectionView.SelectedItem = null;
         }
     }
 }

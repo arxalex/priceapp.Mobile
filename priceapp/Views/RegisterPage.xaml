@@ -30,10 +30,11 @@
                                    x:Name="EntryPassword" />
             <Frame x:Name="ProcessedFrame"
                    IsVisible="False"
-                   BackgroundColor="LightYellow"
+                   BackgroundColor="{AppThemeBinding Default=LightYellow, Light=LightYellow, Dark=#310}"
                    BorderColor="DarkOrange"
                    CornerRadius="5"
-                   Margin="2">
+                   Margin="2"
+                   Style="{StaticResource FrameStyle}">
                 <Frame.Content>
                     <Label x:Name="ProcessedLabel"
                            TextColor="DarkOrange" />
@@ -44,8 +45,8 @@
                     Clicked="Button_OnClicked"/>
             <Button Style="{StaticResource ButtonStyle}"
                     BackgroundColor="{AppThemeBinding Light=White, Dark=#222, Default=White}"
-                    TextColor="Accent"
-                    BorderColor="Accent"
+                    TextColor="{ StaticResource ColorPrimary}"
+                    BorderColor="{ StaticResource ColorPrimary}"
                     BorderWidth="1"
                     Text="Вхід"
                     VerticalOptions="EndAndExpand"

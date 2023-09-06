@@ -1,7 +1,5 @@
 using System;
-using System.Linq;
 using priceapp.Events.Models;
-using priceapp.Models;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -18,7 +16,7 @@ public partial class SearchItemsListPage
     {
         InitializeComponent();
         IsBusy = false;
-        CategoryLabel.Text = search;
+        HeaderBackButton.Label = search;
 
         _searchItemsListViewModel = DependencyService.Get<ISearchItemsListViewModel>(DependencyFetchTarget.NewInstance);
         _searchItemsListViewModel.Loaded += SearchItemsListViewModelOnLoaded;
@@ -33,7 +31,7 @@ public partial class SearchItemsListPage
         ActivityIndicator.IsRunning = true;
         ActivityIndicator.IsVisible = true;
         CollectionView.IsVisible = false;
-        _searchItemsListViewModel.LoadAsync();
+        _searchItemsListViewModel.LoadAsync(Navigation);
     }
 
     private async void SearchItemsListViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
@@ -63,19 +61,11 @@ public partial class SearchItemsListPage
         _isBusy = true;
         ActivityIndicator.IsRunning = true;
         ActivityIndicator.IsVisible = true;
-        _searchItemsListViewModel.LoadAsync();
+        _searchItemsListViewModel.LoadAsync(Navigation);
     }
 
     private async void ImageButton_OnClicked(object sender, EventArgs e)
     {
         await Navigation.PopAsync();
-    }
-
-    private async void CollectionView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (CollectionView.SelectedItem == null) return;
-        var item = (Item) e.CurrentSelection.FirstOrDefault()!;
-        await Navigation.PushAsync(new ItemPage(item));
-        CollectionView.SelectedItem = null;
     }
 }

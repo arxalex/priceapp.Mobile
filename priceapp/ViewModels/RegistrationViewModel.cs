@@ -1,16 +1,8 @@
-using System;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 using priceapp.Events.Delegates;
-using priceapp.Events.Models;
-using priceapp.Utils;
+using priceapp.Services.Interfaces;
 using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
-using priceapp.WebServices;
-using RestSharp;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(RegistrationViewModel))]
@@ -19,122 +11,13 @@ namespace priceapp.ViewModels
 {
     public class RegistrationViewModel : IRegistrationViewModel
     {
-        private readonly RestClient _client;
-
-        public RegistrationViewModel()
-        {
-            var priceAppWebAccess = DependencyService.Get<IPriceAppWebAccess>();
-            var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler())
-            {
-                BaseAddress = new Uri("https://api.priceapp.co/")
-            };
-
-            _client = new RestClient(httpClient);
-            var cookie = Xamarin.Essentials.SecureStorage.GetAsync("cookie").Result;
-
-            if (cookie is not {Length: > 0})
-            {
-                Xamarin.Essentials.SecureStorage.Remove("cookie");
-                return;
-            }
-
-            var expires = int.Parse(cookie
-                .Split(' ')
-                .First(x => x.Contains("token_expires"))
-                .Substring(13)
-                .Trim('=', ';'));
-
-            if (DateTimeOffset.Now.ToUnixTimeSeconds() > expires)
-            {
-                Xamarin.Essentials.SecureStorage.Remove("cookie");
-            }
-            else
-            {
-                _client.AddDefaultHeader("Cookie", cookie);
-            }
-        }
+        private readonly IUserService _userService = DependencyService.Get<IUserService>(DependencyFetchTarget.NewInstance);
 
         public event LoginHandler RegisterSuccess;
 
         public async Task RegisterUser(string username, string email, string password)
         {
-            if (username == null || password == null || email == null)
-            {
-                RegisterSuccess?.Invoke(this,
-                    new ProcessedArgs() {Success = false, Message = "Усі поля обов'язкові до заповнення"});
-                return;
-            }
-
-            if (!StringUtil.IsValidUsername(username))
-            {
-                RegisterSuccess?.Invoke(this,
-                    new ProcessedArgs()
-                    {
-                        Success = false,
-                        Message =
-                            "Ім'я користувача містить недопустимі символи. Використовуйте лише малі літери латинського алфавіту, цифри та символи \".\" і \"_\""
-                    });
-                return;
-            }
-
-            if (!StringUtil.IsValidEmail(email))
-            {
-                RegisterSuccess?.Invoke(this,
-                    new ProcessedArgs() {Success = false, Message = "E-mail вказано некорректно"});
-                return;
-            }
-
-            var json = JsonSerializer.Serialize(new
-            {
-                username, email, password
-            });
-
-            var request = new RestRequest("be/register", Method.Post);
-
-            Xamarin.Essentials.SecureStorage.Remove("cookie");
-            _client.DefaultParameters.RemoveParameter("Cookie");
-            request.AddHeader("Content-Type", "application/json");
-            request.AddBody(json, "application/json");
-
-            var response = await _client.ExecuteAsync(request);
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                RegisterSuccess?.Invoke(this,
-                    new ProcessedArgs()
-                        {Success = false, Message = "Логін та e-mail вже використовуються або вказані некорректно"});
-                return;
-            }
-
-            if (response.Content == null)
-            {
-                RegisterSuccess?.Invoke(this, new ProcessedArgs() {Success = false, Message = "Щось пішло не так"});
-                return;
-            }
-
-            var result = JsonSerializer.Deserialize<UserRegisterParse>(response.Content, new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            if (result is not {StatusRegister: true})
-            {
-                RegisterSuccess?.Invoke(this,
-                    new ProcessedArgs() {Success = false, Message = "Реєстрація відхилена. Перевірте введені дані"});
-                return;
-            }
-
-            if (response.Headers == null)
-            {
-                RegisterSuccess?.Invoke(this, new ProcessedArgs() {Success = false, Message = "Щось пішло не так"});
-                return;
-            }
-
-            RegisterSuccess?.Invoke(this, new ProcessedArgs() {Success = true, Message = "Реєстрація успішна"});
-        }
-
-        private class UserRegisterParse
-        {
-            public bool StatusRegister { get; set; }
+            RegisterSuccess?.Invoke(this, await _userService.RegisterUser(username, email, password));
         }
     }
 }

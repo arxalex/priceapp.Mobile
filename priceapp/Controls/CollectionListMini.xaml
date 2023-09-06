@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
+             xmlns:models="clr-namespace:priceapp.Controls.Models;assembly=priceapp"
+             x:Class="priceapp.Controls.CollectionListMini"
+             x:Name="Page"
+             VerticalOptions="FillAndExpand">
+    <CollectionView x:Name="CollectionView"
+                    ItemSizingStrategy="MeasureAllItems"
+                    VerticalScrollBarVisibility="Never"
+                    SelectionMode="None"
+                    VerticalOptions="FillAndExpand"
+                    ItemsSource="{Binding Source={x:Reference Page}, Path=ItemsSource}">
+        <CollectionView.ItemsLayout>
+            <GridItemsLayout Orientation="Vertical"
+                             Span="1"
+                             VerticalItemSpacing="0" />
+        </CollectionView.ItemsLayout>
+        <CollectionView.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="1" Text="Магазин"/>
+                <Label Grid.Column="2" Text="Ціна" />
+            </Grid>
+        </CollectionView.Header>
+        <CollectionView.ItemTemplate>
+            <DataTemplate x:DataType="models:ImageButtonModel">
+                <controls:ImageButtonWideMini PrimaryText="{Binding PrimaryText}"
+                                              ImageSource="{Binding Image}"
+                                              AccentText="{Binding AccentText}"
+                                              SecondaryText="{Binding SecondaryText}"
+                                              AdditionalText="{Binding AdditionalText}"
+                                              AdditionalTextColor="{Binding AdditionalTextColor}"
+                                              Id="{Binding Id}"
+                                              Command="{Binding Command}"
+                                              HorizontalOptions="FillAndExpand"/>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
+</ContentView>

@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using AutoMapper;
 using priceapp.Annotations;
+using priceapp.Controls.Models;
 using priceapp.Events.Delegates;
 using priceapp.Events.Models;
 using priceapp.LocalDatabase.Models;
@@ -16,6 +18,7 @@ using priceapp.Utils;
 using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 [assembly: Xamarin.Forms.Dependency(typeof(ItemViewModel))]
 
@@ -62,6 +65,8 @@ public class ItemViewModel : IItemViewModel
         }
     }
 
+    public ObservableCollection<ImageButtonModel> ItemButtons { get; set; } = new();
+
     public ObservableCollection<ItemPriceInfo> PricesAndFilials { get; set; }
 
     public BrandAlert BrandAlert
@@ -70,7 +75,7 @@ public class ItemViewModel : IItemViewModel
         set
         {
             _brandAlert = value;
-            IsVisibleBrandAlert = BrandAlert is {Message.Length: > 0};
+            IsVisibleBrandAlert = BrandAlert is { Message.Length: > 0 };
             ForeGroundColorBrandAlert = ColorUtil.BlackOrWhiteFrontColorByBackground(BrandAlert.Color);
             OnPropertyChanged();
         }
@@ -96,7 +101,7 @@ public class ItemViewModel : IItemViewModel
         }
     }
 
-    public async Task LoadAsync(Item item)
+    public async Task LoadAsync(Item item, Page page)
     {
         var shops = _mapper.Map<IList<Shop>>(await _shopRepository.GetShops());
         var filials = _mapper.Map<IList<Filial>>(await _shopRepository.GetFilials());
@@ -111,17 +116,38 @@ public class ItemViewModel : IItemViewModel
                 Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius)
             ));
 
-        foreach (var priceInfo in priceInfos)
+        priceInfos.Select(x => new ItemPriceInfo()
         {
-            PricesAndFilials.Add(new ItemPriceInfo()
+            Price = x.Price,
+            ItemId = x.ItemId,
+            Quantity = x.Quantity,
+            Filial = filials.Last(f => f.Id == x.FilialId),
+            Shop = shops.Last(s => s.Id == x.ShopId)
+        }).ForEach(x => { PricesAndFilials.Add(x); });
+        priceInfos.Select(x =>
+        {
+            var shop = shops.Last(s => s.Id == x.ShopId);
+            var filial = filials.Last(f => f.Id == x.FilialId);
+            return new ImageButtonModel()
             {
-                Price = priceInfo.Price,
-                ItemId = priceInfo.ItemId,
-                Quantity = priceInfo.Quantity,
-                Filial = filials.Last(f => f.Id == priceInfo.FilialId),
-                Shop = shops.Last(s => s.Id == priceInfo.ShopId)
-            });
-        }
+                Id = x.Id,
+                Image = shop.Icon,
+                PrimaryText = shop.Label,
+                SecondaryText = filial.Street + " " + filial.House,
+                AdditionalText = x.Quantity > 0 ? "Є в наявності" : "Немає в наявності",
+                AdditionalTextColor = x.Quantity > 0 ? (Color)Application.Current.Resources["ColorPrimary"] : Color.Red,
+                AccentText = x.Price + " грн",
+                Command = new Command(async () =>
+                {
+                    const string addAction = "Додати до кошика";
+                    var action = await page.DisplayActionSheet("Дії:", "Закрити", null, addAction);
+                    if (action == addAction)
+                    {
+                        await AddToCart(filial.Id);
+                    }
+                })
+            };
+        }).ForEach(x => ItemButtons.Add(x));
 
         if (Xamarin.Essentials.Preferences.Get("showRussiaSupportBrandAlerts",
                 Constants.DefaultShowRussiaSupportBrandAlerts))
@@ -149,7 +175,7 @@ public class ItemViewModel : IItemViewModel
         {
             Added = false,
             Count = 1,
-            Filial = filialId != null ? new Filial {Id = (int) filialId} : null,
+            Filial = filialId != null ? new Filial { Id = (int)filialId } : null,
             Item = Item
         };
         await _itemsToBuyLocalRepository.InsertAsync(_mapper.Map<ItemToBuyLocalDatabaseModel>(itemToBuy));

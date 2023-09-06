@@ -10,4 +10,5 @@ public interface IUserService
     Task<ProcessedArgs> LoginAsGuest();
     Task<bool> IsUserWasLoggedIn();
     void LogoutUser();
+    Task<ProcessedArgs> RegisterUser(string username, string email, string password);
 }

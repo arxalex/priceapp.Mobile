@@ -67,6 +67,30 @@
             <DependentUpon>RdPickerOutlined.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Controls\CollectionList.xaml.cs">
+          <DependentUpon>CollectionList.xaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Controls\CollectionList.xaml.cs">
+          <DependentUpon>CollectionList.xaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Controls\ImageButtonWideMini.xaml.cs">
+          <DependentUpon>ImageButtonWideMini.xaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Controls\CollectionListMini.xaml.cs">
+          <DependentUpon>CollectionListMini.xaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Controls\CollectionGroupedList.xaml.cs">
+          <DependentUpon>CollectionGrouppedList.xaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Controls\HeaderBackButton.xaml.cs">
+          <DependentUpon>HeaderBackButton.xaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

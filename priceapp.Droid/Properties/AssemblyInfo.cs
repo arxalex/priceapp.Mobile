@@ -11,7 +11,7 @@ using Android.App;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Arxalex")]
 [assembly: AssemblyProduct("priceapp.Droid")]
-[assembly: AssemblyCopyright("Copyright © Arxalex 2021")]
+[assembly: AssemblyCopyright("Copyright © Arxalex 2023")]
 [assembly: AssemblyTrademark("Arxalex")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

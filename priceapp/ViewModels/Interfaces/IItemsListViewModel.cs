@@ -9,7 +9,6 @@ namespace priceapp.ViewModels.Interfaces;
 
 public interface IItemsListViewModel
 {
-    ObservableCollection<Item> Items { get; set; }
     int CategoryId { get; set; }
     ObservableCollection<ImageButtonModel> ItemButtons { get; set; }
     Task LoadAsync(INavigation navigation);

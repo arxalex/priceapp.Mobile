@@ -36,7 +36,7 @@ public partial class ItemPage
         ActivityIndicator.IsRunning = true;
         ActivityIndicator.IsVisible = true;
         ItemInfo.IsVisible = false;
-        _itemViewModel.LoadAsync(item);
+        _itemViewModel.LoadAsync(item, this);
     }
 
     private async void ItemViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
@@ -67,19 +67,6 @@ public partial class ItemPage
     private async void ImageButton_OnClicked(object sender, EventArgs e)
     {
         await Navigation.PopAsync();
-    }
-
-    private async void CollectionView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (CollectionView.SelectedItem == null) return;
-        const string addAction = "Додати до кошика";
-        var action = await DisplayActionSheet("Дії:", "Закрити", null, addAction);
-        if (action == addAction)
-        {
-            await _itemViewModel.AddToCart(((ItemPriceInfo) CollectionView.SelectedItem).Filial.Id);
-        }
-
-        CollectionView.SelectedItem = null;
     }
 
     private async void Button_OnClicked(object sender, EventArgs e)

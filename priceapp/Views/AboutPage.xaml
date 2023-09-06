@@ -3,45 +3,29 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="priceapp.Views.AboutPage"
-             xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+             xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp">
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="iOS" Value="0,50,0,0" />
+            <On Platform="Android" Value="0,20,0,0" />
+        </OnPlatform>
+    </ContentPage.Padding>
     <ContentPage.Content>
         <StackLayout>
-            <Grid Padding="15, 15">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="45" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <ImageButton Grid.Column="0"
-                             BackgroundColor="Transparent"
-                             Clicked="ImageButton_OnClicked"
-                             Padding="10,0">
-                    <ImageButton.Source>
-                        <FontImageSource FontFamily="MaterialOutlined"
-                                         Glyph="&#xe2ea;"
-                                         Color="{AppThemeBinding Light=Black, Dark=White, Default=Black}" />
-                    </ImageButton.Source>
-                </ImageButton>
-                <Label Grid.Column="1"
-                       FontSize="20"
-                       TextColor="Black"
-                       FontAttributes="Bold"
-                       Margin="5,2,0,0"
-                       HeightRequest="35"
-                       Text="Про додаток" />
-            </Grid>
-            <Image Source="{OnPlatform Android=splash_logo.png, iOS=splash_logo.png}" />
+            <controls:HeaderBackButton BackButtonClicked="ImageButton_OnClicked"
+                                       Label="Про додаток"/>
+            <Image Source="{OnPlatform Android=splash_logo.png, iOS=splash_logo }" />
             <Label Text="PriceApp"
                    FontSize="30"
-                   TextColor="Black"
+                   TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
                    FontAttributes="Bold"
-                   HorizontalOptions="Center" />
+                   HorizontalOptions="Center" 
+                   Margin="0, -50, 0, 0"/>
             <Label Text="by"
                    HorizontalOptions="Center" />
-            <Image Source="arxlogo_light.png"
+            <Image Source="{OnPlatform Android=arxlogo_light.png, iOS=arxlogo }"
                    WidthRequest="70"
-                   VerticalOptions="StartAndExpand" 
-                   xct:IconTintColorEffect.TintColor="Gray"/>
+                   VerticalOptions="StartAndExpand"/>
             <Label Text="Версія"
                    Margin="0,0,0,20"
                    HorizontalOptions="CenterAndExpand"

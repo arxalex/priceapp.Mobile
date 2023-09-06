@@ -3,10 +3,16 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
-             xmlns:models="clr-namespace:priceapp.Models;assembly=priceapp"
              xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
+             xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
              x:Class="priceapp.Views.SearchPage"
              x:DataType="viewModels:ISearchViewModel">
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="iOS" Value="0,50,0,0" />
+            <On Platform="Android" Value="0,20,0,0" />
+        </OnPlatform>
+    </ContentPage.Padding>
     <ContentPage.Content>
         <StackLayout>
             <Grid Padding="15, 10">
@@ -30,71 +36,15 @@
                                       Margin="5,0,0,0"
                                       HeightRequest="53"
                                       Keyboard="Plain"
-                                      FontSize="18" 
+                                      FontSize="18"
                                       TextChanged="SearchEntry_OnTextChanged"
-                                      Completed="SearchEntry_OnCompleted"/>
+                                      Completed="SearchEntry_OnCompleted" />
             </Grid>
-            <BoxView HeightRequest="1" Color="#DFF0E0" Margin="0, -7, 0, 0" />
-            <ActivityIndicator x:Name="ActivityIndicator" 
-                               IsRunning="False" 
-                               IsVisible="False"
-                               VerticalOptions="CenterAndExpand"
-                               Color="{AppThemeBinding Light=Accent, Dark=DarkGreen, Default=Accent}"/>
-            <CollectionView x:Name="CollectionView"
-                            ItemsSource="{Binding Items}"
-                            Margin="7, 0"
-                            ItemsLayout="VerticalGrid, 1"
-                            SelectionMode="Single"
-                            SelectionChanged="CollectionView_OnSelectionChanged">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:Item">
-                        <Frame Padding="7"
-                               BackgroundColor="White">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="70"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Frame Grid.Row="0"
-                                       Grid.Column="0"
-                                       Grid.RowSpan="3"
-                                       BackgroundColor="WhiteSmoke"
-                                       CornerRadius="15"
-                                       Padding="0">
-                                    <Image Source="{Binding Image}" />
-                                </Frame>
-                                <Label Grid.Row="0"
-                                       Grid.Column="1"
-                                       Text="{Binding Label}"
-                                       FontSize="16"
-                                       VerticalOptions="End"
-                                       HorizontalOptions="Start"
-                                       TextColor="Black" />
-                                <Label Grid.Row="1"
-                                       Grid.Column="1"
-                                       Text="{Binding CategoryLabel}"
-                                       FontSize="16"
-                                       VerticalOptions="End"
-                                       HorizontalOptions="Start"/>
-                                <Label Grid.Row="2"
-                                       Grid.Column="1"
-                                       Text="{Binding PriceText}"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       VerticalOptions="End"
-                                       HorizontalOptions="Start"
-                                       Margin="0, 0, 0,3"
-                                       TextColor="Accent" />
-                            </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}" Margin="0, -7, 0, 10" />
+            <ActivityIndicator x:Name="ActivityIndicator"
+                               Style="{StaticResource ActivityIndicatorStyle}" />
+            <controls:CollectionList x:Name="CollectionView"
+                                     ItemsSource="{Binding ItemButtons}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
