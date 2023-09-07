@@ -25,10 +25,11 @@
                    MinimumWidthRequest="80" />
             <Label Text="{Binding Source={x:Reference Page}, Path=AccentText}"
                    FontSize="18"
+                   Margin="2, 0, 0,0"
                    FontAttributes="Bold"
                    TextColor="{ StaticResource ColorPrimary}"
                    MinimumWidthRequest="80"
-                   HeightRequest="18" />
+                   HeightRequest="{OnPlatform iOS=18, Android=22}" />
         </StackLayout>
         <Label HorizontalTextAlignment="End"
                HorizontalOptions="End"

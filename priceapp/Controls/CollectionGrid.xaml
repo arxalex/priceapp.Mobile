@@ -7,8 +7,14 @@
              x:Name="Page"
              VerticalOptions="FillAndExpand"
              Margin="15, 0, 15, 0">
+    <ContentView.Margin>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="iOS" Value="15, 0, 15, 0" />
+            <On Platform="Android" Value="8, 0, 8, 0" />
+        </OnPlatform>
+    </ContentView.Margin>
     <CollectionView x:Name="CollectionView"
-                    ItemSizingStrategy="MeasureFirstItem"
+                    ItemSizingStrategy="{OnPlatform iOS=MeasureFirstItem, Android=MeasureAllItems}"
                     VerticalScrollBarVisibility="Never"
                     SelectionMode="None"
                     VerticalOptions="FillAndExpand"
@@ -16,8 +22,8 @@
         <CollectionView.ItemsLayout>
             <GridItemsLayout Orientation="Vertical"
                              Span="2"
-                             HorizontalItemSpacing="13"
-                             VerticalItemSpacing="13"/>
+                             HorizontalItemSpacing="{OnPlatform iOS=13, Android=0}"
+                             VerticalItemSpacing="{OnPlatform iOS=13, Android=0}"/>
         </CollectionView.ItemsLayout>
         <CollectionView.ItemTemplate>
             <DataTemplate>

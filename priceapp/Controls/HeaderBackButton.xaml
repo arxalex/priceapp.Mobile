@@ -24,7 +24,13 @@
                      FontSize="20"
                      TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
                      FontAttributes="Bold"
-                     Margin="5,10,0,0"
-                     HeightRequest="35"/>
+                     HeightRequest="35">
+                     <Label.Margin>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                   <On Platform="iOS" Value="5,10,0,0"/>
+                                   <On Platform="Android" Value="5,0,0,0"/>
+                            </OnPlatform>
+                     </Label.Margin>
+              </Label>
        </Grid>
 </ContentView>

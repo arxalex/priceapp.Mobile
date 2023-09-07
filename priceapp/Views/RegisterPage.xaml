@@ -6,7 +6,8 @@
              x:Class="priceapp.Views.RegisterPage"
              NavigationPage.HasNavigationBar="false"
              Title="Registration page"
-             Padding="10, 20">
+             Padding="10, 20"
+             BackgroundColor="{AppThemeBinding Default=White, Light=White, Dark=Black}">
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Реєстрація"

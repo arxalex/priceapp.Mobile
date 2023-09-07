@@ -64,8 +64,13 @@
                                                     ItemsSource="{Binding ImageButtons}" />
                     <Grid Grid.Row="2"
                           Grid.Column="0"
-                          ColumnSpan="2"
-                          Margin="15, 10, 0, 60">
+                          ColumnSpan="2">
+                        <Grid.Margin>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="iOS" Value="15, 10, 0, 60"/>
+                                <On Platform="Android" Value="15, 10, 0, 10"/>
+                            </OnPlatform>
+                        </Grid.Margin>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />

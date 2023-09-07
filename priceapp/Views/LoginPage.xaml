@@ -6,7 +6,8 @@
              x:Class="priceapp.Views.LoginPage"
              Title="Login page"
              Padding="10, 20"
-             NavigationPage.HasNavigationBar="false">
+             NavigationPage.HasNavigationBar="false"
+             BackgroundColor="{AppThemeBinding Default=White, Light=White, Dark=Black}">
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Вхід"

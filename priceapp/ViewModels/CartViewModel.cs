@@ -54,6 +54,7 @@ public class CartViewModel : ICartViewModel
 
         _itemsToBuyLocalRepository.BadConnectEvent += ItemsToBuyLocalRepositoryOnBadConnectEvent;
         _itemRepository.BadConnectEvent += ItemsToBuyLocalRepositoryOnBadConnectEvent;
+        _shopRepository.BadConnectEvent += ItemsToBuyLocalRepositoryOnBadConnectEvent;
     }
 
     public event LoadingHandler Loaded;

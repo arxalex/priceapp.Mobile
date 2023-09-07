@@ -23,18 +23,10 @@ namespace priceapp.Repositories.Implementation;
 
 public class ItemRepository : IItemRepository
 {
-    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository;
-    private readonly RestClient _client;
-    private readonly IItemsLocalRepository _itemsLocalRepository;
-    private readonly IMapper _mapper;
-
-    public ItemRepository()
-    {
-        _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
-        _itemsLocalRepository = DependencyService.Get<IItemsLocalRepository>();
-        _mapper = DependencyService.Get<IMapper>();
-        _client = ConnectionUtil.GetRestClient();
-    }
+    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
+    private readonly RestClient _client = ConnectionUtil.GetRestClient();
+    private readonly IItemsLocalRepository _itemsLocalRepository = DependencyService.Get<IItemsLocalRepository>();
+    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
 
     public event ConnectionErrorHandler BadConnectEvent;
 
@@ -279,9 +271,9 @@ public class ItemRepository : IItemRepository
 
         var request = new RestRequest(requestUrl, json != null ? Method.Post : Method.Get);
 
-        request.AddHeader("Content-Type", "application/json");
         if (json != null)
         {
+            request.AddHeader("Content-Type", "application/json");
             request.AddBody(json, "application/json");
         }
 

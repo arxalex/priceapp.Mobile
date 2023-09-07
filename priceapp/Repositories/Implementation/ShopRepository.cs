@@ -22,20 +22,11 @@ namespace priceapp.Repositories.Implementation;
 public class ShopRepository : IShopRepository
 {
     public event ConnectionErrorHandler BadConnectEvent;
-    private readonly RestClient _client;
-    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository;
-    private readonly IShopsLocalRepository _shopsLocalRepository;
-    private readonly IFilialsLocalRepository _filialsLocalRepository;
-    private readonly IMapper _mapper;
-
-    public ShopRepository()
-    {
-        _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
-        _shopsLocalRepository = DependencyService.Get<IShopsLocalRepository>();
-        _filialsLocalRepository = DependencyService.Get<IFilialsLocalRepository>();
-        _mapper = DependencyService.Get<IMapper>();
-        _client = ConnectionUtil.GetRestClient();
-    }
+    private readonly RestClient _client = ConnectionUtil.GetRestClient();
+    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
+    private readonly IShopsLocalRepository _shopsLocalRepository = DependencyService.Get<IShopsLocalRepository>();
+    private readonly IFilialsLocalRepository _filialsLocalRepository = DependencyService.Get<IFilialsLocalRepository>();
+    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
 
     public async Task<IList<ShopRepositoryModel>> GetShops()
     {

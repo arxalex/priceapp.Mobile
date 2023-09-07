@@ -5,7 +5,8 @@
              xmlns:viewsModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
              x:Class="priceapp.Views.OnboardingPage"
-             x:DataType="viewsModels:IOnboardingViewModel">
+             x:DataType="viewsModels:IOnboardingViewModel"
+             BackgroundColor="{AppThemeBinding Default=White, Light=White, Dark=Black}">
     <ContentPage.Content>
         <Grid Padding="15,20">
             <Grid.RowDefinitions>
