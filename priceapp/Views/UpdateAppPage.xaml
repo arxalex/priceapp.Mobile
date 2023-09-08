@@ -2,7 +2,9 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="priceapp.Views.UpdateAppPage">
+             x:Class="priceapp.Views.UpdateAppPage"
+             Style="{StaticResource PageStyle}"
+             Padding="0">
     <ContentPage.Content>
         <StackLayout VerticalOptions="CenterAndExpand">
             <Label Text="Доступна нова версія додатку"
@@ -12,7 +14,7 @@
             <Label
                 Text="Схоже, що вийшла нова версія додатку, яка має нову функціональність або виправлення помилок. Щоб продовжити користуватись усіма перевагами priceapp - бідь ласка, оновіть додаток."
                 HorizontalTextAlignment="Center"
-                TextColor="{AppThemeBinding Light=Black, Dark=White, Default=Black}" />
+                Style="{StaticResource TextStyle}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

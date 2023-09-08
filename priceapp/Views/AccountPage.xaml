@@ -6,7 +6,8 @@
              xmlns:viewsModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
              x:DataType="viewsModels:IAccountViewModel"
-             Padding="0">
+             Padding="0"
+             Style="{StaticResource PageStyle}">
     <StackLayout>
         <Grid BackgroundColor="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}"
               Margin="0,0,0,0">
@@ -28,11 +29,11 @@
                    Text="{Binding Username}"
                    FontSize="40"
                    Margin="0,0,0,-40"
-                   TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" />
+                   Style="{StaticResource TextStyle}" />
             <Label Grid.Row="1"
                    Text="{Binding Email}"
                    Margin="0,40,0,-50"
-                   TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" />
+                   Style="{StaticResource TextStyle}" />
         </Grid>
         <CollectionView x:Name="CollectionView"
                         ItemsSource="{Binding MenuItems}"
@@ -63,7 +64,8 @@
                                Margin="10, 0, 0,0"
                                Text="{Binding Label}"
                                FontSize="Medium"
-                               VerticalOptions="Center" />
+                               VerticalOptions="Center" 
+                               Style="{StaticResource TextStyle}"/>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

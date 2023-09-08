@@ -22,7 +22,7 @@
               <Label Grid.Column="1"
                      Text="{Binding Source={x:Reference Page}, Path=Label}"
                      FontSize="20"
-                     TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
+                     Style="{StaticResource TextStyle}"
                      FontAttributes="Bold"
                      HeightRequest="35">
                      <Label.Margin>

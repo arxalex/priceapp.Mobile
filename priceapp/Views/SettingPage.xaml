@@ -6,13 +6,8 @@
              x:Class="priceapp.Views.SettingPage"
              xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
-             x:DataType="viewModels:ISettingsViewModel">
-    <ContentPage.Padding>
-        <OnPlatform x:TypeArguments="Thickness">
-            <On Platform="iOS" Value="0,50,0,0" />
-            <On Platform="Android" Value="0,20,0,0" />
-        </OnPlatform>
-    </ContentPage.Padding>
+             x:DataType="viewModels:ISettingsViewModel"
+             Style="{StaticResource PageStyle}">
     <ContentPage.Content>
         <StackLayout>
             <controls:HeaderBackButton BackButtonClicked="ImageButton_OnClicked"
@@ -42,11 +37,12 @@
                         <ui:RdEntryBorderless Grid.Column="1"
                                               Keyboard="Numeric"
                                               MaxLength="5"
-                                              Text="{Binding Radius}" />
+                                              Text="{Binding Radius}" 
+                                              TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"/>
                     </Grid>
                     <Label Text="Спосіб формування списку покупок"
                            FontSize="Medium"
-                           TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
+                           Style="{StaticResource TextStyle}"
                            FontAttributes="Bold"
                            Margin="0, 0, 0,5" />
                     <Frame BorderColor="{ StaticResource ColorPrimary}"
@@ -59,6 +55,7 @@
                                BackgroundColor="Transparent">
                             <ui:RdPickerBorderless ItemsSource="{Binding CartProcessingTypes}"
                                                    SelectedItem="{Binding CartProcessingTypeSetting}"
+                                                   TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
                                                    Margin="10,0" />
                         </Frame>
                     </Frame>
@@ -70,10 +67,10 @@
                         <Label Grid.Column="0"
                                Text="Відмічати бренди, що ще не вийшли з російського ринку"
                                FontSize="Medium"
-                               TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
+                               Style="{StaticResource TextStyle}"
                                FontAttributes="Bold" />
                         <Switch Grid.Column="1"
-                                IsToggled="{Binding ShowRussiaSupportBrandAlerts}" />
+                                IsToggled="{Binding ShowRussiaSupportBrandAlerts}"/>
                     </Grid>
                 </StackLayout>
             </ScrollView>

@@ -7,7 +7,9 @@
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
              x:Class="priceapp.Views.ItemPage"
-             x:DataType="viewModels:IItemViewModel">
+             x:DataType="viewModels:IItemViewModel"
+             Style="{StaticResource PageStyle}"
+             Padding="0">
     <ContentPage.Content>
         <ScrollView>
             <StackLayout>
@@ -37,6 +39,7 @@
                        Text="{Binding BrandAlert.Message}"
                        IsVisible="{Binding IsVisibleBrandAlert}"
                        TextColor="{Binding ForeGroundColorBrandAlert}"
+                       Style="{StaticResource TextStyle}"
                        HorizontalTextAlignment="Center"
                        Margin="0,0,0,-12"/>
                 <Grid x:Name="ItemInfo" Margin="20">
@@ -56,7 +59,7 @@
                            Grid.ColumnSpan="2"
                            Text="{Binding Item.Label}"
                            FontSize="22"
-                           TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
+                           Style="{StaticResource TextStyle}"
                            FontAttributes="Bold" />
                     <Label Grid.Row="1"
                            Grid.Column="0"
@@ -92,67 +95,83 @@
                         <Label Grid.Column="0"
                                Grid.Row="0"
                                Text="Кількість"
-                               x:Name="UnitsLabel" />
+                               x:Name="UnitsLabel"
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="1"
                                Grid.Row="0"
                                Text="{Binding Item.UnitsText}"
-                               x:Name="UnitsLabelValue" />
+                               x:Name="UnitsLabelValue" 
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="0"
                                Grid.Row="1"
                                Text="Бренд"
-                               x:Name="BrandLabel" />
+                               x:Name="BrandLabel" 
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="1"
                                Grid.Row="1"
                                Text="{Binding Item.BrandLabel}"
-                               x:Name="BrandLabelValue" />
+                               x:Name="BrandLabelValue" 
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="0"
                                Grid.Row="2"
                                Text="Категорія"
-                               x:Name="CategoryLabel" />
+                               x:Name="CategoryLabel" 
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="1"
                                Grid.Row="2"
                                Text="{Binding Item.CategoryLabel}"
-                               x:Name="CategoryLabelValue" />
+                               x:Name="CategoryLabelValue" 
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="0"
                                Grid.Row="3"
                                Text="Упаковка"
-                               x:Name="PackageLabel" />
+                               x:Name="PackageLabel" 
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="1"
                                Grid.Row="3"
                                Text="{Binding Item.PackageLabel}"
-                               x:Name="PackageLabelValue" />
+                               x:Name="PackageLabelValue" 
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="0"
                                Grid.Row="4"
                                Text="Калорійність"
-                               x:Name="CalorieLabel" />
+                               x:Name="CalorieLabel" 
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="1"
                                Grid.Row="4"
                                Text="{Binding Item.Calorie}"
-                               x:Name="CalorieLabelValue" />
+                               x:Name="CalorieLabelValue" 
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="0"
                                Grid.Row="5"
                                Text="Жири"
-                               x:Name="FatLabel" />
+                               x:Name="FatLabel" 
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="1"
                                Grid.Row="5"
                                Text="{Binding Item.Fat}"
-                               x:Name="FatLabelValue" />
+                               x:Name="FatLabelValue" 
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="0"
                                Grid.Row="6"
                                Text="Вуглеводи"
-                               x:Name="CarbohydratesLabel" />
+                               x:Name="CarbohydratesLabel"
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="1"
                                Grid.Row="6"
                                Text="{Binding Item.Carbohydrates}"
-                               x:Name="CarbohydratesLabelValue" />
+                               x:Name="CarbohydratesLabelValue"
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="0"
                                Grid.Row="7"
                                Text="Білки"
-                               x:Name="ProteinsLabel" />
+                               x:Name="ProteinsLabel" 
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="1"
                                Grid.Row="7"
                                Text="{Binding Item.Proteins}"
-                               x:Name="ProteinsLabelValue" />
+                               x:Name="ProteinsLabelValue"
+                               Style="{StaticResource TextStyle}"/>
                     </Grid>
                     <controls:CollectionListMini Grid.Row="3"
                                                  Grid.Column="0"

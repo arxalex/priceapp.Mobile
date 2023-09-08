@@ -6,14 +6,14 @@
        x:Class="priceapp.Views.MainPage"
        NavBarIsVisible="False"
        TabBarIsVisible="True"
-       TabBarBackgroundColor="{AppThemeBinding Light=#7efe, Dark=#7010, Default=#7efe}"
+       TabBarBackgroundColor="{AppThemeBinding Light={OnPlatform iOS=#7efe, Android=#efe}, Dark={OnPlatform iOS=#7010, Android=#010}, Default={OnPlatform iOS=#7efe, Android=#efe}}"
        Title="priceapp"
        NavBarHasShadow="False"
-       BackgroundColor="White"
        TabBarTitleColor="#4BB53F"
        TabBarUnselectedColor="#aaa"
        Padding="0"
-       HeightRequest="10">
+       HeightRequest="10"
+       BackgroundColor="{AppThemeBinding Default=White, Light=White, Dark=Black}">
     <TabBar Title="sds">
         <Tab Title="Товари">
             <Tab.Icon>

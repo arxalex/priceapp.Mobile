@@ -4,7 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="priceapp.Controls.ImageButtonLarge"
              x:Name="Page">
-    <Frame BackgroundColor="{StaticResource ColorSecondary}"
+    <Frame BackgroundColor="Transparent"
            CornerRadius="20"
            Padding="0"
            Margin="{OnPlatform iOS=1, Android=7}"

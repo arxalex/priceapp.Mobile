@@ -6,13 +6,8 @@
              xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
              x:Class="priceapp.Views.CatalogAndSearchPage"
-             x:DataType="viewModels:ICategoryViewModel">
-    <ContentPage.Padding>
-        <OnPlatform x:TypeArguments="Thickness">
-            <On Platform="iOS" Value="0,50,0,0" />
-            <On Platform="Android" Value="0,20,0,0" />
-        </OnPlatform>
-    </ContentPage.Padding>
+             x:DataType="viewModels:ICategoryViewModel"
+             Style="{StaticResource PageStyle}">
     <ContentPage.Content>
         <StackLayout>
             <ui:ContentButton Margin="15,0,15,7"
@@ -37,7 +32,8 @@
                         </Image>
                         <Label Grid.Column="1"
                                FontSize="18"
-                               VerticalTextAlignment="Center">
+                               VerticalTextAlignment="Center"
+                               Style="{StaticResource TextStyle}">
                             Пошук
                         </Label>
                     </Grid>

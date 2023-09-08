@@ -5,13 +5,8 @@
              x:Class="priceapp.Views.CartPage"
              xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
-             x:DataType="viewModels:ICartViewModel">
-    <ContentPage.Padding>
-        <OnPlatform x:TypeArguments="Thickness">
-            <On Platform="iOS" Value="0,50,0,0" />
-            <On Platform="Android" Value="0,20,0,0" />
-        </OnPlatform>
-    </ContentPage.Padding>
+             x:DataType="viewModels:ICartViewModel"
+             Style="{StaticResource PageStyle}">
     <ContentPage.Content>
         <StackLayout>
             <RefreshView IsRefreshing="{Binding IsRefreshing}"
@@ -36,7 +31,7 @@
                     <Label Grid.Row="0"
                            Grid.Column="0"
                            FontSize="20"
-                           TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
+                           Style="{StaticResource TextStyle}"
                            FontAttributes="Bold"
                            Margin="15,0,0,0"
                            VerticalOptions="Center"
@@ -76,9 +71,11 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0"
-                               Text="Економія: " />
+                               Text="Економія: " 
+                               Style="{StaticResource TextStyle}"/>
                         <Label Grid.Column="1"
-                               Text="{Binding Economy}" />
+                               Text="{Binding Economy}"
+                               Style="{StaticResource TextStyle}"/>
                     </Grid>
                 </Grid>
             </RefreshView>

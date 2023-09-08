@@ -2,7 +2,9 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="priceapp.Views.ConnectionErrorPage">
+             x:Class="priceapp.Views.ConnectionErrorPage"
+             Style="{StaticResource PageStyle}"
+             Padding="0">
     <ContentPage.Content>
         <StackLayout VerticalOptions="CenterAndExpand">
             <Label Text="Упс, сало впало"
@@ -10,9 +12,11 @@
                    Style="{StaticResource PageTitle}"
                    HorizontalTextAlignment="Center" />
             <Label Text="Щось пішло не так"
-                   HorizontalTextAlignment="Center" />
+                   HorizontalTextAlignment="Center" 
+                   Style="{StaticResource TextStyle}"/>
             <Label x:Name="StatusCodeLabel"
-                   HorizontalTextAlignment="Center" />
+                   HorizontalTextAlignment="Center" 
+                   Style="{StaticResource TextStyle}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

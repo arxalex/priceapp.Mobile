@@ -8,6 +8,18 @@
             <Color x:Key="ColorPrimaryDark">#4BB53F</Color>
             <Color x:Key="ColorSecondary">#DFF0E0</Color>
             <Color x:Key="ColorSecondaryDark">#2D5236</Color>
+            <Style x:Key="PageStyle" TargetType="ContentPage">
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Default=White, Light=White, Dark=Black}"></Setter>
+                <Setter Property="Padding">
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="iOS" Value="0,50,0,0" />
+                        <On Platform="Android" Value="0,20,0,0" />
+                    </OnPlatform>
+                </Setter>
+            </Style>
+            <Style x:Key="TextStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{AppThemeBinding Light=Black, Dark=White, Default=Black}" />
+            </Style>
             <Style x:Key="FrameStyle" TargetType="Frame">
                 <Setter Property="HasShadow" Value="False"></Setter>
             </Style>

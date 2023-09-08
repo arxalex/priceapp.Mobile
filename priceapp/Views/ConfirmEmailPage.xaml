@@ -5,7 +5,8 @@
              x:Class="priceapp.Views.ConfirmEmailPage"
              NavigationPage.HasNavigationBar="false"
              Title="Registration page"
-             Padding="10, 20">
+             Padding="10, 20"
+             Style="{StaticResource PageStyle}">
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Реєстрація пройшла успішно!"
@@ -15,7 +16,7 @@
                    HorizontalOptions="CenterAndExpand" />
             <Label Text="Для продовження вам необхідно підтвердити реєстрацію. Вам було надіслано лист на вказану електронну пошту (можливе потрапляння до спаму) з посиланням для підтвердження реєстрації. Перейдіть за посиланням. Після цього можете зробити вхід у цьому додатку"
                    VerticalOptions="CenterAndExpand"
-                   TextColor="{AppThemeBinding Light=Black, Dark=White, Default=Black}"
+                   Style="{StaticResource TextStyle}"
                    HorizontalOptions="CenterAndExpand" />
             <Button Style="{StaticResource ButtonStyle}"
                     BackgroundColor="{AppThemeBinding Light=White, Dark=#222, Default=White}"

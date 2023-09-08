@@ -13,8 +13,8 @@
         <StackLayout HorizontalOptions="FillAndExpand">
             <Label Text="{Binding Source={x:Reference Page}, Path=PrimaryText}"
                    FontSize="18"
-                   TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
-                   HorizontalOptions="FillAndExpand" />
+                   Style="{StaticResource TextStyle}"
+                   HorizontalOptions="FillAndExpand"/>
             <Label Text="{Binding Source={x:Reference Page}, Path=SecondaryText}"
                    HeightRequest="16"
                    TextColor="#aaa"
@@ -26,6 +26,7 @@
                    HorizontalOptions="End"
                    FontSize="18"
                    FontAttributes="Bold"
+                   Style="{StaticResource TextStyle}"
                    Text="{Binding Source={x:Reference Page}, Path=AccentText}" />
             <Label Text="{Binding Source={x:Reference Page}, Path=AdditionalText }"
                    TextColor="{Binding Source={x:Reference Page}, Path=AdditionalTextColor }"

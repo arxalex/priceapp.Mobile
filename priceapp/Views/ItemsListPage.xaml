@@ -5,13 +5,8 @@
              xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
              x:Class="priceapp.Views.ItemsListPage"
-             x:DataType="viewModels:IItemsListViewModel">
-    <ContentPage.Padding>
-        <OnPlatform x:TypeArguments="Thickness">
-            <On Platform="iOS" Value="0,50,0,0" />
-            <On Platform="Android" Value="0,20,0,0" />
-        </OnPlatform>
-    </ContentPage.Padding>
+             x:DataType="viewModels:IItemsListViewModel"
+             Style="{StaticResource PageStyle}">
     <ContentPage.Content>
         <StackLayout>
             <controls:HeaderBackButton BackButtonClicked="ImageButton_OnClicked"

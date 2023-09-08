@@ -7,7 +7,7 @@
              Title="Login page"
              Padding="10, 20"
              NavigationPage.HasNavigationBar="false"
-             BackgroundColor="{AppThemeBinding Default=White, Light=White, Dark=Black}">
+             Style="{StaticResource PageStyle}">
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Вхід"
