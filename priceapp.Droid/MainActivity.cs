@@ -1,6 +1,9 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Android.Views;
+using Xamarin.Forms;
+using View = Xamarin.Forms.View;
 
 namespace priceapp.Droid
 {
@@ -18,11 +21,36 @@ namespace priceapp.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
-            Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
+            Forms.Init(this, savedInstanceState);
+            FormsMaterial.Init(this, savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Xamarin.FormsMaps.Init(this, savedInstanceState);
             LoadApplication(new App());
+            if (App.Current.RequestedTheme == OSAppTheme.Dark)
+            {
+                SetStatusBarColor(Android.Graphics.Color.Black);
+                if (Build.VERSION.SdkInt >= BuildVersionCodes.R)
+                {
+                    Window.InsetsController?.SetSystemBarsAppearance(0,
+                        (int)WindowInsetsControllerAppearance.LightStatusBars);
+                } else
+                {
+                    Window.DecorView.SystemUiVisibility = StatusBarVisibility.Hidden;
+                }
+            }
+            else
+            {
+                SetStatusBarColor(Android.Graphics.Color.White);
+                if (Build.VERSION.SdkInt >= BuildVersionCodes.R)
+                {
+                    Window.InsetsController?.SetSystemBarsAppearance((int)WindowInsetsControllerAppearance.LightStatusBars,
+                        (int)WindowInsetsControllerAppearance.LightStatusBars);
+                } else
+                {
+                    Window.DecorView.SystemUiVisibility = StatusBarVisibility.Visible;
+                }
+            }
+            
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions,
@@ -32,5 +60,7 @@ namespace priceapp.Droid
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+        
+        
     }
 }

@@ -9,76 +9,77 @@
              Style="{StaticResource PageStyle}">
     <ContentPage.Content>
         <StackLayout>
-            <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                         Command="{Binding RefreshCommand}"
-                         RefreshColor="{ StaticResource ColorPrimary}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+            <Grid VerticalOptions="FillAndExpand">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ActivityIndicator Grid.Column="0"
+                                   Grid.Row="0"
+                                   Grid.ColumnSpan="2"
+                                   Grid.RowSpan="2"
+                                   x:Name="ActivityIndicator"
+                                   Style="{StaticResource ActivityIndicatorStyle}" />
+                <Label Grid.Row="0"
+                       Grid.Column="0"
+                       FontSize="20"
+                       Style="{StaticResource TextStyle}"
+                       FontAttributes="Bold"
+                       Margin="15,0,0,0"
+                       VerticalOptions="Center"
+                       Text="{Binding HeaderText}" />
+                <Frame Grid.Row="0"
+                       Grid.Column="1"
+                       Padding="0"
+                       BorderColor="Transparent"
+                       BackgroundColor="Transparent"
+                       Style="{StaticResource FrameStyle}">
+                    <Button WidthRequest="50"
+                            BackgroundColor="Transparent"
+                            Clicked="Button_OnClicked">
+                        <Button.ImageSource>
+                            <FontImageSource FontFamily="MaterialOutlined"
+                                             Glyph="&#xe92b;"
+                                             Color="DarkRed" />
+                        </Button.ImageSource>
+                    </Button>
+                </Frame>
+                <RefreshView Grid.Row="1"
+                             Grid.Column="0"
+                             Grid.ColumnSpan="2"
+                             IsRefreshing="{Binding IsRefreshing}"
+                             Command="{Binding RefreshCommand}"
+                             RefreshColor="{ StaticResource ColorPrimary}">
+                    <controls:CollectionGroupedList Margin="15,0"
+                                                    ItemsSource="{Binding ImageButtons}"/>
+                </RefreshView>
+                <Grid Grid.Row="2"
+                      Grid.Column="0"
+                      ColumnSpan="2"
+                      VerticalOptions="End">
+                    <Grid.Margin>
+                        <OnPlatform x:TypeArguments="Thickness">
+                            <On Platform="iOS" Value="15, 10, 0, 100" />
+                            <On Platform="Android" Value="15, 10, 0, 10" />
+                        </OnPlatform>
+                    </Grid.Margin>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <ActivityIndicator Grid.Column="0"
-                                       Grid.Row="0"
-                                       Grid.ColumnSpan="2"
-                                       Grid.RowSpan="2"
-                                       x:Name="ActivityIndicator"
-                                       Style="{StaticResource ActivityIndicatorStyle}" />
-                    <Label Grid.Row="0"
-                           Grid.Column="0"
-                           FontSize="20"
-                           Style="{StaticResource TextStyle}"
-                           FontAttributes="Bold"
-                           Margin="15,0,0,0"
-                           VerticalOptions="Center"
-                           Text="{Binding HeaderText}" />
-                    <Frame Grid.Row="0"
-                           Grid.Column="1"
-                           Padding="0"
-                           BorderColor="Transparent"
-                           BackgroundColor="Transparent"
-                           Style="{StaticResource FrameStyle}">
-                        <Button WidthRequest="50"
-                                BackgroundColor="Transparent"
-                                Clicked="Button_OnClicked">
-                            <Button.ImageSource>
-                                <FontImageSource FontFamily="MaterialOutlined"
-                                                 Glyph="&#xe92b;"
-                                                 Color="DarkRed" />
-                            </Button.ImageSource>
-                        </Button>
-                    </Frame>
-                    <controls:CollectionGroupedList Grid.Row="1"
-                                                    Grid.Column="0"
-                                                    Grid.ColumnSpan="2"
-                                                    Margin="15,0"
-                                                    ItemsSource="{Binding ImageButtons}" />
-                    <Grid Grid.Row="2"
-                          Grid.Column="0"
-                          ColumnSpan="2">
-                        <Grid.Margin>
-                            <OnPlatform x:TypeArguments="Thickness">
-                                <On Platform="iOS" Value="15, 10, 0, 60"/>
-                                <On Platform="Android" Value="15, 10, 0, 10"/>
-                            </OnPlatform>
-                        </Grid.Margin>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0"
-                               Text="Економія: " 
-                               Style="{StaticResource TextSecondaryStyle}"/>
-                        <Label Grid.Column="1"
-                               Text="{Binding Economy}"
-                               Style="{StaticResource TextSecondaryStyle}"/>
-                    </Grid>
+                    <Label Grid.Column="0"
+                           Text="Економія: "
+                           Style="{StaticResource TextSecondaryStyle}" />
+                    <Label Grid.Column="1"
+                           Text="{Binding Economy}"
+                           Style="{StaticResource TextSecondaryStyle}" />
                 </Grid>
-            </RefreshView>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

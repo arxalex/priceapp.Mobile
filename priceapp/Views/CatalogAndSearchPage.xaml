@@ -10,8 +10,13 @@
              Style="{StaticResource PageStyle}">
     <ContentPage.Content>
         <StackLayout>
-            <ui:ContentButton Margin="15,10,15,7"
-                              Tapped="SearchButton_OnTapped">
+            <ui:ContentButton Tapped="SearchButton_OnTapped">
+                <ui:ContentButton.Margin>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="iOS" Value="15,5,15,7"/>
+                        <On Platform="Android" Value="15,0,15,7"/>
+                    </OnPlatform>
+                </ui:ContentButton.Margin>
                 <Frame BackgroundColor="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}"
                        Padding="20, 15"
                        CornerRadius="20"
