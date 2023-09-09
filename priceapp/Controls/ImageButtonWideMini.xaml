@@ -17,7 +17,7 @@
                    HorizontalOptions="FillAndExpand"/>
             <Label Text="{Binding Source={x:Reference Page}, Path=SecondaryText}"
                    HeightRequest="16"
-                   TextColor="#aaa"
+                   Style="{StaticResource TextSecondaryStyle}"
                    FontSize="12"
                    HorizontalOptions="FillAndExpand"/>
         </StackLayout>

@@ -24,9 +24,15 @@
                    VerticalOptions="StartAndExpand"/>
             <Label Text="Версія"
                    Style="{StaticResource TextStyle}"
-                   Margin="0,0,0,20"
                    HorizontalOptions="CenterAndExpand"
-                   x:Name="Label" />
+                   x:Name="Label" >
+                   <Label.Margin>
+                          <OnPlatform x:TypeArguments="Thickness">
+                                 <On Platform="iOS" Value="0,0,0,100"/>
+                                 <On Platform="Android" Value="0,0,0,20"/>
+                          </OnPlatform>
+                   </Label.Margin>
+            </Label>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

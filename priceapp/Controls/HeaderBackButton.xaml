@@ -16,7 +16,7 @@
                      <ImageButton.Source>
                             <FontImageSource FontFamily="MaterialOutlined"
                                              Glyph="&#xe2ea;"
-                                             Color="{AppThemeBinding Light=Black, Dark=White, Default=Black}"/>
+                                             Color="{AppThemeBinding Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}, Default={StaticResource ColorText}}"/>
                      </ImageButton.Source>
               </ImageButton>
               <Label Grid.Column="1"

@@ -13,8 +13,11 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout>
-                <Grid>
-                    <Image Source="{Binding Item.Image}" BackgroundColor="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}"/>
+                <BoxView BackgroundColor="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}"
+                         Margin="0, -100, 0, -6"
+                         HeightRequest="100"/>
+                <Grid BackgroundColor="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}">
+                    <Image Source="{Binding Item.Image}" />
                     <Grid Padding="15, 15">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="65" />
@@ -23,14 +26,12 @@
                             <RowDefinition Height="40" />
                         </Grid.RowDefinitions>
                         <ImageButton Grid.Column="0"
-                                     BackgroundColor="{AppThemeBinding Default=#FAFAFA, Light=#FAFAFA, Dark=#132f13}"
-                                     Clicked="ImageButton_OnClicked"
-                                     CornerRadius="20"
-                                     Padding="17,7, 20, 7">
+                                     Style="{StaticResource BackImageButtonItemPageStyle}"
+                                     Clicked="ImageButton_OnClicked">
                             <ImageButton.Source>
                                 <FontImageSource FontFamily="MaterialOutlined"
                                                  Glyph="&#xe2ea;"
-                                                 Color="{AppThemeBinding Light=Black, Dark=White, Default=Black}" />
+                                                 Color="{AppThemeBinding Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}, Default={StaticResource ColorText}}" />
                             </ImageButton.Source>
                         </ImageButton>
                     </Grid>

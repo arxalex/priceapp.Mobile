@@ -25,8 +25,8 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="1" Text="Магазин" Style="{StaticResource TextStyle}"/>
-                <Label Grid.Column="2" Text="Ціна" Style="{StaticResource TextStyle}"/>
+                <Label Grid.Column="1" Text="Магазин" Style="{StaticResource TextSecondaryStyle}"/>
+                <Label Grid.Column="2" Text="Ціна" Style="{StaticResource TextSecondaryStyle}"/>
             </Grid>
         </CollectionView.Header>
         <CollectionView.ItemTemplate>

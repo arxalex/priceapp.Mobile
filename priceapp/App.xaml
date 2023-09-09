@@ -8,8 +8,13 @@
             <Color x:Key="ColorPrimaryDark">#4BB53F</Color>
             <Color x:Key="ColorSecondary">#DFF0E0</Color>
             <Color x:Key="ColorSecondaryDark">#2D5236</Color>
+            <Color x:Key="ColorTextSecondary">#aaa</Color>
+            <Color x:Key="ColorBackground">White</Color>
+            <Color x:Key="ColorBackgroundDark">Black</Color>
+            <Color x:Key="ColorText">Black</Color>
+            <Color x:Key="ColorTextDark">White</Color>
             <Style x:Key="PageStyle" TargetType="ContentPage">
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Default=White, Light=White, Dark=Black}"></Setter>
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Default={StaticResource ColorBackground}, Light={StaticResource ColorBackground}, Dark={StaticResource ColorBackgroundDark}}"></Setter>
                 <Setter Property="Padding">
                     <OnPlatform x:TypeArguments="Thickness">
                         <On Platform="iOS" Value="0,50,0,0" />
@@ -18,7 +23,10 @@
                 </Setter>
             </Style>
             <Style x:Key="TextStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{AppThemeBinding Light=Black, Dark=White, Default=Black}" />
+                <Setter Property="TextColor" Value="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}" />
+            </Style>
+            <Style x:Key="TextSecondaryStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource ColorTextSecondary}" />
             </Style>
             <Style x:Key="FrameStyle" TargetType="Frame">
                 <Setter Property="HasShadow" Value="False"></Setter>
@@ -52,10 +60,15 @@
                 <Setter Property="FontSize" Value="58" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="HorizontalOptions" Value="Center" />
-                <Setter Property="TextColor" Value="{AppThemeBinding Light=Black, Dark=White, Default=Black}" />
+                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}, Default={StaticResource ColorText}}" />
             </Style>
             <Style x:Key="EntryStyle" TargetType="Entry">
                 <Setter Property="Margin" Value="0, 0, 0, 0" />
+            </Style>
+            <Style x:Key="BackImageButtonItemPageStyle" TargetType="ImageButton">
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Default=#FAFAFA, Light=#FAFAFA, Dark=#132f13}"/>
+                <Setter Property="CornerRadius" Value="20"/>
+                <Setter Property="Padding" Value="17,7, 20, 7"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

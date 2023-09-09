@@ -23,7 +23,7 @@
         <CollectionView.GroupHeaderTemplate>
             <DataTemplate x:DataType="models:ImageButtonsGroup">
                 <Label Text="{Binding Name}"
-                       Style="{StaticResource TextStyle}"/>
+                       Style="{StaticResource TextSecondaryStyle}"/>
             </DataTemplate>
         </CollectionView.GroupHeaderTemplate>
         <CollectionView.ItemTemplate>

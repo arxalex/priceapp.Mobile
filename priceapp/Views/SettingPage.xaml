@@ -16,7 +16,7 @@
                 <StackLayout Margin="20, 0">
                     <Label Text="Радіус пошуку (в метрах)"
                            FontSize="Medium"
-                           TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
+                           Style="{StaticResource TextStyle}"
                            FontAttributes="Bold" />
                     <Grid Margin="0, 0, 0,5">
                         <Grid.ColumnDefinitions>
@@ -38,7 +38,7 @@
                                               Keyboard="Numeric"
                                               MaxLength="5"
                                               Text="{Binding Radius}" 
-                                              TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"/>
+                                              TextColor="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}"/>
                     </Grid>
                     <Label Text="Спосіб формування списку покупок"
                            FontSize="Medium"
@@ -55,7 +55,7 @@
                                BackgroundColor="Transparent">
                             <ui:RdPickerBorderless ItemsSource="{Binding CartProcessingTypes}"
                                                    SelectedItem="{Binding CartProcessingTypeSetting}"
-                                                   TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
+                                                   TextColor="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}"
                                                    Margin="10,0" />
                         </Frame>
                     </Frame>

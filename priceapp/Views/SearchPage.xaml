@@ -22,7 +22,7 @@
                     <ImageButton.Source>
                         <FontImageSource FontFamily="MaterialOutlined"
                                          Glyph="&#xe5c4;"
-                                         Color="{AppThemeBinding Dark=White, Light=Black, Default=Black}" />
+                                         Color="{AppThemeBinding Dark={StaticResource ColorTextDark}, Light={StaticResource ColorText}, Default={StaticResource ColorText}}" />
                     </ImageButton.Source>
                 </ImageButton>
                 <ui:RdEntryBorderless Grid.Column="1"
@@ -32,11 +32,12 @@
                                       HeightRequest="53"
                                       Keyboard="Plain"
                                       FontSize="18"
-                                      TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
+                                      TextColor="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}"
                                       TextChanged="SearchEntry_OnTextChanged"
                                       Completed="SearchEntry_OnCompleted" />
             </Grid>
-            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}" Margin="0, -7, 0, 10" />
+            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}" 
+                     Margin="0, -7, 0, 10" />
             <ActivityIndicator x:Name="ActivityIndicator"
                                Style="{StaticResource ActivityIndicatorStyle}" />
             <controls:CollectionList x:Name="CollectionView"

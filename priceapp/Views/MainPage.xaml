@@ -13,7 +13,7 @@
        TabBarUnselectedColor="#aaa"
        Padding="0"
        HeightRequest="10"
-       BackgroundColor="{AppThemeBinding Default=White, Light=White, Dark=Black}">
+       BackgroundColor="{AppThemeBinding Default={StaticResource ColorBackground}, Light={StaticResource ColorBackground}, Dark={StaticResource ColorBackgroundDark}}">
     <TabBar Title="sds">
         <Tab Title="Товари">
             <Tab.Icon>

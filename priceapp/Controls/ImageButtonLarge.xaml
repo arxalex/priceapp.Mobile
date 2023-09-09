@@ -26,7 +26,7 @@
                    FontSize="16"
                    FontAttributes="Bold"
                    Padding="15"
-                   TextColor="White"
+                   TextColor="{StaticResource ColorTextDark}"
                    HorizontalTextAlignment="Center" 
                    VerticalTextAlignment="Center"/>
         </AbsoluteLayout>

@@ -56,7 +56,7 @@
                                     <FontImageSource FontFamily="MaterialOutlined"
                                                      Size="18"
                                                      Glyph="{Binding  Glyph}"
-                                                     Color="White"/>
+                                                     Color="{StaticResource ColorTextDark}"/>
                                 </Image.Source>
                             </Image>
                         </Frame>

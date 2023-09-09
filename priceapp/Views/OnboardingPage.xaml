@@ -43,12 +43,12 @@
                                 <Label Text="{Binding Title}"
                                        FontAttributes="Bold"
                                        HorizontalTextAlignment="Center"
-                                       TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
+                                       Style="{StaticResource TextStyle}"
                                        FontSize="Title" />
 
                                 <Label Text="{Binding Content}"
                                        HorizontalTextAlignment="Center"
-                                       TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
+                                       Style="{StaticResource TextStyle}"
                                        FontSize="Body" />
 
                             </FlexLayout>
@@ -71,7 +71,7 @@
                     Style="{StaticResource ButtonStyle}"
                     Text="{Binding SkipButtonText}"
                     BackgroundColor="Transparent"
-                    TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}"
+                    TextColor="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}"
                     CornerRadius="20"
                     Clicked="SkipButton_OnClicked" />
             <Button Grid.Row="2"

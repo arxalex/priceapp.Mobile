@@ -34,7 +34,7 @@
         <Label HorizontalTextAlignment="End"
                HorizontalOptions="End"
                MinimumWidthRequest="80"
-               TextColor="#aaa"
+               Style="{StaticResource TextSecondaryStyle}"
                Text="{Binding Source={x:Reference Page}, Path=SecondaryText}" />
     </StackLayout>
 </ContentView>
