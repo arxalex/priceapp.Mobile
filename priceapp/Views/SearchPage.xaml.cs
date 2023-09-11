@@ -12,13 +12,11 @@ namespace priceapp.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SearchPage
     {
-        private readonly ISearchViewModel _searchViewModel;
+        private readonly ISearchViewModel _searchViewModel = DependencyService.Get<ISearchViewModel>(DependencyFetchTarget.NewInstance);
 
         public SearchPage()
         {
             InitializeComponent();
-
-            _searchViewModel = DependencyService.Get<ISearchViewModel>(DependencyFetchTarget.NewInstance);
 
             _searchViewModel.Loaded += SearchViewModelOnLoaded;
             _searchViewModel.BadConnectEvent += SearchViewModelOnBadConnectEvent;

@@ -11,12 +11,10 @@ namespace priceapp.Views;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class AccountPage
 {
-    private readonly IAccountViewModel _accountViewModel;
+    private readonly IAccountViewModel _accountViewModel = DependencyService.Get<IAccountViewModel>(DependencyFetchTarget.NewInstance);
     public AccountPage()
     {
         InitializeComponent();
-
-        _accountViewModel = DependencyService.Get<IAccountViewModel>(DependencyFetchTarget.NewInstance);
 
         _accountViewModel.Loaded += AccountViewModelOnLoaded;
         _accountViewModel.BadConnectEvent += AccountViewModelOnBadConnectEvent;

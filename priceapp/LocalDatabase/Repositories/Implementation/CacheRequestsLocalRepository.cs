@@ -17,12 +17,7 @@ public class CacheRequestsLocalRepository : ICacheRequestsLocalRepository
 {
     public event ConnectionErrorHandler BadConnectEvent;
 
-    private readonly SQLiteAsyncConnection _connection;
-
-    public CacheRequestsLocalRepository()
-    {
-        _connection = LocalCacheDatabase.Database;
-    }
+    private readonly SQLiteAsyncConnection _connection = LocalCacheDatabase.Database;
 
     public async Task InsertAsync(CacheRequestsLocalDatabaseModel model)
     {

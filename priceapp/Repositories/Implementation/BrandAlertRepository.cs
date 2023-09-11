@@ -22,18 +22,10 @@ namespace priceapp.Repositories.Implementation;
 
 public class BrandAlertRepository : IBrandAlertRepository
 {
-    private readonly IBrandAlertsLocalRepository _brandAlertsLocalRepository;
-    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository;
-    private readonly RestClient _client;
-    private readonly IMapper _mapper;
-
-    public BrandAlertRepository()
-    {
-        _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
-        _brandAlertsLocalRepository = DependencyService.Get<IBrandAlertsLocalRepository>();
-        _mapper = DependencyService.Get<IMapper>();
-        _client = ConnectionUtil.GetRestClient();
-    }
+    private readonly IBrandAlertsLocalRepository _brandAlertsLocalRepository = DependencyService.Get<IBrandAlertsLocalRepository>();
+    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
+    private readonly RestClient _client = ConnectionUtil.GetRestClient();
+    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
 
     public event ConnectionErrorHandler BadConnectEvent;
 

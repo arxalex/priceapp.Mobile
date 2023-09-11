@@ -14,13 +14,8 @@ namespace priceapp.Repositories.Implementation;
 
 public class InfoRepository : IInfoRepository
 {
-    private readonly RestClient _client;
+    private readonly RestClient _client = ConnectionUtil.GetRestClient();
 
-    public InfoRepository()
-    {
-        _client = ConnectionUtil.GetRestClient();
-    }
-    
 
     public async Task<InfoRepositoryModel> GetInfo()
     {

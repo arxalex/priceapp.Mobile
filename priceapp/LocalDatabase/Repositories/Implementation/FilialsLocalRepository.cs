@@ -16,11 +16,7 @@ public class FilialsLocalRepository : IFilialsLocalRepository
 {
     public event ConnectionErrorHandler BadConnectEvent;
     
-    private readonly SQLiteAsyncConnection _connection;
-    public FilialsLocalRepository()
-    {
-        _connection = LocalCacheDatabase.Database;
-    }
+    private readonly SQLiteAsyncConnection _connection = LocalCacheDatabase.Database;
 
     public async Task<int> InsertAsync(FilialLocalDatabaseModel model)
     {

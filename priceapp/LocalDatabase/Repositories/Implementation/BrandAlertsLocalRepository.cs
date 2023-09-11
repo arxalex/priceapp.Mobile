@@ -15,12 +15,7 @@ namespace priceapp.LocalDatabase.Repositories.Implementation;
 
 public class BrandAlertsLocalRepository : IBrandAlertsLocalRepository
 {
-    private readonly SQLiteAsyncConnection _connection;
-
-    public BrandAlertsLocalRepository()
-    {
-        _connection = LocalCacheDatabase.Database;
-    }
+    private readonly SQLiteAsyncConnection _connection = LocalCacheDatabase.Database;
 
     public event ConnectionErrorHandler BadConnectEvent;
 

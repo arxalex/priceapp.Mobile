@@ -16,12 +16,7 @@ namespace priceapp.LocalDatabase.Repositories.Implementation;
 
 public class ItemsToBuyLocalRepository : IItemsToBuyLocalRepository
 {
-    private readonly SQLiteAsyncConnection _connection;
-
-    public ItemsToBuyLocalRepository()
-    {
-        _connection = LocalDatabase.Database;
-    }
+    private readonly SQLiteAsyncConnection _connection = LocalDatabase.Database;
 
     public event ConnectionErrorHandler BadConnectEvent;
 

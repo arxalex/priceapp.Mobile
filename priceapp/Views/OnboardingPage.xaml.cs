@@ -7,17 +7,14 @@ using Xamarin.Forms.Xaml;
 namespace priceapp.Views;
 
 [XamlCompilation(XamlCompilationOptions.Compile)]
-public partial class OnboardingPage : ContentPage
+public partial class OnboardingPage
 {
-    private readonly IOnboardingViewModel _onboardingViewModel;
-    private readonly IUserService _userService;
+    private readonly IOnboardingViewModel _onboardingViewModel = DependencyService.Get<IOnboardingViewModel>(DependencyFetchTarget.NewInstance);
+    private readonly IUserService _userService = DependencyService.Get<IUserService>(DependencyFetchTarget.NewInstance);
 
     public OnboardingPage()
     {
         InitializeComponent();
-
-        _onboardingViewModel = DependencyService.Get<IOnboardingViewModel>(DependencyFetchTarget.NewInstance);
-        _userService = DependencyService.Get<IUserService>(DependencyFetchTarget.NewInstance);
 
         BindingContext = _onboardingViewModel;
     }

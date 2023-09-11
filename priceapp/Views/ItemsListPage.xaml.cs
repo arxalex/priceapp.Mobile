@@ -9,7 +9,7 @@ namespace priceapp.Views;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class ItemsListPage
 {
-    private readonly IItemsListViewModel _itemsListViewModel;
+    private readonly IItemsListViewModel _itemsListViewModel = DependencyService.Get<IItemsListViewModel>(DependencyFetchTarget.NewInstance);
     private bool _isBusy;
 
     public ItemsListPage(int categoryId, string categoryName)
@@ -19,7 +19,6 @@ public partial class ItemsListPage
         IsBusy = false;
         HeaderBackButton.Label = CategoryName;
 
-        _itemsListViewModel = DependencyService.Get<IItemsListViewModel>(DependencyFetchTarget.NewInstance);
         _itemsListViewModel.CategoryId = categoryId;
         _itemsListViewModel.Loaded += ItemsListViewModelOnLoaded;
         _itemsListViewModel.BadConnectEvent += ItemsListViewModelOnBadConnectEvent;

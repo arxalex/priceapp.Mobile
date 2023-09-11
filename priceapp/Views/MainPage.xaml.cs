@@ -7,8 +7,6 @@ namespace priceapp.Views
         public MainPage()
         {
             InitializeComponent();
-            this.Padding = new Thickness(200);
-            
         }
     }
 }

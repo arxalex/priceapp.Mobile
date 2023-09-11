@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -26,12 +25,12 @@ namespace priceapp.ViewModels;
 
 public class ItemViewModel : IItemViewModel
 {
-    private readonly IBrandAlertRepository _brandAlertRepository;
-    private readonly GeolocationUtil _geolocationUtil;
-    private readonly IItemRepository _itemRepository;
-    private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository;
-    private readonly IShopRepository _shopRepository;
-    private readonly IMapper _mapper;
+    private readonly IBrandAlertRepository _brandAlertRepository = DependencyService.Get<IBrandAlertRepository>();
+    private readonly GeolocationUtil _geolocationUtil = DependencyService.Get<GeolocationUtil>();
+    private readonly IItemRepository _itemRepository = DependencyService.Get<IItemRepository>();
+    private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository = DependencyService.Get<IItemsToBuyLocalRepository>();
+    private readonly IShopRepository _shopRepository = DependencyService.Get<IShopRepository>();
+    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
     private BrandAlert _brandAlert;
     private Color _foreGroundColorBrandAlert;
     private bool _isVisibleBrandAlert;
@@ -40,13 +39,6 @@ public class ItemViewModel : IItemViewModel
 
     public ItemViewModel()
     {
-        _mapper = DependencyService.Get<IMapper>();
-        _itemRepository = DependencyService.Get<IItemRepository>();
-        _brandAlertRepository = DependencyService.Get<IBrandAlertRepository>();
-        _geolocationUtil = DependencyService.Get<GeolocationUtil>();
-        _itemsToBuyLocalRepository = DependencyService.Get<IItemsToBuyLocalRepository>();
-        _shopRepository = DependencyService.Get<IShopRepository>();
-
         _itemRepository.BadConnectEvent += ItemRepositoryOnBadConnectEvent;
 
         PricesAndFilials = new ObservableCollection<ItemPriceInfo>();

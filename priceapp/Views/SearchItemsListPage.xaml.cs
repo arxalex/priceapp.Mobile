@@ -9,7 +9,7 @@ namespace priceapp.Views;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class SearchItemsListPage
 {
-    private readonly ISearchItemsListViewModel _searchItemsListViewModel;
+    private readonly ISearchItemsListViewModel _searchItemsListViewModel = DependencyService.Get<ISearchItemsListViewModel>(DependencyFetchTarget.NewInstance);
     private bool _isBusy;
 
     public SearchItemsListPage(string search)
@@ -18,7 +18,6 @@ public partial class SearchItemsListPage
         IsBusy = false;
         HeaderBackButton.Label = search;
 
-        _searchItemsListViewModel = DependencyService.Get<ISearchItemsListViewModel>(DependencyFetchTarget.NewInstance);
         _searchItemsListViewModel.Loaded += SearchItemsListViewModelOnLoaded;
         _searchItemsListViewModel.BadConnectEvent += SearchItemsListViewModelOnBadConnectEvent;
         _searchItemsListViewModel.Search = search;

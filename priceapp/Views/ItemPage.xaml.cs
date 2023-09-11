@@ -13,12 +13,12 @@ namespace priceapp.Views;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class ItemPage
 {
-    private readonly IItemViewModel _itemViewModel;
+    private readonly IItemViewModel _itemViewModel = DependencyService.Get<IItemViewModel>(DependencyFetchTarget.NewInstance);
 
     public ItemPage(Item item)
     {
         InitializeComponent();
-        _itemViewModel = DependencyService.Get<IItemViewModel>(DependencyFetchTarget.NewInstance);
+        
         _itemViewModel.Loaded += ItemViewModelOnLoaded;
         _itemViewModel.BadConnectEvent += ItemViewModelOnBadConnectEvent;
         _itemViewModel.PropertyChanged += ItemViewModelOnPropertyChanged;

@@ -21,18 +21,15 @@ namespace priceapp.ViewModels;
 public class SearchItemsListViewModel : ISearchItemsListViewModel
 {
     private const int PageSize = 20;
-    private readonly GeolocationUtil _geolocationUtil;
-    private readonly IItemRepository _itemRepository;
+    private readonly GeolocationUtil _geolocationUtil = DependencyService.Get<GeolocationUtil>();
+    private readonly IItemRepository _itemRepository = DependencyService.Get<IItemRepository>();
 
-    private readonly IMapper _mapper;
+    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
 
     public SearchItemsListViewModel()
     {
         CanLoadMode = true;
         ItemsLoadingNow = false;
-        _mapper = DependencyService.Get<IMapper>();
-        _itemRepository = DependencyService.Get<IItemRepository>();
-        _geolocationUtil = DependencyService.Get<GeolocationUtil>();
 
         _itemRepository.BadConnectEvent += ItemRepositoryOnBadConnectEvent;
     }

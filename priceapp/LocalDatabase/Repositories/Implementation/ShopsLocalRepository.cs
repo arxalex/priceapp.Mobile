@@ -16,11 +16,7 @@ public class ShopsLocalRepository : IShopsLocalRepository
 {
     public event ConnectionErrorHandler BadConnectEvent;
     
-    private readonly SQLiteAsyncConnection _connection;
-    public ShopsLocalRepository()
-    {
-        _connection = LocalCacheDatabase.Database;
-    }
+    private readonly SQLiteAsyncConnection _connection = LocalCacheDatabase.Database;
 
     public async Task<int> InsertAsync(ShopLocalDatabaseModel model)
     {

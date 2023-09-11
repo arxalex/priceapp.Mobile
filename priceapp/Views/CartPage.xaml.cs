@@ -9,13 +9,11 @@ namespace priceapp.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CartPage
     {
-        private readonly ICartViewModel _cartViewModel;
+        private readonly ICartViewModel _cartViewModel = DependencyService.Get<ICartViewModel>(DependencyFetchTarget.NewInstance);
 
         public CartPage()
         {
             InitializeComponent();
-
-            _cartViewModel = DependencyService.Get<ICartViewModel>(DependencyFetchTarget.NewInstance);
 
             _cartViewModel.Loaded += CartViewModelOnLoaded;
             _cartViewModel.BadConnectEvent += CartViewModelOnBadConnectEvent;

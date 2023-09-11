@@ -31,12 +31,12 @@ namespace priceapp.ViewModels;
 public class CartViewModel : ICartViewModel
 {
     private const int RefreshDuration = 0;
-    private readonly GeolocationUtil _geolocationUtil;
-    private readonly IItemRepository _itemRepository;
+    private readonly GeolocationUtil _geolocationUtil = DependencyService.Get<GeolocationUtil>();
+    private readonly IItemRepository _itemRepository = DependencyService.Get<IItemRepository>();
 
-    private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository;
-    private readonly IMapper _mapper;
-    private readonly IShopRepository _shopRepository;
+    private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository = DependencyService.Get<IItemsToBuyLocalRepository>();
+    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
+    private readonly IShopRepository _shopRepository = DependencyService.Get<IShopRepository>();
     private string _economy;
 
     private string _headerText;
@@ -45,11 +45,6 @@ public class CartViewModel : ICartViewModel
 
     public CartViewModel()
     {
-        _itemsToBuyLocalRepository = DependencyService.Get<IItemsToBuyLocalRepository>();
-        _shopRepository = DependencyService.Get<IShopRepository>();
-        _itemRepository = DependencyService.Get<IItemRepository>();
-        _geolocationUtil = DependencyService.Get<GeolocationUtil>();
-        _mapper = DependencyService.Get<IMapper>();
         _economy = "0.00 грн";
 
         _itemsToBuyLocalRepository.BadConnectEvent += ItemsToBuyLocalRepositoryOnBadConnectEvent;

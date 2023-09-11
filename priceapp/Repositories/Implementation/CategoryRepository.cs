@@ -23,18 +23,10 @@ namespace priceapp.Repositories.Implementation;
 public class CategoryRepository : ICategoryRepository
 {
     public event ConnectionErrorHandler BadConnectEvent;
-    private readonly RestClient _client;
-    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository;
-    private readonly ICategoriesLocalRepository _categoriesLocalRepository;
-    private readonly IMapper _mapper;
-
-    public CategoryRepository()
-    {
-        _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
-        _categoriesLocalRepository = DependencyService.Get<ICategoriesLocalRepository>();
-        _mapper = DependencyService.Get<IMapper>();
-        _client = ConnectionUtil.GetRestClient();
-    }
+    private readonly RestClient _client = ConnectionUtil.GetRestClient();
+    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
+    private readonly ICategoriesLocalRepository _categoriesLocalRepository = DependencyService.Get<ICategoriesLocalRepository>();
+    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
 
     public async Task<IList<CategoryRepositoryModel>> GetCategories(int? parent = null)
     {

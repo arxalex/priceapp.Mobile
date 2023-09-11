@@ -21,18 +21,15 @@ namespace priceapp.ViewModels;
 public class ItemsListViewModel : IItemsListViewModel
 {
     private const int PageSize = 20;
-    private readonly GeolocationUtil _geolocationUtil;
-    private readonly IItemRepository _itemRepository;
+    private readonly GeolocationUtil _geolocationUtil = DependencyService.Get<GeolocationUtil>();
+    private readonly IItemRepository _itemRepository = DependencyService.Get<IItemRepository>();
 
-    private readonly IMapper _mapper;
+    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
 
     public ItemsListViewModel()
     {
         CanLoadMode = true;
         ItemsLoadingNow = false;
-        _mapper = DependencyService.Get<IMapper>();
-        _itemRepository = DependencyService.Get<IItemRepository>();
-        _geolocationUtil = DependencyService.Get<GeolocationUtil>();
 
         _itemRepository.BadConnectEvent += ItemRepositoryOnBadConnectEvent;
     }
@@ -72,8 +69,6 @@ public class ItemsListViewModel : IItemsListViewModel
             Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius)
         );
 
-        var i = 0;
-        
         items.Select(y =>
         {
             var x = _mapper.Map<Item>(y);

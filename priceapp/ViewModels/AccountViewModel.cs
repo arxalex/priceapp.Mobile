@@ -18,19 +18,15 @@ namespace priceapp.ViewModels;
 
 public class AccountViewModel : IAccountViewModel
 {
-    private readonly IUserRepository _userRepository;
-    private readonly IUserService _userService;
-    private readonly ICacheService _cacheService;
+    private readonly IUserRepository _userRepository = DependencyService.Get<IUserRepository>(DependencyFetchTarget.NewInstance);
+    private readonly IUserService _userService = DependencyService.Get<IUserService>();
+    private readonly ICacheService _cacheService = DependencyService.Get<ICacheService>();
     private string _email;
 
     private string _username;
 
     public AccountViewModel()
     {
-        _userRepository = DependencyService.Get<IUserRepository>(DependencyFetchTarget.NewInstance);
-        _userService = DependencyService.Get<IUserService>();
-        _cacheService = DependencyService.Get<ICacheService>();
-
         MenuItems.Add(new MenuItem {Label = "Налаштування", Glyph = "\ue8b8"});
         MenuItems.Add(new MenuItem {Label = "Підказки", Glyph = "\ue79a"});
         MenuItems.Add(new MenuItem {Label = "Новини", Glyph = "\ueb81"});

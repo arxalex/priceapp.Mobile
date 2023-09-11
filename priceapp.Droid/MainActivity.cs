@@ -3,7 +3,6 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Xamarin.Forms;
-using View = Xamarin.Forms.View;
 
 namespace priceapp.Droid
 {

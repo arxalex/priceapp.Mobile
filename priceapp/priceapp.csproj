@@ -3,7 +3,11 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <PackageVersion>1.0.2</PackageVersion>
+        <PackageVersion>1.1.0</PackageVersion>
+        <Title>priceapp</Title>
+        <Copyright>arxalex</Copyright>
+        <PackageProjectUrl>https://priceapp.co/</PackageProjectUrl>
+        <Company>arxalex</Company>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -91,9 +95,5 @@
           <DependentUpon>HeaderBackButton.xaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Controls\ViewModels\" />
     </ItemGroup>
 </Project>

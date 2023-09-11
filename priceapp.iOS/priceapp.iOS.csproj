@@ -136,16 +136,6 @@
         <LinkDescription Include="Linker.xml" />
     </ItemGroup>
     <ItemGroup>
-        <AndroidResource Include="Resources\values\colors.xml">
-          <SubType>Designer</SubType>
-          <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-        </AndroidResource>
-        <AndroidResource Include="Resources\values\styles.xml">
-          <SubType>Designer</SubType>
-          <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-        </AndroidResource>
-    </ItemGroup>
-    <ItemGroup>
       <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\100.png" />
       <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\102.png" />
       <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\1024.png" />

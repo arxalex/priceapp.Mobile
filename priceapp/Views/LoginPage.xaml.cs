@@ -10,12 +10,12 @@ namespace priceapp.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginPage
     {
-        private readonly ILoginViewModel _loginViewModel;
+        private readonly ILoginViewModel _loginViewModel = DependencyService.Get<ILoginViewModel>(DependencyFetchTarget.NewInstance);
 
         public LoginPage()
         {
             InitializeComponent();
-            _loginViewModel = DependencyService.Get<ILoginViewModel>(DependencyFetchTarget.NewInstance);
+            
             _loginViewModel.LoginSuccess += LoginViewModelOnLoginSuccess;
         }
 

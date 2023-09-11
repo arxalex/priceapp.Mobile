@@ -16,12 +16,7 @@ public class CategoriesLocalRepository : ICategoriesLocalRepository
 {
     public event ConnectionErrorHandler BadConnectEvent;
 
-    private readonly SQLiteAsyncConnection _connection;
-
-    public CategoriesLocalRepository()
-    {
-        _connection = LocalCacheDatabase.Database;
-    }
+    private readonly SQLiteAsyncConnection _connection = LocalCacheDatabase.Database;
 
     public async Task<int> InsertAsync(CategoryLocalDatabaseModel model)
     {

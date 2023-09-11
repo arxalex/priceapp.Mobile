@@ -10,12 +10,7 @@ namespace priceapp.Services.Implementation;
 
 public class ConnectionService : IConnectionService
 {
-    private readonly IInfoRepository _infoRepository;
-    
-    public ConnectionService()
-    {
-        _infoRepository = DependencyService.Get<IInfoRepository>();
-    }
+    private readonly IInfoRepository _infoRepository = DependencyService.Get<IInfoRepository>();
 
     public async Task<bool> IsConnectedAsync()
     {

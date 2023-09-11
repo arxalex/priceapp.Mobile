@@ -9,12 +9,11 @@ namespace priceapp.Views;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class RegisterPage
 {
-    private readonly IRegistrationViewModel _registrationViewModel;
+    private readonly IRegistrationViewModel _registrationViewModel = DependencyService.Get<IRegistrationViewModel>(DependencyFetchTarget.NewInstance);
 
     public RegisterPage()
     {
         InitializeComponent();
-        _registrationViewModel = DependencyService.Get<IRegistrationViewModel>(DependencyFetchTarget.NewInstance);
         _registrationViewModel.RegisterSuccess += RegistrationViewModelOnRegisterSuccess;
     }
 
