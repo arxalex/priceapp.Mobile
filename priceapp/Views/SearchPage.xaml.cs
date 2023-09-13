@@ -26,6 +26,7 @@ namespace priceapp.Views
             ActivityIndicator.IsRunning = false;
             ActivityIndicator.IsVisible = false;
             CollectionView.IsVisible = false;
+            NotFound.IsVisible = false;
         }
 
         private async void SearchViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
@@ -38,6 +39,13 @@ namespace priceapp.Views
             ActivityIndicator.IsRunning = false;
             ActivityIndicator.IsVisible = false;
             CollectionView.IsVisible = true;
+            NotFound.IsVisible = false;
+
+            if (args.Total < 1)
+            {
+                NotFound.IsVisible = true;
+                CollectionView.IsVisible = false;
+            }
         }
 
         protected override void OnAppearing()

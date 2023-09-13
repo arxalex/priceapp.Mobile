@@ -11,6 +11,8 @@
         <StackLayout>
             <controls:HeaderBackButton BackButtonClicked="ImageButton_OnClicked"
                                        x:Name="HeaderBackButton"/>
+            <controls:NotFound x:Name="NotFound"
+                               IsVisible="False"/>
             <controls:CollectionList x:Name="CollectionGrid"
                                      ItemsSource="{Binding ItemButtons}"/>
             <ActivityIndicator x:Name="ActivityIndicator" 

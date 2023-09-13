@@ -40,6 +40,8 @@
                      Margin="0, -7, 0, 10" />
             <ActivityIndicator x:Name="ActivityIndicator"
                                Style="{StaticResource ActivityIndicatorStyle}" />
+            <controls:NotFound x:Name="NotFound"
+                               IsVisible="False"/>
             <controls:CollectionList x:Name="CollectionView"
                                      ItemsSource="{Binding ItemButtons}" />
         </StackLayout>

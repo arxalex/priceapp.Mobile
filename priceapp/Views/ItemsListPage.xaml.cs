@@ -30,6 +30,7 @@ public partial class ItemsListPage
 
         ActivityIndicator.IsRunning = true;
         ActivityIndicator.IsVisible = true;
+        NotFound.IsVisible = false;
         CollectionGrid.IsVisible = false;
         _itemsListViewModel.LoadAsync(Navigation);
     }
@@ -47,9 +48,17 @@ public partial class ItemsListPage
         ActivityIndicator.IsRunning = false;
         ActivityIndicator.IsVisible = false;
         CollectionGrid.IsVisible = true;
+        NotFound.IsVisible = false;
+
         if (!args.Success)
         {
             CollectionGrid.RemainingItemsThreshold = -1;
+        }
+
+        if (args.Total < 1)
+        {
+            CollectionGrid.IsVisible = false;
+            NotFound.IsVisible = true;
         }
     }
 
