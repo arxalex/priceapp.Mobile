@@ -1,4 +1,5 @@
-﻿using priceapp.Services.Interfaces;
+﻿using priceapp.Events.Models;
+using priceapp.Services.Interfaces;
 using priceapp.Utils;
 using priceapp.Views;
 using Xamarin.Essentials;
@@ -29,6 +30,7 @@ namespace priceapp
             var connectionService = DependencyService.Get<IConnectionService>(DependencyFetchTarget.NewInstance);
             var userService = DependencyService.Get<IUserService>(DependencyFetchTarget.NewInstance);
             var geolocationUtil = DependencyService.Get<GeolocationUtil>();
+            connectionService.BadConnectEvent += ConnectionServiceOnBadConnectEvent;
             await geolocationUtil.GetCurrentLocationNow();
 
             var isConnected = await connectionService.IsConnectedAsync();
@@ -41,30 +43,47 @@ namespace priceapp
                     return;
                 }
                 
-                MainPage = new NavigationPage(new LoginPage());
+                MainPage = new ConnectionErrorPage(new ConnectionErrorArgs(){Message = "Відсутнє зʼєднання з сервером", StatusCode = 404, Success = false});
                 return;
             }
-            
-            if (await connectionService.IsAppNeedsUpdateAsync())
-            {
-                MainPage = new UpdateAppPage();
-                return;
-            }
-            
-            var isLoggedIn = await userService.IsUserLoggedIn();
-            if (isLoggedIn)
-            {
-                if (VersionTracking.IsFirstLaunchEver)
-                {
-                    MainPage = new OnboardingPage();
-                    return;
-                }
 
-                MainPage = new MainPage();
-                return;
+            var needUpdate = await connectionService.IsAppNeedsUpdateAsync();
+            switch (needUpdate)
+            {
+                case null:
+                    return;
+                case true:
+                    MainPage = new UpdateAppPage();
+                    return;
+            }
+
+            var isLoggedIn = await userService.IsUserLoggedIn();
+            if (!isLoggedIn)
+            {
+                var loginResult = await userService.LoginAsGuest();
+                if (!loginResult.Success)
+                {
+                    MainPage = new ConnectionErrorPage(new ConnectionErrorArgs()
+                    {
+                        Message = loginResult.Message,
+                        StatusCode = 400,
+                        Success = loginResult.Success
+                    });
+                }
             }
             
-            MainPage = new NavigationPage(new LoginPage());
+            if (VersionTracking.IsFirstLaunchEver)
+            {
+                MainPage = new OnboardingPage();
+                return;
+            }
+
+            MainPage = new MainPage();
+        }
+
+        private void ConnectionServiceOnBadConnectEvent(object sender, ConnectionErrorArgs args)
+        {
+            MainPage = new ConnectionErrorPage(args);
         }
     }
 }

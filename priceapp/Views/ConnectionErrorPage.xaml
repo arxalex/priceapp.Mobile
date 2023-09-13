@@ -2,21 +2,32 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
              x:Class="priceapp.Views.ConnectionErrorPage"
-             Style="{StaticResource PageStyle}"
-             Padding="0">
+             Style="{StaticResource PageStyle}">
     <ContentPage.Content>
-        <StackLayout VerticalOptions="CenterAndExpand">
+        <StackLayout VerticalOptions="FillAndExpand">
+            <controls:HeaderBackButton Label="Помилка"
+                                       x:Name="HeaderBackButton"
+                                       BackButtonClicked="HeaderBackButton_OnBackButtonClicked"
+                                       IsVisible="False" />
             <Label Text="Упс, сало впало"
                    TextColor="{ StaticResource ColorPrimary}"
                    Style="{StaticResource PageTitle}"
                    HorizontalTextAlignment="Center" />
             <Label Text="Щось пішло не так"
-                   HorizontalTextAlignment="Center" 
-                   Style="{StaticResource TextStyle}"/>
+                   HorizontalTextAlignment="Center"
+                   Style="{StaticResource TextStyle}" />
             <Label x:Name="StatusCodeLabel"
-                   HorizontalTextAlignment="Center" 
-                   Style="{StaticResource TextStyle}"/>
+                   HorizontalTextAlignment="Center"
+                   Style="{StaticResource TextSecondaryStyle}" />
+            <Label x:Name="ErrorMessage"
+                   HorizontalTextAlignment="Center"
+                   Style="{StaticResource TextSecondaryStyle}" />
+            <Button Style="{StaticResource ButtonStyle}"
+                    Text="Перезавантажитись"
+                    Margin="15, 5, 15,15"
+                    Clicked="Button_OnClicked" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

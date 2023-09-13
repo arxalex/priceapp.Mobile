@@ -19,7 +19,7 @@ namespace priceapp.ViewModels;
 public class AccountViewModel : IAccountViewModel
 {
     private readonly IUserRepository _userRepository = DependencyService.Get<IUserRepository>(DependencyFetchTarget.NewInstance);
-    private readonly IUserService _userService = DependencyService.Get<IUserService>();
+    private readonly IUserService _userService = DependencyService.Get<IUserService>(DependencyFetchTarget.NewInstance);
     private readonly ICacheService _cacheService = DependencyService.Get<ICacheService>();
     private string _email;
 
@@ -34,6 +34,7 @@ public class AccountViewModel : IAccountViewModel
         MenuItems.Add(new MenuItem {Label = "Питання та відповіді", Glyph = "\uf04c"});
         MenuItems.Add(new MenuItem {Label = "Політика конфіденційності", Glyph = "\uf0dc"});
         MenuItems.Add(new MenuItem {Label = "Змінити акаунт", Glyph = "\ue7ef"});
+        MenuItems.Add(new MenuItem {Label = "Видалити акаунт", Glyph = "\uef66"});
 
         _userRepository.BadConnectEvent += UserRepositoryOnBadConnectEvent;
     }
@@ -62,20 +63,13 @@ public class AccountViewModel : IAccountViewModel
 
     public async Task LoadAsync()
     {
-        if (await Xamarin.Essentials.SecureStorage.GetAsync("username") is not {Length: > 0})
-        {
-            var user = await _userRepository.GetUser();
+        var user = await _userService.GetUser();
+        Username = user.Username;
+        Email = user.Email;
 
-            await Xamarin.Essentials.SecureStorage.SetAsync("username", user.username);
-            await Xamarin.Essentials.SecureStorage.SetAsync("email", user.email);
-
-            Username = user.username;
-            Email = user.email;
-        }
-        else
+        if (Username == "guest")
         {
-            Username = await Xamarin.Essentials.SecureStorage.GetAsync("username");
-            Email = await Xamarin.Essentials.SecureStorage.GetAsync("email");
+            MenuItems.RemoveAt(7);
         }
 
         Loaded?.Invoke(this,

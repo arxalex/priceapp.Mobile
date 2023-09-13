@@ -2,7 +2,7 @@ namespace priceapp.Repositories.Models;
 
 public class SuccessRepositoryModel
 {
-    public bool Status { get; set; }
-    public string Message { get; set; }
-    public string Code { get; set; }
+    public bool status { get; set; }
+    public string message { get; set; }
+    public string code { get; set; }
 }

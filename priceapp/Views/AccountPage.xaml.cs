@@ -67,6 +67,9 @@ public partial class AccountPage
             case "Новини":
                 await Browser.OpenAsync("https://t.me/price_app", BrowserLaunchMode.SystemPreferred);
                 break;
+            case "Видалити акаунт":
+                await Navigation.PushAsync(new DeleteAccountPage());
+                break;
         }
 
         

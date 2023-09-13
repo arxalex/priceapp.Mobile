@@ -12,6 +12,7 @@ public static class ExceptionMessages
     public const string ChangePasswordIncorrect = "Old or new password is invalid";
     public const string UserDoesNotExists = "User does not exist";
     public const string SomethingWentWrong = "Something went wrong";
+    public const string ProtectedUser = "You cant change protected user";
 }
 
 public static class ExceptionMessagesTranslated
@@ -25,4 +26,5 @@ public static class ExceptionMessagesTranslated
     public const string ChangePasswordIncorrect = "Старий або новий паролі невірні";
     public const string UserDoesNotExists = "Такого користувача не існує";
     public const string SomethingWentWrong = "Щось пішло не так";
+    public const string ProtectedUser = "Ви не можете змінювати захищеного користувача";
 }

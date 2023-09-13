@@ -38,6 +38,8 @@ public static class ConnectionUtil
 
     public static void RemoveToken()
     {
+        Xamarin.Essentials.SecureStorage.Remove("username");
+        Xamarin.Essentials.SecureStorage.Remove("email");
         Xamarin.Essentials.SecureStorage.Remove("token");
     }
 

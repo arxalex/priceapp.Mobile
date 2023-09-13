@@ -23,7 +23,7 @@ namespace priceapp.ViewModels
         public event ConnectionErrorHandler BadConnectEvent;
         public event LoadingHandler Loaded;
         private readonly IMapper _mapper = DependencyService.Get<IMapper>();
-        private readonly ICategoryRepository _categoryRepository = DependencyService.Get<ICategoryRepository>();
+        private readonly ICategoryRepository _categoryRepository = DependencyService.Get<ICategoryRepository>(DependencyFetchTarget.NewInstance);
 
         public CategoryViewModel()
         {

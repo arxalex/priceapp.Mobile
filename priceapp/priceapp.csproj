@@ -95,5 +95,9 @@
           <DependentUpon>HeaderBackButton.xaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\DeleteAccountPage.xaml.cs">
+          <DependentUpon>DeleteAccountPage.xaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 </Project>

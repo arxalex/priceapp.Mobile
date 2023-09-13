@@ -1,8 +1,10 @@
 using System.Threading.Tasks;
 using priceapp.Events.Models;
 using priceapp.Repositories.Interfaces;
+using priceapp.Repositories.Models;
 using priceapp.Services.Implementation;
 using priceapp.Services.Interfaces;
+using priceapp.Services.Models;
 using priceapp.Utils;
 using priceapp.Views;
 using Xamarin.Forms;
@@ -13,7 +15,9 @@ namespace priceapp.Services.Implementation;
 
 public class UserService : IUserService
 {
-    private readonly IUserRepository _userRepository = DependencyService.Get<IUserRepository>(DependencyFetchTarget.NewInstance);
+    private readonly IUserRepository _userRepository =
+        DependencyService.Get<IUserRepository>(DependencyFetchTarget.NewInstance);
+
     private readonly IConnectionService _connectionService = DependencyService.Get<IConnectionService>();
 
     public async Task<bool> IsUserLoggedIn()
@@ -67,38 +71,60 @@ public class UserService : IUserService
 
         return new ProcessedArgs { Success = true, Message = "Вхід виконано" };
     }
-    
+
     public async Task<ProcessedArgs> RegisterUser(string username, string email, string password)
+    {
+        if (username == null || password == null || email == null)
         {
-            if (username == null || password == null || email == null)
-            {
-                return new ProcessedArgs() {Success = false, Message = "Усі поля обов'язкові до заповнення"};
-            }
-
-            if (!StringUtil.IsValidUsername(username))
-            {
-                return new ProcessedArgs()
-                    {
-                        Success = false,
-                        Message =
-                            "Ім'я користувача містить недопустимі символи. Використовуйте лише малі літери латинського алфавіту, цифри та символи \".\" і \"_\""
-                    };
-            }
-
-            if (!StringUtil.IsValidEmail(email))
-            {
-                return new ProcessedArgs() {Success = false, Message = "E-mail вказано некорректно"};
-            }
-
-            var loginStatus = await _userRepository.Register(username, email, password);
-            
-            if (!loginStatus.Succsess)
-            {
-                return new ProcessedArgs { Success = false, Message = loginStatus.Message };
-            }
-
-            return new ProcessedArgs { Success = true, Message = "Реєстрація успішна" };
+            return new ProcessedArgs() { Success = false, Message = "Усі поля обов'язкові до заповнення" };
         }
+
+        if (!StringUtil.IsValidUsername(username))
+        {
+            return new ProcessedArgs()
+            {
+                Success = false,
+                Message =
+                    "Ім'я користувача містить недопустимі символи. Використовуйте лише малі літери латинського алфавіту, цифри та символи \".\" і \"_\""
+            };
+        }
+
+        if (!StringUtil.IsValidEmail(email))
+        {
+            return new ProcessedArgs() { Success = false, Message = "E-mail вказано некорректно" };
+        }
+
+        var loginStatus = await _userRepository.Register(username, email, password);
+
+        if (!loginStatus.Succsess)
+        {
+            return new ProcessedArgs { Success = false, Message = loginStatus.Message };
+        }
+
+        return new ProcessedArgs { Success = true, Message = "Реєстрація успішна" };
+    }
+
+    public async Task<ProcessedArgs> DeleteAccountAsync(string password)
+    {
+        if (!await _connectionService.IsConnectedAsync())
+        {
+            return new ProcessedArgs { Success = false, Message = "Відсутнє зʼєднання з сервером" };
+        }
+
+        if (password == null)
+        {
+            return new ProcessedArgs { Success = false, Message = "Усі поля обов'язкові до заповнення" };
+        }
+
+        var loginStatus = await _userRepository.Delete(password);
+
+        if (!loginStatus.Succsess)
+        {
+            return new ProcessedArgs { Success = false, Message = loginStatus.Message };
+        }
+
+        return new ProcessedArgs { Success = true, Message = "Видалення виконано" };
+    }
 
 
     public async Task<ProcessedArgs> LoginAsGuest()
@@ -115,5 +141,27 @@ public class UserService : IUserService
         Xamarin.Essentials.SecureStorage.Remove("username");
         Xamarin.Essentials.SecureStorage.Remove("email");
         Application.Current.MainPage = new LoginPage();
+    }
+
+    public async Task<UserModel> GetUser()
+    {
+        var result = new UserModel();
+        if (await Xamarin.Essentials.SecureStorage.GetAsync("username") is not {Length: > 0})
+        {
+            var user = await _userRepository.GetUser();
+
+            await Xamarin.Essentials.SecureStorage.SetAsync("username", user.username);
+            await Xamarin.Essentials.SecureStorage.SetAsync("email", user.email);
+
+            result.Username = user.username;
+            result.Email = user.email;
+        }
+        else
+        {
+            result.Username = await Xamarin.Essentials.SecureStorage.GetAsync("username");
+            result.Email = await Xamarin.Essentials.SecureStorage.GetAsync("email");
+        }
+
+        return result;
     }
 }

@@ -91,7 +91,7 @@ public class UserRepository : IUserRepository
         return new LoginResultModel() { Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong };
     }
 
-    public async Task<LoginResultModel> Register(string username, string email, string password)
+    public async Task<RegisterResultModel> Register(string username, string email, string password)
     {
         var request = new RestRequest("User/register", Method.Post);
 
@@ -107,14 +107,14 @@ public class UserRepository : IUserRepository
         
         if (response.Content == null)
         {
-            return new LoginResultModel(){Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong};
+            return new RegisterResultModel(){Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong};
         }
         
         if (response.StatusCode == HttpStatusCode.BadRequest)
         {
             var result = JsonSerializer.Deserialize<ErrorResponseModel>(response.Content);
 
-            var resultModel = new LoginResultModel(){Succsess = false};
+            var resultModel = new RegisterResultModel(){Succsess = false};
             switch (result.message)
             {
                 case ExceptionMessages.UsernameRegisterIncorrect:
@@ -136,15 +136,62 @@ public class UserRepository : IUserRepository
         
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            var result = JsonSerializer.Deserialize<SuccessRepositoryModel>(response.Content, new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true
-            });
+            var result = JsonSerializer.Deserialize<SuccessRepositoryModel>(response.Content);
 
-            return new LoginResultModel() { Succsess = result.Status };
+            return new RegisterResultModel() { Succsess = result.status };
         }
 
-        return new LoginResultModel() { Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong };
+        return new RegisterResultModel() { Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong };
+    }
+    
+    public async Task<DeleteResultModel> Delete(string password)
+    {
+        var request = new RestRequest("User/delete", Method.Post);
+
+        var body = new DeleteRequestModel()
+        {
+            password = password
+        };
+        
+        request.AddHeader("Content-Type", "application/json");
+        request.AddBody(body, "application/json");
+        
+        var response = await _client.ExecuteAsync(request);
+
+        if (response.Content == null)
+        {
+            return new DeleteResultModel(){Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong};
+        }
+        
+        if (response.StatusCode == HttpStatusCode.BadRequest)
+        {
+            var result = JsonSerializer.Deserialize<ErrorResponseModel>(response.Content);
+
+            var resultModel = new DeleteResultModel(){Succsess = false};
+            switch (result.message)
+            {
+                case ExceptionMessages.PasswordIncorrect:
+                    resultModel.Message = ExceptionMessagesTranslated.PasswordIncorrect;
+                    break;
+                case ExceptionMessages.ProtectedUser:
+                    resultModel.Message = ExceptionMessagesTranslated.ProtectedUser;
+                    break;
+                default:
+                    resultModel.Message = ExceptionMessagesTranslated.SomethingWentWrong;
+                    break;
+            }
+
+            return resultModel;
+        }
+        
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            var result = JsonSerializer.Deserialize<DeleteRepositoryModel>(response.Content);
+
+            return new DeleteResultModel() { Succsess = result.status };
+        }
+
+        return new DeleteResultModel() { Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong };
     }
 
     public async Task<bool> IsUserLoggedIn()
