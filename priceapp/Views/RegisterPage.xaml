@@ -44,7 +44,7 @@
             <Button Style="{StaticResource ButtonStyle}"
                     Text="Зареєструватися"
                     Clicked="Button_OnClicked"/>
-            <Button Style="{StaticResource ButtonStyle}"
+            <Button Style="{StaticResource ButtonBottomStyle}"
                     BackgroundColor="{AppThemeBinding Light={StaticResource ColorBackground}, Dark=#222, Default={StaticResource ColorBackground}}"
                     TextColor="{ StaticResource ColorPrimary}"
                     BorderColor="{ StaticResource ColorPrimary}"

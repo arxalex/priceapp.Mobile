@@ -18,7 +18,7 @@
                    VerticalOptions="CenterAndExpand"
                    Style="{StaticResource TextStyle}"
                    HorizontalOptions="CenterAndExpand" />
-            <Button Style="{StaticResource ButtonStyle}"
+            <Button Style="{StaticResource ButtonBottomStyle}"
                     BackgroundColor="{AppThemeBinding Light=White, Dark=#222, Default=White}"
                     TextColor="{ StaticResource ColorPrimary}"
                     BorderColor="{ StaticResource ColorPrimary}"

@@ -47,6 +47,15 @@
                 <Setter Property="Margin" Value="2, 0" />
                 <Setter Property="CornerRadius" Value="5" />
             </Style>
+            <Style x:Key="ButtonBottomStyle" TargetType="Button">
+                <Setter Property="Style" Value="{StaticResource ButtonStyle}"></Setter>
+                <Setter Property="Margin">
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="iOS" Value="2,0,2,30" />
+                        <On Platform="Android" Value="2,0,2,0" />
+                    </OnPlatform>
+                </Setter>
+            </Style>
             <Style x:Key="TapToText" TargetType="Button">
                 <Setter Property="TextColor" Value="#222222" />
                 <Setter Property="BackgroundColor" Value="{ StaticResource ColorSecondary}" />

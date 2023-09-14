@@ -47,7 +47,7 @@
                     Text="Реєстрація"
                     VerticalOptions="EndAndExpand"
                     Clicked="ButtonRegistration_OnClicked"/>
-            <Button Style="{StaticResource ButtonStyle}"
+            <Button Style="{StaticResource ButtonBottomStyle}"
                     BackgroundColor="Transparent"
                     TextColor="{ StaticResource ColorPrimary}"
                     BorderColor="Transparent"
