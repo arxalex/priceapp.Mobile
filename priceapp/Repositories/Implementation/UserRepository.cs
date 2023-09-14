@@ -60,21 +60,7 @@ public class UserRepository : IUserRepository
             var result = JsonSerializer.Deserialize<ErrorResponseModel>(response.Content);
 
             var resultModel = new LoginResultModel(){Succsess = false};
-            switch (result.message)
-            {
-                case ExceptionMessages.UsernameIncorrect:
-                    resultModel.Message = ExceptionMessagesTranslated.UsernameIncorrect;
-                    break;
-                case ExceptionMessages.EmailIncorrect:
-                    resultModel.Message = ExceptionMessagesTranslated.EmailIncorrect;
-                    break;
-                case ExceptionMessages.PasswordIncorrect:
-                    resultModel.Message = ExceptionMessagesTranslated.PasswordIncorrect;
-                    break;
-                default:
-                    resultModel.Message = ExceptionMessagesTranslated.SomethingWentWrong;
-                    break;
-            }
+            resultModel.Message = TranslateUtill.TranslateException(result.message, username, username);
 
             return resultModel;
         }
@@ -83,6 +69,7 @@ public class UserRepository : IUserRepository
         {
             var result = JsonSerializer.Deserialize<UserLoginRepositoryModel>(response.Content);
 
+            ConnectionUtil.RemoveUserInfo();
             await ConnectionUtil.UpdateToken(result.token);
 
             return new LoginResultModel() { Succsess = true };
@@ -115,21 +102,7 @@ public class UserRepository : IUserRepository
             var result = JsonSerializer.Deserialize<ErrorResponseModel>(response.Content);
 
             var resultModel = new RegisterResultModel(){Succsess = false};
-            switch (result.message)
-            {
-                case ExceptionMessages.UsernameRegisterIncorrect:
-                    resultModel.Message = ExceptionMessagesTranslated.UsernameRegisterIncorrect;
-                    break;
-                case ExceptionMessages.UserAlreadyExists:
-                    resultModel.Message = ExceptionMessagesTranslated.UserAlreadyExists;
-                    break;
-                case ExceptionMessages.UserAlreadyExists2:
-                    resultModel.Message = ExceptionMessagesTranslated.UserAlreadyExists;
-                    break;
-                default:
-                    resultModel.Message = ExceptionMessagesTranslated.SomethingWentWrong;
-                    break;
-            }
+            resultModel.Message = TranslateUtill.TranslateException(result.message, username, email);
 
             return resultModel;
         }
@@ -168,18 +141,7 @@ public class UserRepository : IUserRepository
             var result = JsonSerializer.Deserialize<ErrorResponseModel>(response.Content);
 
             var resultModel = new DeleteResultModel(){Succsess = false};
-            switch (result.message)
-            {
-                case ExceptionMessages.PasswordIncorrect:
-                    resultModel.Message = ExceptionMessagesTranslated.PasswordIncorrect;
-                    break;
-                case ExceptionMessages.ProtectedUser:
-                    resultModel.Message = ExceptionMessagesTranslated.ProtectedUser;
-                    break;
-                default:
-                    resultModel.Message = ExceptionMessagesTranslated.SomethingWentWrong;
-                    break;
-            }
+            resultModel.Message = TranslateUtill.TranslateException(result.message);
 
             return resultModel;
         }

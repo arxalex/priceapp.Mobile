@@ -38,13 +38,34 @@ public static class ConnectionUtil
 
     public static void RemoveToken()
     {
-        Xamarin.Essentials.SecureStorage.Remove("username");
-        Xamarin.Essentials.SecureStorage.Remove("email");
         Xamarin.Essentials.SecureStorage.Remove("token");
     }
 
     public static async Task<bool> IsTokenExists()
     {
         return !string.IsNullOrEmpty(await Xamarin.Essentials.SecureStorage.GetAsync("token"));
+    }
+    
+    public static void RemoveUserInfo()
+    {
+        Xamarin.Essentials.SecureStorage.Remove("username");
+        Xamarin.Essentials.SecureStorage.Remove("email");
+    }
+    
+    public static async Task<bool> IsUserInfoExists()
+    {
+        return !string.IsNullOrEmpty(await Xamarin.Essentials.SecureStorage.GetAsync("username"));
+    }
+    
+    public static async Task UpdateUserInfo(string username, string email)
+    {
+        await Xamarin.Essentials.SecureStorage.SetAsync("username", username);
+        await Xamarin.Essentials.SecureStorage.SetAsync("email", email);
+    }
+
+    public static async Task<(string username, string email)> GetUserInfo()
+    {
+        return (await Xamarin.Essentials.SecureStorage.GetAsync("username"),
+            await Xamarin.Essentials.SecureStorage.GetAsync("email"));
     }
 }

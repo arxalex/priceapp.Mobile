@@ -138,28 +138,27 @@ public class UserService : IUserService
     public void LogoutUser()
     {
         ConnectionUtil.RemoveToken();
-        Xamarin.Essentials.SecureStorage.Remove("username");
-        Xamarin.Essentials.SecureStorage.Remove("email");
+        ConnectionUtil.RemoveUserInfo();
         Application.Current.MainPage = new LoginPage();
     }
 
     public async Task<UserModel> GetUser()
     {
         var result = new UserModel();
-        if (await Xamarin.Essentials.SecureStorage.GetAsync("username") is not {Length: > 0})
+        if (!await ConnectionUtil.IsUserInfoExists())
         {
             var user = await _userRepository.GetUser();
 
-            await Xamarin.Essentials.SecureStorage.SetAsync("username", user.username);
-            await Xamarin.Essentials.SecureStorage.SetAsync("email", user.email);
+            await ConnectionUtil.UpdateUserInfo(user.username, user.email);
 
             result.Username = user.username;
             result.Email = user.email;
         }
         else
         {
-            result.Username = await Xamarin.Essentials.SecureStorage.GetAsync("username");
-            result.Email = await Xamarin.Essentials.SecureStorage.GetAsync("email");
+            var userInfo = await ConnectionUtil.GetUserInfo();
+            result.Username = userInfo.username;
+            result.Email = userInfo.email;
         }
 
         return result;
