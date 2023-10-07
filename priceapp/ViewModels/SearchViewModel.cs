@@ -7,7 +7,7 @@ using priceapp.Events.Delegates;
 using priceapp.Events.Models;
 using priceapp.Models;
 using priceapp.Repositories.Interfaces;
-using priceapp.Utils;
+using priceapp.Services.Interfaces;
 using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
 using priceapp.Views;
@@ -21,7 +21,7 @@ namespace priceapp.ViewModels;
 public class SearchViewModel : ISearchViewModel
 {
     private const int PageSize = 5;
-    private readonly GeolocationUtil _geolocationUtil = DependencyService.Get<GeolocationUtil>();
+    private readonly ILocationService _locationService = DependencyService.Get<ILocationService>();
     private readonly IItemRepository _itemRepository = DependencyService.Get<IItemRepository>();
 
     private readonly IMapper _mapper = DependencyService.Get<IMapper>();
@@ -40,7 +40,7 @@ public class SearchViewModel : ISearchViewModel
     {
         ItemButtons.Clear();
 
-        var location = await _geolocationUtil.GetCurrentLocation();
+        var location = await _locationService.GetLocationAsync();
 
         var items = await _itemRepository
             .SearchItems(

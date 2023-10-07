@@ -18,7 +18,7 @@ using priceapp.LocalDatabase.Repositories.Interfaces;
 using priceapp.Models;
 using priceapp.Repositories.Interfaces;
 using priceapp.Repositories.Models;
-using priceapp.Utils;
+using priceapp.Services.Interfaces;
 using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
@@ -31,7 +31,7 @@ namespace priceapp.ViewModels;
 public class CartViewModel : ICartViewModel
 {
     private const int RefreshDuration = 0;
-    private readonly GeolocationUtil _geolocationUtil = DependencyService.Get<GeolocationUtil>();
+    private readonly ILocationService _locationService = DependencyService.Get<ILocationService>();
     private readonly IItemRepository _itemRepository = DependencyService.Get<IItemRepository>();
 
     private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository = DependencyService.Get<IItemsToBuyLocalRepository>();
@@ -139,7 +139,7 @@ public class CartViewModel : ICartViewModel
             itemsToBuyListPreProcessed.Add(itemToBuy);
         }
 
-        var location = await _geolocationUtil.GetCurrentLocation();
+        var location = await _locationService.GetLocationAsync();
         var (itemsResult, economy) = await _itemRepository.GetShoppingList(
             _mapper.Map<List<ShoppingListRepositoryModel>>(itemsToBuyListPreProcessed),
             location.Longitude, location.Latitude,

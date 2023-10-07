@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using priceapp.Events.Models;
 using priceapp.Models;
-using priceapp.Utils;
+using priceapp.Services.Interfaces;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
@@ -22,8 +22,8 @@ public partial class ItemPage
         _itemViewModel.Loaded += ItemViewModelOnLoaded;
         _itemViewModel.BadConnectEvent += ItemViewModelOnBadConnectEvent;
         _itemViewModel.PropertyChanged += ItemViewModelOnPropertyChanged;
-        var geolocationUtil = DependencyService.Get<GeolocationUtil>();
-        var currentPosition = geolocationUtil.GetCurrentLocation().Result;
+        var locationService = DependencyService.Get<ILocationService>();
+        var currentPosition = locationService.GetLocationAsync().Result;
         Map.MoveToRegion(
             MapSpan.FromCenterAndRadius(
                 new Position(currentPosition.Latitude, currentPosition.Longitude),

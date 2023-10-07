@@ -16,7 +16,8 @@ public class CacheService : ICacheService
     private readonly IFilialsLocalRepository _filialsLocalRepository = DependencyService.Get<IFilialsLocalRepository>();
     private readonly IItemsLocalRepository _itemsLocalRepository = DependencyService.Get<IItemsLocalRepository>();
     private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository = DependencyService.Get<IItemsToBuyLocalRepository>();
-    private readonly IShopsLocalRepository _shopsLocalRepository = DependencyService.Get<IShopsLocalRepository>();
+    private readonly IShopsLocalRepository _shopsLocalRepository = DependencyService.Get<IShopsLocalRepository>();    
+    private readonly ILocationService _locationService = DependencyService.Get<ILocationService>();
 
     public async Task ClearAsync()
     {
@@ -27,5 +28,6 @@ public class CacheService : ICacheService
         await _filialsLocalRepository.DeleteAllAsync();
         await _shopsLocalRepository.DeleteAllAsync();
         await _brandAlertsLocalRepository.DeleteAllAsync();
+        _locationService.ClearCustomLocationData();
     }
 }

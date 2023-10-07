@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using Xamarin.Essentials;
 
 namespace priceapp.ViewModels.Interfaces;
 
@@ -9,4 +10,6 @@ public interface ISettingsViewModel : INotifyPropertyChanged
     List<string> CartProcessingTypes { get; }
     string CartProcessingTypeSetting { get; set; }
     bool ShowRussiaSupportBrandAlerts { get; set; }
+    bool UseCustomLocation { get; set; }
+    Location CustomLocation { get; set; }
 }

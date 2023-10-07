@@ -29,9 +29,15 @@ namespace priceapp
         {
             var connectionService = DependencyService.Get<IConnectionService>(DependencyFetchTarget.NewInstance);
             var userService = DependencyService.Get<IUserService>(DependencyFetchTarget.NewInstance);
-            var geolocationUtil = DependencyService.Get<GeolocationUtil>();
+            var locationService = DependencyService.Get<ILocationService>(DependencyFetchTarget.NewInstance);
+            if (VersionTracking.IsFirstLaunchEver)
+            {
+                await locationService.RefreshPermission();
+            }
+
+            await locationService.RefreshLocation();
+
             connectionService.BadConnectEvent += ConnectionServiceOnBadConnectEvent;
-            await geolocationUtil.GetCurrentLocationNow();
 
             var isConnected = await connectionService.IsConnectedAsync();
             if (!isConnected)

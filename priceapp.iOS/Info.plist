@@ -24,7 +24,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>co.arxalex.priceapp</string>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>4</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
@@ -32,7 +32,7 @@
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>App needs GPS to get shops near you</string>
+	<string>Застосунок потребує GPS для того, щоб показувати товари у магазинах поблизу вас</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.1.0</string>
 	<key>UIMainStoryboardFile</key>

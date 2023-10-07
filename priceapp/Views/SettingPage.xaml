@@ -6,6 +6,7 @@
              x:Class="priceapp.Views.SettingPage"
              xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              x:DataType="viewModels:ISettingsViewModel"
              Style="{StaticResource PageStyle}">
     <ContentPage.Content>
@@ -72,6 +73,24 @@
                         <Switch Grid.Column="1"
                                 IsToggled="{Binding ShowRussiaSupportBrandAlerts}"/>
                     </Grid>
+                    <Grid Margin="0, 5, 0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0"
+                               Text="Використовувати власну геолокацію"
+                               FontSize="Medium"
+                               Style="{StaticResource TextStyle}"
+                               FontAttributes="Bold" />
+                        <Switch Grid.Column="1"
+                                IsToggled="{Binding UseCustomLocation}"/>
+                    </Grid>
+                    <maps:Map x:Name="Map"
+                              HeightRequest="500"
+                              IsShowingUser="True"
+                              MapType="Street">
+                    </maps:Map>
                 </StackLayout>
             </ScrollView>
         </StackLayout>

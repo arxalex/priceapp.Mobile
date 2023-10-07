@@ -13,6 +13,7 @@ using priceapp.LocalDatabase.Models;
 using priceapp.LocalDatabase.Repositories.Interfaces;
 using priceapp.Models;
 using priceapp.Repositories.Interfaces;
+using priceapp.Services.Interfaces;
 using priceapp.Utils;
 using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
@@ -26,7 +27,7 @@ namespace priceapp.ViewModels;
 public class ItemViewModel : IItemViewModel
 {
     private readonly IBrandAlertRepository _brandAlertRepository = DependencyService.Get<IBrandAlertRepository>();
-    private readonly GeolocationUtil _geolocationUtil = DependencyService.Get<GeolocationUtil>();
+    private readonly ILocationService _locationService = DependencyService.Get<ILocationService>();
     private readonly IItemRepository _itemRepository = DependencyService.Get<IItemRepository>();
     private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository = DependencyService.Get<IItemsToBuyLocalRepository>();
     private readonly IShopRepository _shopRepository = DependencyService.Get<IShopRepository>();
@@ -97,7 +98,7 @@ public class ItemViewModel : IItemViewModel
     {
         var shops = _mapper.Map<IList<Shop>>(await _shopRepository.GetShops());
         var filials = _mapper.Map<IList<Filial>>(await _shopRepository.GetFilials());
-        var location = await _geolocationUtil.GetCurrentLocation();
+        var location = await _locationService.GetLocationAsync();
         Item = item;
 
         var priceInfos = _mapper.Map<IList<PriceModel>>(await _itemRepository

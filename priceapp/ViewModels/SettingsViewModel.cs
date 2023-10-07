@@ -4,8 +4,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using priceapp.Annotations;
 using priceapp.Enums;
+using priceapp.Services.Interfaces;
 using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
 [assembly: Xamarin.Forms.Dependency(typeof(SettingsViewModel))]
 
@@ -13,6 +16,7 @@ namespace priceapp.ViewModels;
 
 public class SettingsViewModel : ISettingsViewModel
 {
+    private readonly ILocationService _locationService = DependencyService.Get<ILocationService>();
     private Dictionary<CartProcessingType, string> CartProcessingTypesDictionary { get; set; } =
         new()
         {
@@ -22,21 +26,41 @@ public class SettingsViewModel : ISettingsViewModel
 
     public int Radius
     {
-        get => Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius);
+        get => Preferences.Get("locationRadius", Constants.DefaultRadius);
         set
         {
-            Xamarin.Essentials.Preferences.Set("locationRadius", value);
+            Preferences.Set("locationRadius", value);
             OnPropertyChanged();
         }
     }
 
     public bool ShowRussiaSupportBrandAlerts
     {
-        get => Xamarin.Essentials.Preferences.Get("showRussiaSupportBrandAlerts",
+        get => Preferences.Get("showRussiaSupportBrandAlerts",
             Constants.DefaultShowRussiaSupportBrandAlerts);
         set
         {
-            Xamarin.Essentials.Preferences.Set("showRussiaSupportBrandAlerts", value);
+            Preferences.Set("showRussiaSupportBrandAlerts", value);
+            OnPropertyChanged();
+        }
+    }
+    
+    public bool UseCustomLocation
+    {
+        get => _locationService.UseCustomLocation;
+        set
+        {
+            _locationService.UseCustomLocation = value;
+            OnPropertyChanged();
+        }
+    }
+    
+    public Location CustomLocation
+    {
+        get => _locationService.CustomLocation;
+        set
+        {
+            _locationService.CustomLocation = value;
             OnPropertyChanged();
         }
     }
@@ -45,14 +69,14 @@ public class SettingsViewModel : ISettingsViewModel
     {
         get
         {
-            var setting = (CartProcessingType) Xamarin.Essentials.Preferences.Get("cartProcessingType",
+            var setting = (CartProcessingType) Preferences.Get("cartProcessingType",
                 (int) CartProcessingType.MultipleMarketsLowest);
             return CartProcessingTypesDictionary[setting];
         }
         set
         {
             var setting = CartProcessingTypesDictionary.First(x => x.Value == value);
-            Xamarin.Essentials.Preferences.Set("cartProcessingType", (int) setting.Key);
+            Preferences.Set("cartProcessingType", (int) setting.Key);
             OnPropertyChanged();
         }
     }
