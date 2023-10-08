@@ -8,7 +8,6 @@ using priceapp.Events.Models;
 using priceapp.Models;
 using priceapp.Repositories.Interfaces;
 using priceapp.Services.Interfaces;
-using priceapp.Utils;
 using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
 using priceapp.Views;
@@ -80,7 +79,7 @@ public class ItemsListViewModel : IItemsListViewModel
                 PrimaryText = x.Label,
                 SecondaryText = x.UnitsText,
                 AccentText = x.PriceText,
-                Command = new Command(async () => { await navigation.PushAsync(new ItemPage(x)); })
+                Command = new Command(() => { navigation.PushAsync(new ItemPage(x)); })
             };
         }).ForEach(x => ItemButtons.Add(x));
 

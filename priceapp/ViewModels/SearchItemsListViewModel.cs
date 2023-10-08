@@ -83,7 +83,7 @@ public class SearchItemsListViewModel : ISearchItemsListViewModel
                     PrimaryText = x.Label,
                     SecondaryText = x.UnitsText,
                     AccentText = x.PriceText,
-                    Command = new Command(async () => { await navigation.PushAsync(new ItemPage(x)); })
+                    Command = new Command(() => { navigation.PushAsync(new ItemPage(x)); })
                 };
             }).ForEach(x => ItemButtons.Add(x));
         }

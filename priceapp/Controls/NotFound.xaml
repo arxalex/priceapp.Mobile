@@ -19,7 +19,11 @@
                    TextColor="{ StaticResource ColorPrimary}"/>
             <Label Style="{StaticResource TextStyle}"
                    HorizontalTextAlignment="Center"
-                   Text="Нічого не знайдено в вашемо районі. Спробуйте змінити радіус пошуку або спробуйте в іншому місці" />
+                   Margin="0, 0, 0, 7"
+                   Text="Нічого не знайдено в вашемо районі. Спробуйте змінити радіус пошуку, геолокацію або спробуйте в іншому місці" />
+            <Button Clicked="Button_OnClicked"
+                    Style="{StaticResource ButtonStyle}"
+                    Text="Перейти до налаштувань"/>
         </StackLayout>
     </ContentView.Content>
 </ContentView>

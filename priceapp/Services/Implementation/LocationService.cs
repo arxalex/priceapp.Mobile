@@ -2,9 +2,9 @@ using System;
 using System.Threading.Tasks;
 using priceapp.Services.Implementation;
 using priceapp.Services.Interfaces;
-using priceapp.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
 [assembly: Dependency(typeof(LocationService))]
 
@@ -18,7 +18,7 @@ public class LocationService : ILocationService
         set
         {
             Preferences.Set("useCustomLocation", value);
-            RefreshLocation().Wait();
+            RefreshLocation();
         }
     }
 
@@ -58,11 +58,11 @@ public class LocationService : ILocationService
             
             return await Geolocation.GetLastKnownLocationAsync() ?? await Geolocation.GetLocationAsync(request);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            await TrySetCustomLocation();
+            DisplayAlert(e);
 
-            return new Location(30, 50);
+            return new Location(Constants.DefaultY, Constants.DefaultX);
         }
     }
 
@@ -91,7 +91,7 @@ public class LocationService : ILocationService
 
             if (status != PermissionStatus.Granted)
             {
-                await TrySetCustomLocation();
+                DisplayAlert(new PermissionException(""));
             }
             else
             {
@@ -106,24 +106,25 @@ public class LocationService : ILocationService
         UseCustomLocation = Constants.DefaultUseCustomLocation;
     }
 
-    private async Task TrySetCustomLocation()
+    private static async Task DisplayAlert(Exception e)
     {
-        if (Application.Current.MainPage.GetType() == typeof(MainPage))
+        var message = "Вкажіть вашу геопозицію в налаштуваннях";
+        if (e != null)
         {
-            const string addAction = "Перейти до налаштувань";
-            var action = await Application.Current.MainPage.DisplayActionSheet(
-                "Неможливо отримати вашу геопозицію. Вкажіть вашу геопозицію в налаштуваннях", "Закрити", null,
-                addAction);
-            if (action == addAction)
+            if (e.GetType() == typeof(PermissionException))
             {
-                await Application.Current.MainPage.Navigation.PushAsync(new SettingPage());
+                message = "Надайте додатку доступ до геолокації в налаштуваннях пристрою";
+            }
+            else if (e.GetType() == typeof(FeatureNotEnabledException))
+            {
+                message = "Увімкніть GPS";
             }
         }
-            
-        await Application.Current.MainPage.DisplayAlert("Неможливо отримати вашу геопозицію", "Вкажіть вашу геопозицію в налаштуваннях", "Закрити");
+
+        await Application.Current.MainPage.DisplayAlert("Неможливо отримати вашу геопозицію", message, "Закрити");
     }
 
-    private async Task RefreshLocationRequest()
+    private static async Task RefreshLocationRequest()
     {
         var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(3));
         await Geolocation.GetLocationAsync(request);

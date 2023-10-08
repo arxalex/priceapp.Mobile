@@ -1,5 +1,4 @@
 using System;
-using priceapp.Services.Interfaces;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -12,20 +11,30 @@ namespace priceapp.Views;
 public partial class SettingPage
 {
     private readonly ISettingsViewModel _settingsViewModel = DependencyService.Get<ISettingsViewModel>(DependencyFetchTarget.NewInstance);
+    private const string CustomLocationPinLabel = "Вибрана геопозиція";
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        Map.MapClicked += OnMapClicked;
+        var customLocation = _settingsViewModel.CustomLocation;
+        Map.MoveToRegion(
+            MapSpan.FromCenterAndRadius(
+                new Position(customLocation.Latitude, customLocation.Longitude),
+                Distance.FromMeters(Preferences.Get("locationRadius", 1000) + 100)
+            )
+        );
+        var selectedPin = new Pin
+        {
+            Type = PinType.SavedPin,
+            Position = new Position(customLocation.Latitude, customLocation.Longitude),
+            Label = CustomLocationPinLabel
+        };
+        Map.Pins.Add(selectedPin);
+    }
 
     public SettingPage()
     {
         InitializeComponent();
-
-        var locationService = DependencyService.Get<ILocationService>();
-        var currentPosition = locationService.GetLocationAsync().Result;
-        Map.MoveToRegion(
-            MapSpan.FromCenterAndRadius(
-                new Position(currentPosition.Latitude, currentPosition.Longitude),
-                Distance.FromMeters(Preferences.Get("locationRadius", 1000) + 100)
-            )
-        );
-        Map.MapClicked += OnMapClicked;
         
         BindingContext = _settingsViewModel;
     }
@@ -37,7 +46,19 @@ public partial class SettingPage
     
     private void OnMapClicked(object sender, MapClickedEventArgs e)
     {
+        Map.Pins.Clear();
+
         var position = e.Position;
+
+        var selectedPin = new Pin
+        {
+            Type = PinType.SavedPin,
+            Position = position,
+            Label = CustomLocationPinLabel
+        };
+        
+        Map.Pins.Add(selectedPin);
+        
         _settingsViewModel.CustomLocation = new Location(position.Latitude, position.Longitude);
     }
 }

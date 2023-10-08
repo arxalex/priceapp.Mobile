@@ -1,8 +1,6 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using priceapp.Events.Models;
-using priceapp.Models;
 using priceapp.ViewModels.Interfaces;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -29,9 +27,9 @@ namespace priceapp.Views
             NotFound.IsVisible = false;
         }
 
-        private async void SearchViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
+        private void SearchViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
         {
-            await Navigation.PushAsync(new ConnectionErrorPage(args));
+            Navigation.PushAsync(new ConnectionErrorPage(args));
         }
 
         private void SearchViewModelOnLoaded(object sender, LoadingArgs args)
@@ -51,11 +49,15 @@ namespace priceapp.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            Device.BeginInvokeOnMainThread(async () =>
+
+            Device.BeginInvokeOnMainThread(Action);
+            return;
+
+            async void Action()
             {
                 await Task.Delay(250);
                 SearchEntry.Focus();
-            });
+            }
         }
 
         private async void ImageButton_OnClicked(object sender, EventArgs e)
@@ -74,9 +76,9 @@ namespace priceapp.Views
             await _searchViewModel.LoadAsync(Navigation);
         }
 
-        private async void SearchEntry_OnCompleted(object sender, EventArgs e)
+        private void SearchEntry_OnCompleted(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new SearchItemsListPage(SearchEntry.Text));
+            Navigation.PushAsync(new SearchItemsListPage(SearchEntry.Text));
         }
     }
 }

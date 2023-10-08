@@ -37,9 +37,9 @@ public partial class ItemsListPage
 
     private string CategoryName { get; set; }
 
-    private async void ItemsListViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
+    private void ItemsListViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
     {
-        await Navigation.PushAsync(new ConnectionErrorPage(args));
+        Navigation.PushAsync(new ConnectionErrorPage(args));
     }
 
     private void ItemsListViewModelOnLoaded(object sender, LoadingArgs args)

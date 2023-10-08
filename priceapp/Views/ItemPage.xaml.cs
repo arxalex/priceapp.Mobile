@@ -39,9 +39,9 @@ public partial class ItemPage
         _itemViewModel.LoadAsync(item, this);
     }
 
-    private async void ItemViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
+    private void ItemViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
     {
-        await Navigation.PushAsync(new ConnectionErrorPage(args));
+        Navigation.PushAsync(new ConnectionErrorPage(args));
     }
 
     private void ItemViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)

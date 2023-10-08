@@ -33,9 +33,9 @@ public partial class SearchItemsListPage
         _searchItemsListViewModel.LoadAsync(Navigation);
     }
 
-    private async void SearchItemsListViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
+    private void SearchItemsListViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
     {
-        await Navigation.PushAsync(new ConnectionErrorPage(args));
+        Navigation.PushAsync(new ConnectionErrorPage(args));
     }
 
     private void SearchItemsListViewModelOnLoaded(object sender, LoadingArgs args)

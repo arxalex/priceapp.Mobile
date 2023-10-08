@@ -11,8 +11,8 @@ public partial class ConfirmEmailPage
         InitializeComponent();
     }
 
-    private async void ButtonLogin_OnClicked(object sender, EventArgs e)
+    private void ButtonLogin_OnClicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new LoginPage());
+        Navigation.PushAsync(new LoginPage());
     }
 }

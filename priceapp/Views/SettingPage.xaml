@@ -15,32 +15,6 @@
                                        Label="Налаштування"/>
             <ScrollView>
                 <StackLayout Margin="20, 0">
-                    <Label Text="Радіус пошуку (в метрах)"
-                           FontSize="Medium"
-                           Style="{StaticResource TextStyle}"
-                           FontAttributes="Bold" />
-                    <Grid Margin="0, 0, 0,5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="60" />
-                        </Grid.ColumnDefinitions>
-                        <Frame Grid.Column="0"
-                               Style="{StaticResource FrameStyle}"
-                               BackgroundColor="Transparent"
-                               Padding="0"
-                               Margin="0,0">
-                            <ui:RdSliderBorderless Maximum="10000"
-                                                   Minimum="0"
-                                                   ThumbColor="{AppThemeBinding Light={ StaticResource ColorPrimary}, Dark={ StaticResource ColorPrimaryDark}, Default={ StaticResource ColorPrimary}}"
-                                                   MinimumTrackColor="Gray"
-                                                   Value="{Binding Radius}" />
-                        </Frame>
-                        <ui:RdEntryBorderless Grid.Column="1"
-                                              Keyboard="Numeric"
-                                              MaxLength="5"
-                                              Text="{Binding Radius}" 
-                                              TextColor="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}"/>
-                    </Grid>
                     <Label Text="Спосіб формування списку покупок"
                            FontSize="Medium"
                            Style="{StaticResource TextStyle}"
@@ -87,10 +61,37 @@
                                 IsToggled="{Binding UseCustomLocation}"/>
                     </Grid>
                     <maps:Map x:Name="Map"
-                              HeightRequest="500"
+                              HeightRequest="400"
                               IsShowingUser="True"
+                              IsVisible="{Binding UseCustomLocation}"
                               MapType="Street">
                     </maps:Map>
+                    <Label Text="Радіус пошуку (в метрах)"
+                           FontSize="Medium"
+                           Style="{StaticResource TextStyle}"
+                           FontAttributes="Bold" />
+                    <Grid Margin="0, 0, 0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="60" />
+                        </Grid.ColumnDefinitions>
+                        <Frame Grid.Column="0"
+                               Style="{StaticResource FrameStyle}"
+                               BackgroundColor="Transparent"
+                               Padding="0"
+                               Margin="0,0">
+                            <ui:RdSliderBorderless Maximum="10000"
+                                                   Minimum="0"
+                                                   ThumbColor="{AppThemeBinding Light={ StaticResource ColorPrimary}, Dark={ StaticResource ColorPrimaryDark}, Default={ StaticResource ColorPrimary}}"
+                                                   MinimumTrackColor="Gray"
+                                                   Value="{Binding Radius}" />
+                        </Frame>
+                        <ui:RdEntryBorderless Grid.Column="1"
+                                              Keyboard="Numeric"
+                                              MaxLength="5"
+                                              Text="{Binding Radius}" 
+                                              TextColor="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}"/>
+                    </Grid>
                 </StackLayout>
             </ScrollView>
         </StackLayout>

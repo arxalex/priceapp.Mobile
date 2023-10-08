@@ -7,6 +7,7 @@
              xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
              x:Class="priceapp.Views.SearchPage"
              x:DataType="viewModels:ISearchViewModel"
+             x:Name="Page"
              Style="{StaticResource PageStyle}">
     <ContentPage.Content>
         <StackLayout>
@@ -41,6 +42,7 @@
             <ActivityIndicator x:Name="ActivityIndicator"
                                Style="{StaticResource ActivityIndicatorStyle}" />
             <controls:NotFound x:Name="NotFound"
+                               Navigation="{Binding Source={x:Reference Page}, Path=Navigation}"
                                IsVisible="False"/>
             <controls:CollectionList x:Name="CollectionView"
                                      ItemsSource="{Binding ItemButtons}" />

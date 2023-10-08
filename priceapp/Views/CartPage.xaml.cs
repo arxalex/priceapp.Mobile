@@ -26,9 +26,9 @@ namespace priceapp.Views
             BindingContext = _cartViewModel;
         }
 
-        private async void CartViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
+        private void CartViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
         {
-            await Navigation.PushAsync(new ConnectionErrorPage(args));
+            Navigation.PushAsync(new ConnectionErrorPage(args));
         }
 
         private async void CartViewModelOnLoaded(object sender, LoadingArgs args)

@@ -45,7 +45,7 @@ namespace priceapp.ViewModels
                     Id = x.Id,
                     Image = x.Image,
                     PrimaryText = x.Label,
-                    Command = new Command(async () => { await navigation.PushAsync(new ItemsListPage(x.Id, x.Label)); })
+                    Command = new Command( () => { navigation.PushAsync(new ItemsListPage(x.Id, x.Label)); })
                 }).ForEach(x => { CategoryButtons.Add(x); });
 
             Loaded?.Invoke(this,

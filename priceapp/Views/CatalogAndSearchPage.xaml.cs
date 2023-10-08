@@ -24,9 +24,9 @@ namespace priceapp.Views
             BindingContext = categoryViewModel;
         }
 
-        private async void CategoryViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
+        private void CategoryViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
         {
-            await Navigation.PushAsync(new ConnectionErrorPage(args));
+            Navigation.PushAsync(new ConnectionErrorPage(args));
         }
 
         private void CategoryViewModelOnLoaded(object sender, LoadingArgs args)
@@ -36,9 +36,9 @@ namespace priceapp.Views
             CollectionGrid.IsVisible = true;
         }
 
-        private async void SearchButton_OnTapped(object sender, EventArgs e)
+        private void SearchButton_OnTapped(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new SearchPage());
+            Navigation.PushAsync(new SearchPage());
         }
     }
 }

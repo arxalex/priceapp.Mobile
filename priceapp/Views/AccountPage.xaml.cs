@@ -27,9 +27,9 @@ public partial class AccountPage
         BindingContext = _accountViewModel;
     }
 
-    private async void AccountViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
+    private void AccountViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
     {
-        await Navigation.PushAsync(new ConnectionErrorPage(args));
+        Navigation.PushAsync(new ConnectionErrorPage(args));
     }
 
     private void AccountViewModelOnLoaded(object sender, LoadingArgs args)
@@ -38,7 +38,7 @@ public partial class AccountPage
         ActivityIndicator.IsVisible = false;
     }
 
-    private async void CollectionView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void CollectionView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (CollectionView.SelectedItem == null) return;
         var item = (MenuItem) e.CurrentSelection.FirstOrDefault()!;
@@ -46,29 +46,29 @@ public partial class AccountPage
         switch (item.Label)
         {
             case "Налаштування":
-                await Navigation.PushAsync(new SettingPage());
+                Navigation.PushAsync(new SettingPage());
                 break;
             case "Про додаток":
-                await Navigation.PushAsync(new AboutPage());
+                Navigation.PushAsync(new AboutPage());
                 break;
             case "Змінити акаунт":
-                await _accountViewModel.ChangeAccount();
+                _accountViewModel.ChangeAccount();
                 break;
             case "Підказки":
                 Application.Current.MainPage = new OnboardingPage();
                 break;
             case "Питання та відповіді":
-                await Browser.OpenAsync("https://priceapp.co/documents/faq", BrowserLaunchMode.SystemPreferred);
+                Browser.OpenAsync("https://priceapp.co/documents/faq", BrowserLaunchMode.SystemPreferred);
                 break;
             case "Політика конфіденційності":
-                await Browser.OpenAsync("https://priceapp.co/documents/privacy",
+                Browser.OpenAsync("https://priceapp.co/documents/privacy",
                     BrowserLaunchMode.SystemPreferred);
                 break;
             case "Новини":
-                await Browser.OpenAsync("https://t.me/price_app", BrowserLaunchMode.SystemPreferred);
+                Browser.OpenAsync("https://t.me/price_app", BrowserLaunchMode.SystemPreferred);
                 break;
             case "Видалити акаунт":
-                await Navigation.PushAsync(new DeleteAccountPage());
+                Navigation.PushAsync(new DeleteAccountPage());
                 break;
         }
 
