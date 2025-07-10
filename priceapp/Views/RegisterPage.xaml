@@ -1,57 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
              x:Class="priceapp.Views.RegisterPage"
              NavigationPage.HasNavigationBar="false"
              Title="Registration page"
-             Padding="10, 20"
-             Style="{StaticResource PageStyle}">
+             Padding="10, 20">
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Реєстрація"
-                   Style="{StaticResource PageTitle}"
-                   Margin="0, 50"/>
-            <ui:RdEntryOutlined Keyboard="Email"
-                                   Placeholder="E-mail"
-                                   ClearButtonVisibility="WhileEditing"
-                                   BackgroundColor="Transparent"
-                                   x:Name="EntryEmail" />
-            <ui:RdEntryOutlined Keyboard="Plain"
-                                Placeholder="Ім'я користувача"
-                                ClearButtonVisibility="WhileEditing"
-                                BackgroundColor="Transparent"
-                                x:Name="EntryUsername" />
-            <ui:RdEntryOutlined Keyboard="Default"
-                                   Placeholder="Пароль"
-                                   IsPassword="True"
-                                   ClearButtonVisibility="WhileEditing"
-                                   BackgroundColor="Transparent"
-                                   x:Name="EntryPassword" />
+                   Style="{StaticResource Headline}"
+                   Margin="0, 50" />
+            <Entry Keyboard="Email"
+                   Placeholder="E-mail"
+                   ClearButtonVisibility="WhileEditing"
+                   BackgroundColor="Transparent"
+                   x:Name="EntryEmail" />
+            <Entry Keyboard="Plain"
+                   Placeholder="Ім'я користувача"
+                   ClearButtonVisibility="WhileEditing"
+                   BackgroundColor="Transparent"
+                   x:Name="EntryUsername" />
+            <Entry Keyboard="Default"
+                   Placeholder="Пароль"
+                   IsPassword="True"
+                   ClearButtonVisibility="WhileEditing"
+                   BackgroundColor="Transparent"
+                   x:Name="EntryPassword" />
             <Frame x:Name="ProcessedFrame"
                    IsVisible="False"
                    BackgroundColor="{AppThemeBinding Default=LightYellow, Light=LightYellow, Dark=#310}"
                    BorderColor="DarkOrange"
                    CornerRadius="5"
-                   Margin="2"
-                   Style="{StaticResource FrameStyle}">
+                   Margin="2">
                 <Frame.Content>
                     <Label x:Name="ProcessedLabel"
                            TextColor="DarkOrange" />
                 </Frame.Content>
             </Frame>
-            <Button Style="{StaticResource ButtonStyle}"
-                    Text="Зареєструватися"
-                    Clicked="Button_OnClicked"/>
-            <Button Style="{StaticResource ButtonBottomStyle}"
+            <Button
+                Text="Зареєструватися"
+                Clicked="Button_OnClicked" />
+            <Button Style="{StaticResource Bottom}"
                     BackgroundColor="{AppThemeBinding Light={StaticResource ColorBackground}, Dark=#222, Default={StaticResource ColorBackground}}"
-                    TextColor="{ StaticResource ColorPrimary}"
-                    BorderColor="{ StaticResource ColorPrimary}"
+                    TextColor="{ StaticResource Primary}"
+                    BorderColor="{ StaticResource Primary}"
                     BorderWidth="1"
                     Text="Вхід"
                     VerticalOptions="EndAndExpand"
-                    Clicked="ButtonLogin_OnClicked"/>
+                    Clicked="ButtonLogin_OnClicked" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

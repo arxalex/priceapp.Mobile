@@ -1,20 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using priceapp.Events.Delegates;
 using priceapp.LocalDatabase.Models;
-using priceapp.LocalDatabase.Repositories.Implementation;
 using priceapp.LocalDatabase.Repositories.Interfaces;
 using SQLite;
-using Xamarin.Forms;
 
-[assembly: Dependency(typeof(ShopsLocalRepository))]
 namespace priceapp.LocalDatabase.Repositories.Implementation;
 
 public class ShopsLocalRepository : IShopsLocalRepository
 {
-    public event ConnectionErrorHandler BadConnectEvent;
+    public event ConnectionErrorHandler? BadConnectEvent;
     
     private readonly SQLiteAsyncConnection _connection = LocalCacheDatabase.Database;
 

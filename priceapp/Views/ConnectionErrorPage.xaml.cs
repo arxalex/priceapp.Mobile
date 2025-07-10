@@ -1,10 +1,9 @@
-using System;
 using priceapp.Events.Models;
-using Xamarin.Forms.Xaml;
+
 
 namespace priceapp.Views;
 
-[XamlCompilation(XamlCompilationOptions.Compile)]
+
 public partial class ConnectionErrorPage
 {
     public ConnectionErrorPage(ConnectionErrorArgs args)
@@ -12,7 +11,7 @@ public partial class ConnectionErrorPage
         InitializeComponent();
         StatusCodeLabel.Text = "StatusCode: " + args.StatusCode;
         ErrorMessage.Text = "Error: " + args.Message;
-        if (App.Current.MainPage.Navigation.NavigationStack.Count > 0)
+        if (Application.Current.Windows[0].Page.Navigation.NavigationStack.Count > 0)
         {
             HeaderBackButton.IsVisible = true;
         }
@@ -20,7 +19,7 @@ public partial class ConnectionErrorPage
 
     private void Button_OnClicked(object sender, EventArgs e)
     {
-        App.Current.SendStart();
+        Application.Current.Windows[0].Page = ((App)Application.Current).OnCreateWindow();
     }
 
     private void HeaderBackButton_OnBackButtonClicked(object sender, EventArgs e)

@@ -1,16 +1,12 @@
-using System;
+using Microsoft.Maui.Controls.Maps;
+using Microsoft.Maui.Maps;
 using priceapp.ViewModels.Interfaces;
-using Xamarin.Essentials;
-using Xamarin.Forms;
-using Xamarin.Forms.Maps;
-using Xamarin.Forms.Xaml;
 
 namespace priceapp.Views;
 
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class SettingPage
 {
-    private readonly ISettingsViewModel _settingsViewModel = DependencyService.Get<ISettingsViewModel>(DependencyFetchTarget.NewInstance);
+    private readonly ISettingsViewModel _settingsViewModel;
     private const string CustomLocationPinLabel = "Вибрана геопозиція";
     protected override void OnAppearing()
     {
@@ -19,22 +15,23 @@ public partial class SettingPage
         var customLocation = _settingsViewModel.CustomLocation;
         Map.MoveToRegion(
             MapSpan.FromCenterAndRadius(
-                new Position(customLocation.Latitude, customLocation.Longitude),
+                new Location(customLocation.Latitude, customLocation.Longitude),
                 Distance.FromMeters(Preferences.Get("locationRadius", 1000) + 100)
             )
         );
         var selectedPin = new Pin
         {
             Type = PinType.SavedPin,
-            Position = new Position(customLocation.Latitude, customLocation.Longitude),
+            Location = new Location(customLocation.Latitude, customLocation.Longitude),
             Label = CustomLocationPinLabel
         };
         Map.Pins.Add(selectedPin);
     }
 
-    public SettingPage()
+    public SettingPage(ISettingsViewModel settingsViewModel)
     {
         InitializeComponent();
+        _settingsViewModel = settingsViewModel;
         
         BindingContext = _settingsViewModel;
     }
@@ -48,12 +45,12 @@ public partial class SettingPage
     {
         Map.Pins.Clear();
 
-        var position = e.Position;
+        var position = e.Location;
 
         var selectedPin = new Pin
         {
             Type = PinType.SavedPin,
-            Position = position,
+            Location = position,
             Label = CustomLocationPinLabel
         };
         

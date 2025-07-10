@@ -1,11 +1,9 @@
-using System.Threading.Tasks;
 using priceapp.Events.Delegates;
 
-namespace priceapp.ViewModels.Interfaces
+namespace priceapp.ViewModels.Interfaces;
+
+public interface IRegistrationViewModel
 {
-    public interface IRegistrationViewModel
-    {
-        event LoginHandler RegisterSuccess;
-        Task RegisterUser(string username, string email, string password);
-    }
+    event LoginHandler RegisterSuccess;
+    Task RegisterUser(string username, string email, string password);
 }

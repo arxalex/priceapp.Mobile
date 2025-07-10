@@ -1,5 +1,3 @@
-using System;
-
 namespace priceapp.Events.Models;
 
 public class ConnectionErrorArgs : EventArgs

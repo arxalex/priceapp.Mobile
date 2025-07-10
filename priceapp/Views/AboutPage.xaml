@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="priceapp.Views.AboutPage"
-             xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
-             Style="{StaticResource PageStyle}">
+             xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp">
     <ContentPage.Content>
         <StackLayout>
             <controls:HeaderBackButton BackButtonClicked="ImageButton_OnClicked"
@@ -12,18 +11,18 @@
             <Image Source="{OnPlatform Android=splash_logo.png, iOS=splash_logo }" />
             <Label Text="PriceApp"
                    FontSize="30"
-                   Style="{StaticResource TextStyle}"
+                   
                    FontAttributes="Bold"
                    HorizontalOptions="Center" 
                    Margin="0, -50, 0, 0"/>
             <Label Text="by"
                    HorizontalOptions="Center" 
-                   Style="{StaticResource TextStyle}"/>
+                   />
             <Image Source="{OnPlatform Android=arxlogo_light.png, iOS=arxlogo }"
                    WidthRequest="70"
                    VerticalOptions="StartAndExpand"/>
             <Label Text="Версія"
-                   Style="{StaticResource TextStyle}"
+                   
                    HorizontalOptions="CenterAndExpand"
                    x:Name="Label" >
                    <Label.Margin>

@@ -1,6 +1,3 @@
-using System.Threading.Tasks;
-using Xamarin.Essentials;
-
 namespace priceapp.Services.Interfaces;
 
 public interface ILocationService

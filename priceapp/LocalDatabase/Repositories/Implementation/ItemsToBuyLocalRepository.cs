@@ -1,16 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using priceapp.Events.Delegates;
 using priceapp.LocalDatabase.Models;
-using priceapp.LocalDatabase.Repositories.Implementation;
 using priceapp.LocalDatabase.Repositories.Interfaces;
 using SQLite;
-using Xamarin.Forms;
-
-[assembly: Dependency(typeof(ItemsToBuyLocalRepository))]
 
 namespace priceapp.LocalDatabase.Repositories.Implementation;
 
@@ -18,7 +10,7 @@ public class ItemsToBuyLocalRepository : IItemsToBuyLocalRepository
 {
     private readonly SQLiteAsyncConnection _connection = LocalDatabase.Database;
 
-    public event ConnectionErrorHandler BadConnectEvent;
+    public event ConnectionErrorHandler? BadConnectEvent;
 
     public async Task InsertAsync(ItemToBuyLocalDatabaseModel model)
     {

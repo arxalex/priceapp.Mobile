@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="priceapp.Views.CartPage"
              xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
              x:DataType="viewModels:ICartViewModel"
-             Style="{StaticResource PageStyle}">
+             >
     <ContentPage.Content>
         <StackLayout>
             <Grid VerticalOptions="FillAndExpand">
@@ -24,11 +24,11 @@
                                    Grid.ColumnSpan="2"
                                    Grid.RowSpan="2"
                                    x:Name="ActivityIndicator"
-                                   Style="{StaticResource ActivityIndicatorStyle}" />
+                                    />
                 <Label Grid.Row="0"
                        Grid.Column="0"
                        FontSize="20"
-                       Style="{StaticResource TextStyle}"
+                       
                        FontAttributes="Bold"
                        Margin="15,0,0,0"
                        VerticalOptions="Center"
@@ -38,7 +38,7 @@
                        Padding="0"
                        BorderColor="Transparent"
                        BackgroundColor="Transparent"
-                       Style="{StaticResource FrameStyle}">
+                       >
                     <Button WidthRequest="50"
                             BackgroundColor="Transparent"
                             Clicked="Button_OnClicked">
@@ -54,7 +54,7 @@
                              Grid.ColumnSpan="2"
                              IsRefreshing="{Binding IsRefreshing}"
                              Command="{Binding RefreshCommand}"
-                             RefreshColor="{ StaticResource ColorPrimary}">
+                             RefreshColor="{ StaticResource Primary}">
                     <controls:CollectionGroupedList Margin="15,0"
                                                     ItemsSource="{Binding ImageButtons}"/>
                 </RefreshView>

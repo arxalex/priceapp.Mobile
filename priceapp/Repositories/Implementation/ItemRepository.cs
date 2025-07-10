@@ -1,34 +1,37 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 using AutoMapper;
 using priceapp.Enums;
 using priceapp.Events.Delegates;
 using priceapp.Events.Models;
 using priceapp.LocalDatabase.Models;
 using priceapp.LocalDatabase.Repositories.Interfaces;
-using priceapp.Repositories.Implementation;
 using priceapp.Repositories.Interfaces;
 using priceapp.Repositories.Models;
 using priceapp.Utils;
 using RestSharp;
-using Xamarin.Forms;
-
-[assembly: Dependency(typeof(ItemRepository))]
 
 namespace priceapp.Repositories.Implementation;
 
 public class ItemRepository : IItemRepository
 {
-    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
-    private readonly RestClient _client = ConnectionUtil.GetRestClient();
-    private readonly IItemsLocalRepository _itemsLocalRepository = DependencyService.Get<IItemsLocalRepository>();
-    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
+    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository;
+    private readonly RestClient _client;
+    private readonly IItemsLocalRepository _itemsLocalRepository;
+    private readonly IMapper _mapper;
 
-    public event ConnectionErrorHandler BadConnectEvent;
+    public ItemRepository(
+        ICacheRequestsLocalRepository cacheRequestsLocalRepository,
+        IItemsLocalRepository itemsLocalRepository,
+        IMapper mapper,
+        HttpClient http) {
+        _cacheRequestsLocalRepository = cacheRequestsLocalRepository;
+        _itemsLocalRepository = itemsLocalRepository;
+        _mapper = mapper;
+        _client = ConnectionUtil.GetRestClient(http);
+    }
+
+    public event ConnectionErrorHandler? BadConnectEvent;
 
     public async Task<IList<ItemRepositoryModel>> GetItems(int categoryId,
         int from,
@@ -98,7 +101,7 @@ public class ItemRepository : IItemRepository
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
             BadConnectEvent?.Invoke(this,
-                new ConnectionErrorArgs() { Success = false, StatusCode = (int)response.StatusCode });
+                new ConnectionErrorArgs { Success = false, StatusCode = (int)response.StatusCode });
             return new List<ItemRepositoryModel>();
         }
 
@@ -122,7 +125,7 @@ public class ItemRepository : IItemRepository
         return list;
     }
 
-    public async Task<IList<ItemRepositoryModel>> SearchItems(string search,
+    public async Task<IList<ItemRepositoryModel>> SearchItems(string? search,
         int from,
         int to,
         double? xCord = null,
@@ -194,7 +197,7 @@ public class ItemRepository : IItemRepository
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
             BadConnectEvent?.Invoke(this,
-                new ConnectionErrorArgs() { Success = false, StatusCode = (int)response.StatusCode });
+                new ConnectionErrorArgs { Success = false, StatusCode = (int)response.StatusCode });
             return new List<ItemRepositoryModel>();
         }
 
@@ -282,7 +285,7 @@ public class ItemRepository : IItemRepository
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
             BadConnectEvent?.Invoke(this,
-                new ConnectionErrorArgs() { Success = false, StatusCode = (int)response.StatusCode });
+                new ConnectionErrorArgs { Success = false, StatusCode = (int)response.StatusCode });
             return null;
         }
 
@@ -321,7 +324,7 @@ public class ItemRepository : IItemRepository
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
             BadConnectEvent?.Invoke(this,
-                new ConnectionErrorArgs() { Success = false, StatusCode = (int)response.StatusCode });
+                new ConnectionErrorArgs { Success = false, StatusCode = (int)response.StatusCode });
             return new List<PriceRepositoryModel>();
         }
 
@@ -352,11 +355,11 @@ public class ItemRepository : IItemRepository
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
             BadConnectEvent?.Invoke(this,
-                new ConnectionErrorArgs() { Success = false, StatusCode = (int)response.StatusCode });
+                new ConnectionErrorArgs { Success = false, StatusCode = (int)response.StatusCode });
             return (new List<PriceRepositoryModel>(), 0);
         }
 
-        var content = JsonSerializer.Deserialize<ShoppingListResponse>(response.Content) ?? new ShoppingListResponse()
+        var content = JsonSerializer.Deserialize<ShoppingListResponse>(response.Content) ?? new ShoppingListResponse
         {
             shoppingList = new List<PriceRepositoryModel>(),
             economy = 0,

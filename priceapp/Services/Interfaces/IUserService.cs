@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using priceapp.Events.Models;
 using priceapp.Services.Models;
 

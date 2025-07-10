@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using priceapp.Events.Delegates;
 
 namespace priceapp.Services.Interfaces;

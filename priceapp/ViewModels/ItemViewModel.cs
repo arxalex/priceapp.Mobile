@@ -1,9 +1,6 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using AutoMapper;
 using priceapp.Annotations;
 using priceapp.Controls.Models;
@@ -15,40 +12,47 @@ using priceapp.Models;
 using priceapp.Repositories.Interfaces;
 using priceapp.Services.Interfaces;
 using priceapp.Utils;
-using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
-using Xamarin.Forms;
-using Xamarin.Forms.Internals;
-
-[assembly: Xamarin.Forms.Dependency(typeof(ItemViewModel))]
 
 namespace priceapp.ViewModels;
 
 public class ItemViewModel : IItemViewModel
 {
-    private readonly IBrandAlertRepository _brandAlertRepository = DependencyService.Get<IBrandAlertRepository>();
-    private readonly ILocationService _locationService = DependencyService.Get<ILocationService>();
-    private readonly IItemRepository _itemRepository = DependencyService.Get<IItemRepository>();
-    private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository = DependencyService.Get<IItemsToBuyLocalRepository>();
-    private readonly IShopRepository _shopRepository = DependencyService.Get<IShopRepository>();
-    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
-    private BrandAlert _brandAlert;
-    private Color _foreGroundColorBrandAlert;
+    private readonly IBrandAlertRepository _brandAlertRepository;
+    private readonly ILocationService _locationService;
+    private readonly IItemRepository _itemRepository;
+    private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository;
+    private readonly IShopRepository _shopRepository;
+    private readonly IMapper _mapper;
+    private BrandAlert? _brandAlert;
+    private Color? _foreGroundColorBrandAlert;
     private bool _isVisibleBrandAlert;
 
-    private Item _item;
+    private Item? _item;
 
-    public ItemViewModel()
-    {
+    public ItemViewModel(
+        IBrandAlertRepository brandAlertRepository, 
+        ILocationService locationService, 
+        IItemRepository itemRepository,
+        IItemsToBuyLocalRepository itemsToBuyLocalRepository,
+        IShopRepository shopRepository, 
+        IMapper mapper
+        ) {
+        _brandAlertRepository = brandAlertRepository;
+        _locationService = locationService;
+        _itemRepository = itemRepository;
+        _itemsToBuyLocalRepository = itemsToBuyLocalRepository;
+        _shopRepository = shopRepository;
+        _mapper = mapper;
         _itemRepository.BadConnectEvent += ItemRepositoryOnBadConnectEvent;
 
         PricesAndFilials = new ObservableCollection<ItemPriceInfo>();
     }
 
-    public event ConnectionErrorHandler BadConnectEvent;
-    public event LoadingHandler Loaded;
+    public event ConnectionErrorHandler? BadConnectEvent;
+    public event LoadingHandler? Loaded;
 
-    public Item Item
+    public Item? Item
     {
         get => _item;
         set
@@ -62,19 +66,19 @@ public class ItemViewModel : IItemViewModel
 
     public ObservableCollection<ItemPriceInfo> PricesAndFilials { get; set; }
 
-    public BrandAlert BrandAlert
+    public BrandAlert? BrandAlert
     {
         get => _brandAlert;
         set
         {
             _brandAlert = value;
-            IsVisibleBrandAlert = BrandAlert is { Message.Length: > 0 };
+            IsVisibleBrandAlert = BrandAlert.Message is { Length: > 0 };
             ForeGroundColorBrandAlert = ColorUtil.BlackOrWhiteFrontColorByBackground(BrandAlert.Color);
             OnPropertyChanged();
         }
     }
 
-    public Color ForeGroundColorBrandAlert
+    public Color? ForeGroundColorBrandAlert
     {
         get => _foreGroundColorBrandAlert;
         set
@@ -94,7 +98,7 @@ public class ItemViewModel : IItemViewModel
         }
     }
 
-    public async Task LoadAsync(Item item, Page page)
+    public async Task LoadAsync(Item? item, Page page)
     {
         var shops = _mapper.Map<IList<Shop>>(await _shopRepository.GetShops());
         var filials = _mapper.Map<IList<Filial>>(await _shopRepository.GetFilials());
@@ -106,10 +110,10 @@ public class ItemViewModel : IItemViewModel
                 Item.Id,
                 location.Longitude,
                 location.Latitude,
-                Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius)
+                Preferences.Get("locationRadius", Constants.DefaultRadius)
             ));
 
-        priceInfos.Select(x => new ItemPriceInfo()
+        priceInfos.Select(x => new ItemPriceInfo
         {
             Price = x.Price,
             ItemId = x.ItemId,
@@ -121,14 +125,14 @@ public class ItemViewModel : IItemViewModel
         {
             var shop = shops.Last(s => s.Id == x.ShopId);
             var filial = filials.Last(f => f.Id == x.FilialId);
-            return new ImageButtonModel()
+            return new ImageButtonModel
             {
                 Id = x.Id,
                 Image = shop.Icon,
                 PrimaryText = shop.Label,
                 SecondaryText = filial.Street + " " + filial.House,
                 AdditionalText = x.Quantity > 0 ? "Є в наявності" : "Немає в наявності",
-                AdditionalTextColor = x.Quantity > 0 ? (Color)Application.Current.Resources["ColorPrimary"] : Color.Red,
+                AdditionalTextColor = x.Quantity > 0 ? (Color)Application.Current.Resources["Primary"] : Colors.Red,
                 AccentText = x.Price + " грн",
                 Command = new Command(async () =>
                 {
@@ -142,7 +146,7 @@ public class ItemViewModel : IItemViewModel
             };
         }).ForEach(x => ItemButtons.Add(x));
 
-        if (Xamarin.Essentials.Preferences.Get("showRussiaSupportBrandAlerts",
+        if (Preferences.Get("showRussiaSupportBrandAlerts",
                 Constants.DefaultShowRussiaSupportBrandAlerts))
         {
             var alerts = await _brandAlertRepository.GetBrandAlerts(Item.Brand);
@@ -154,7 +158,7 @@ public class ItemViewModel : IItemViewModel
             }
         }
 
-        Loaded?.Invoke(this, new LoadingArgs()
+        Loaded?.Invoke(this, new LoadingArgs
         {
             Success = true,
             LoadedCount = 1,
@@ -164,7 +168,7 @@ public class ItemViewModel : IItemViewModel
 
     public async Task AddToCart(int? filialId = null)
     {
-        var itemToBuy = new ItemToBuy()
+        var itemToBuy = new ItemToBuy
         {
             Added = false,
             Count = 1,
@@ -174,7 +178,7 @@ public class ItemViewModel : IItemViewModel
         await _itemsToBuyLocalRepository.InsertAsync(_mapper.Map<ItemToBuyLocalDatabaseModel>(itemToBuy));
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     private void ItemRepositoryOnBadConnectEvent(object sender, ConnectionErrorArgs args)
     {

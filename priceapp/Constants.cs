@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace priceapp;
 
 public class Constants
@@ -19,8 +17,8 @@ public class Constants
         SQLite.SQLiteOpenFlags.Create |
         SQLite.SQLiteOpenFlags.SharedCache;
 
-    public static string DatabasePath => Path.Combine(Xamarin.Essentials.FileSystem.AppDataDirectory, DatabaseFilename);
+    public static string DatabasePath => Path.Combine(FileSystem.AppDataDirectory, DatabaseFilename);
 
     public static string CacheDatabasePath =>
-        Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, CacheDatabaseFilename);
+        Path.Combine(FileSystem.CacheDirectory, CacheDatabaseFilename);
 }

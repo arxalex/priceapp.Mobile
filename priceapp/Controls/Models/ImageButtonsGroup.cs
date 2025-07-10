@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace priceapp.Controls.Models;
 
 public class ImageButtonsGroup : List<ImageButtonModel>

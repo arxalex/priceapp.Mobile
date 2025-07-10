@@ -1,32 +1,34 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using priceapp.Annotations;
 using priceapp.Events.Delegates;
 using priceapp.Events.Models;
 using priceapp.Repositories.Interfaces;
 using priceapp.Services.Interfaces;
-using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
-using Xamarin.Forms;
-using MenuItem = priceapp.UI.MenuItem;
 
-[assembly: Xamarin.Forms.Dependency(typeof(AccountViewModel))]
+using MenuItem = priceapp.UI.MenuItem;
 
 namespace priceapp.ViewModels;
 
 public class AccountViewModel : IAccountViewModel
 {
-    private readonly IUserRepository _userRepository = DependencyService.Get<IUserRepository>(DependencyFetchTarget.NewInstance);
-    private readonly IUserService _userService = DependencyService.Get<IUserService>(DependencyFetchTarget.NewInstance);
-    private readonly ICacheService _cacheService = DependencyService.Get<ICacheService>();
-    private string _email;
+    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
+    private readonly ICacheService _cacheService;
+    private string? _email;
 
-    private string _username;
+    private string? _username;
 
-    public AccountViewModel()
-    {
+    public AccountViewModel(
+        IUserRepository userRepository, 
+        IUserService userService, 
+        ICacheService cacheService
+        ) {
+        _userRepository = userRepository;
+        _userService = userService;
+        _cacheService = cacheService;
         MenuItems.Add(new MenuItem {Label = "Налаштування", Glyph = "\ue8b8"});
         MenuItems.Add(new MenuItem {Label = "Підказки", Glyph = "\ue79a"});
         MenuItems.Add(new MenuItem {Label = "Новини", Glyph = "\ueb81"});
@@ -41,7 +43,7 @@ public class AccountViewModel : IAccountViewModel
 
     public ObservableCollection<MenuItem> MenuItems { get; set; } = new();
 
-    public string Username
+    public string? Username
     {
         get => _username;
         set
@@ -51,7 +53,7 @@ public class AccountViewModel : IAccountViewModel
         }
     }
 
-    public string Email
+    public string? Email
     {
         get => _email;
         set
@@ -73,7 +75,7 @@ public class AccountViewModel : IAccountViewModel
         }
 
         Loaded?.Invoke(this,
-            new LoadingArgs() {Success = true, LoadedCount = 1, Total = 1});
+            new LoadingArgs {Success = true, LoadedCount = 1, Total = 1});
     }
 
     public async Task ChangeAccount()
@@ -82,9 +84,9 @@ public class AccountViewModel : IAccountViewModel
         _userService.LogoutUser();
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
-    public event ConnectionErrorHandler BadConnectEvent;
-    public event LoadingHandler Loaded;
+    public event PropertyChangedEventHandler? PropertyChanged;
+    public event ConnectionErrorHandler? BadConnectEvent;
+    public event LoadingHandler? Loaded;
 
     private void UserRepositoryOnBadConnectEvent(object sender, ConnectionErrorArgs args)
     {

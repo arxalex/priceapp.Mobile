@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using AutoMapper;
 using priceapp.Annotations;
@@ -19,32 +15,37 @@ using priceapp.Models;
 using priceapp.Repositories.Interfaces;
 using priceapp.Repositories.Models;
 using priceapp.Services.Interfaces;
-using priceapp.ViewModels;
+using priceapp.Utils;
 using priceapp.ViewModels.Interfaces;
-using Xamarin.Forms;
-using Xamarin.Forms.Internals;
-
-[assembly: Xamarin.Forms.Dependency(typeof(CartViewModel))]
 
 namespace priceapp.ViewModels;
 
 public class CartViewModel : ICartViewModel
 {
     private const int RefreshDuration = 0;
-    private readonly ILocationService _locationService = DependencyService.Get<ILocationService>();
-    private readonly IItemRepository _itemRepository = DependencyService.Get<IItemRepository>();
-
-    private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository = DependencyService.Get<IItemsToBuyLocalRepository>();
-    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
-    private readonly IShopRepository _shopRepository = DependencyService.Get<IShopRepository>();
+    private readonly ILocationService _locationService;
+    private readonly IItemRepository _itemRepository;
+    private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository;
+    private readonly IMapper _mapper;
+    private readonly IShopRepository _shopRepository;
     private string _economy;
 
-    private string _headerText;
+    private string? _headerText;
     private bool _isRefreshing;
     private ObservableCollection<ImageButtonsGroup> _imageButtons = new();
 
-    public CartViewModel()
-    {
+    public CartViewModel(
+        ILocationService locationService, 
+        IItemRepository itemRepository,
+        IItemsToBuyLocalRepository itemsToBuyLocalRepository,
+        IShopRepository shopRepository,
+        IMapper mapper
+        ) {
+        _locationService = locationService;
+        _itemRepository = itemRepository;
+        _itemsToBuyLocalRepository = itemsToBuyLocalRepository;
+        _shopRepository = shopRepository;
+        _mapper = mapper;
         _economy = "0.00 грн";
 
         _itemsToBuyLocalRepository.BadConnectEvent += ItemsToBuyLocalRepositoryOnBadConnectEvent;
@@ -52,8 +53,8 @@ public class CartViewModel : ICartViewModel
         _shopRepository.BadConnectEvent += ItemsToBuyLocalRepositoryOnBadConnectEvent;
     }
 
-    public event LoadingHandler Loaded;
-    public event ConnectionErrorHandler BadConnectEvent;
+    public event LoadingHandler? Loaded;
+    public event ConnectionErrorHandler? BadConnectEvent;
 
     public bool IsRefreshing
     {
@@ -93,9 +94,9 @@ public class CartViewModel : ICartViewModel
         }
     }
 
-    public Page Page { get; set; }
+    public Page? Page { get; set; }
 
-    public string HeaderText
+    public string? HeaderText
     {
         get => _headerText;
         set
@@ -117,7 +118,7 @@ public class CartViewModel : ICartViewModel
             Economy = "0.00 грн";
             HeaderText = "Доступно 0 з 0";
             Loaded?.Invoke(this,
-                new LoadingArgs()
+                new LoadingArgs
                     { Success = true, LoadedCount = items.Count, Total = 0 });
             return;
         }
@@ -143,8 +144,8 @@ public class CartViewModel : ICartViewModel
         var (itemsResult, economy) = await _itemRepository.GetShoppingList(
             _mapper.Map<List<ShoppingListRepositoryModel>>(itemsToBuyListPreProcessed),
             location.Longitude, location.Latitude,
-            Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius),
-            (CartProcessingType)Xamarin.Essentials.Preferences.Get("cartProcessingType",
+            Preferences.Get("locationRadius", Constants.DefaultRadius),
+            (CartProcessingType)Preferences.Get("cartProcessingType",
                 (int)CartProcessingType.MultipleMarketsLowest));
 
         if (itemsResult.Count == 0)
@@ -152,7 +153,7 @@ public class CartViewModel : ICartViewModel
             Economy = "0.00 грн";
             HeaderText = "Доступно 0 з " + itemsToBuyListPreProcessed.Count;
             Loaded?.Invoke(this,
-                new LoadingArgs()
+                new LoadingArgs
                     { Success = false, LoadedCount = items.Count, Total = itemsToBuyListPreProcessed.Count });
             return;
         }
@@ -178,7 +179,7 @@ public class CartViewModel : ICartViewModel
                 continue;
             }
 
-            var itemToBuy = new ItemToBuy()
+            var itemToBuy = new ItemToBuy
             {
                 RecordId = item.RecordId,
                 Added = true,
@@ -195,13 +196,13 @@ public class CartViewModel : ICartViewModel
         
         var query = from item in itemsToBuyListUngrouped
             group item by item.Filial.City + ", " + item.Filial.Street + " " + item.Filial.House + ", " +
-            shops.Last(y => y.id == item.Filial.Shop.Id).label into grouped
+                          shops.Last(y => y.id == item.Filial.Shop.Id).label into grouped
             select new
             {
                 grouped.Key,
                 Result = grouped.Select(x =>
                 {
-                    return new ImageButtonModel()
+                    return new ImageButtonModel
                     {
                         Id = x.RecordId,
                         Image = x.Item.Image,
@@ -235,7 +236,7 @@ public class CartViewModel : ICartViewModel
         HeaderText = "Доступно " + itemsToBuyListUngrouped.Count + " з " + itemsToBuyListPreProcessed.Count;
 
         Loaded?.Invoke(this,
-            new LoadingArgs() { Success = true, LoadedCount = items.Count, Total = itemsToBuyListPreProcessed.Count });
+            new LoadingArgs { Success = true, LoadedCount = items.Count, Total = itemsToBuyListPreProcessed.Count });
     }
 
     private async Task ChangeCartItem(ItemToBuy model)
@@ -257,7 +258,7 @@ public class CartViewModel : ICartViewModel
         await _itemsToBuyLocalRepository.DeleteAllAsync();
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     private void ItemsToBuyLocalRepositoryOnBadConnectEvent(object sender, ConnectionErrorArgs args)
     {

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewsModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
              x:Class="priceapp.Views.OnboardingPage"
              x:DataType="viewsModels:IOnboardingViewModel"
-             Style="{StaticResource PageStyle}"
+             
              Padding="0">
     <ContentPage.Content>
         <Grid Padding="15,20">
@@ -43,12 +43,12 @@
                                 <Label Text="{Binding Title}"
                                        FontAttributes="Bold"
                                        HorizontalTextAlignment="Center"
-                                       Style="{StaticResource TextStyle}"
+                                       
                                        FontSize="Title" />
 
                                 <Label Text="{Binding Content}"
                                        HorizontalTextAlignment="Center"
-                                       Style="{StaticResource TextStyle}"
+                                       
                                        FontSize="Body" />
 
                             </FlexLayout>
@@ -63,12 +63,12 @@
                            IndicatorSize="7"
                            IndicatorsShape="Circle"
                            IndicatorColor="DarkGray"
-                           SelectedIndicatorColor="{ StaticResource ColorPrimary}"
+                           SelectedIndicatorColor="{ StaticResource Primary}"
                            HorizontalOptions="Center"
                            VerticalOptions="Center" />
             <Button Grid.Row="2"
                     Grid.Column="0"
-                    Style="{StaticResource ButtonStyle}"
+                    
                     Text="{Binding SkipButtonText}"
                     BackgroundColor="Transparent"
                     TextColor="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}"
@@ -76,7 +76,7 @@
                     Clicked="SkipButton_OnClicked" />
             <Button Grid.Row="2"
                     Grid.Column="2"
-                    Style="{StaticResource ButtonStyle}"
+                    
                     Text="{Binding NextButtonText}"
                     CornerRadius="20"
                     Clicked="NextButton_OnClicked" />

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using priceapp.Events.Delegates;
 using priceapp.Repositories.Models;
 

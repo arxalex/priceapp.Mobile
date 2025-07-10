@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="priceapp.Controls.NotFound"
              x:Name="Page"
@@ -14,15 +14,15 @@
     </ContentView.Margin>
     <ContentView.Content>
         <StackLayout>
-            <Label Style="{StaticResource PageTitle}"
+            <Label Style="{StaticResource Headline}"
                    Text="Тут пусто :(" 
-                   TextColor="{ StaticResource ColorPrimary}"/>
-            <Label Style="{StaticResource TextStyle}"
+                   TextColor="{ StaticResource Primary}"/>
+            <Label 
                    HorizontalTextAlignment="Center"
                    Margin="0, 0, 0, 7"
                    Text="Нічого не знайдено в вашемо районі. Спробуйте змінити радіус пошуку, геолокацію або спробуйте в іншому місці" />
             <Button Clicked="Button_OnClicked"
-                    Style="{StaticResource ButtonStyle}"
+                    
                     Text="Перейти до налаштувань"/>
         </StackLayout>
     </ContentView.Content>

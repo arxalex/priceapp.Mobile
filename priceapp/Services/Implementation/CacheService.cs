@@ -1,23 +1,38 @@
-using System.Threading.Tasks;
 using priceapp.LocalDatabase.Repositories.Interfaces;
-using priceapp.Services.Implementation;
 using priceapp.Services.Interfaces;
-using Xamarin.Forms;
-
-[assembly: Dependency(typeof(CacheService))]
 
 namespace priceapp.Services.Implementation;
 
 public class CacheService : ICacheService
 {
-    private readonly IBrandAlertsLocalRepository _brandAlertsLocalRepository = DependencyService.Get<IBrandAlertsLocalRepository>();
-    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
-    private readonly ICategoriesLocalRepository _categoriesLocalRepository = DependencyService.Get<ICategoriesLocalRepository>();
-    private readonly IFilialsLocalRepository _filialsLocalRepository = DependencyService.Get<IFilialsLocalRepository>();
-    private readonly IItemsLocalRepository _itemsLocalRepository = DependencyService.Get<IItemsLocalRepository>();
-    private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository = DependencyService.Get<IItemsToBuyLocalRepository>();
-    private readonly IShopsLocalRepository _shopsLocalRepository = DependencyService.Get<IShopsLocalRepository>();    
-    private readonly ILocationService _locationService = DependencyService.Get<ILocationService>();
+    private readonly IBrandAlertsLocalRepository _brandAlertsLocalRepository;
+    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository;
+    private readonly ICategoriesLocalRepository _categoriesLocalRepository;
+    private readonly IFilialsLocalRepository _filialsLocalRepository;
+    private readonly IItemsLocalRepository _itemsLocalRepository;
+    private readonly IItemsToBuyLocalRepository _itemsToBuyLocalRepository;
+    private readonly IShopsLocalRepository _shopsLocalRepository;    
+    private readonly ILocationService _locationService;
+
+    public CacheService(
+        IBrandAlertsLocalRepository brandAlertsLocalRepository, 
+        ICacheRequestsLocalRepository cacheRequestsLocalRepository, 
+        ICategoriesLocalRepository categoriesLocalRepository, 
+        IFilialsLocalRepository filialsLocalRepository, 
+        IItemsLocalRepository itemsLocalRepository, 
+        IItemsToBuyLocalRepository itemsToBuyLocalRepository,
+        IShopsLocalRepository shopsLocalRepository,
+        ILocationService locationService)
+    {
+        _brandAlertsLocalRepository = brandAlertsLocalRepository;
+        _cacheRequestsLocalRepository = cacheRequestsLocalRepository;
+        _categoriesLocalRepository = categoriesLocalRepository;
+        _filialsLocalRepository = filialsLocalRepository;
+        _itemsLocalRepository = itemsLocalRepository;
+        _itemsToBuyLocalRepository = itemsToBuyLocalRepository;
+        _shopsLocalRepository = shopsLocalRepository;
+        _locationService = locationService;
+    }
 
     public async Task ClearAsync()
     {

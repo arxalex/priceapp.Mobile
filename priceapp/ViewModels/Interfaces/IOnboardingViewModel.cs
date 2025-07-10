@@ -7,7 +7,7 @@ namespace priceapp.ViewModels.Interfaces;
 public interface IOnboardingViewModel : INotifyPropertyChanged
 {
     ObservableCollection<OnboardingItem> Items { get; set; }
-    string NextButtonText { get; set; }
+    string? NextButtonText { get; set; }
     string SkipButtonText { get; set; }
     int Position { get; set; }
 }

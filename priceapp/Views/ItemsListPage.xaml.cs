@@ -1,21 +1,18 @@
-using System;
 using priceapp.Events.Models;
 using priceapp.ViewModels.Interfaces;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace priceapp.Views;
 
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class ItemsListPage
 {
-    private readonly IItemsListViewModel _itemsListViewModel = DependencyService.Get<IItemsListViewModel>(DependencyFetchTarget.NewInstance);
+    private readonly IItemsListViewModel _itemsListViewModel;
     private bool _isBusy;
 
-    public ItemsListPage(int categoryId, string categoryName)
+    public ItemsListPage(int categoryId, string? categoryName, IItemsListViewModel itemsListViewModel)
     {
         InitializeComponent();
         CategoryName = categoryName;
+        _itemsListViewModel = itemsListViewModel;
         IsBusy = false;
         HeaderBackButton.Label = CategoryName;
 
@@ -35,7 +32,7 @@ public partial class ItemsListPage
         _itemsListViewModel.LoadAsync(Navigation);
     }
 
-    private string CategoryName { get; set; }
+    private string? CategoryName { get; set; }
 
     private void ItemsListViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
     {

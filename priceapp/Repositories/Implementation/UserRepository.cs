@@ -1,24 +1,24 @@
 using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 using priceapp.Events.Delegates;
 using priceapp.Events.Models;
-using priceapp.Repositories.Implementation;
 using priceapp.Repositories.Interfaces;
 using priceapp.Repositories.Models;
 using priceapp.Utils;
 using RestSharp;
-using Xamarin.Forms;
-
-[assembly: Dependency(typeof(UserRepository))]
 
 namespace priceapp.Repositories.Implementation;
 
 public class UserRepository : IUserRepository
 {
-    private readonly RestClient _client = ConnectionUtil.GetRestClient();
+    private readonly RestClient _client;
 
-    public event ConnectionErrorHandler BadConnectEvent;
+    public UserRepository(HttpClient http)
+    {
+        _client = ConnectionUtil.GetRestClient(http);
+    }
+
+    public event ConnectionErrorHandler? BadConnectEvent;
 
     public async Task<UserRepositoryModel> GetUser()
     {
@@ -28,7 +28,7 @@ public class UserRepository : IUserRepository
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
             BadConnectEvent?.Invoke(this,
-                new ConnectionErrorArgs() {Success = false, StatusCode = (int) response.StatusCode});
+                new ConnectionErrorArgs {Success = false, StatusCode = (int) response.StatusCode});
             return null;
         }
 
@@ -39,7 +39,7 @@ public class UserRepository : IUserRepository
     {
         var request = new RestRequest("User/login", Method.Post);
 
-        var body = new LoginRequestModel()
+        var body = new LoginRequestModel
         {
             username = username,
             password = password
@@ -52,14 +52,14 @@ public class UserRepository : IUserRepository
 
         if (response.Content == null)
         {
-            return new LoginResultModel(){Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong};
+            return new LoginResultModel {Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong};
         }
         
         if (response.StatusCode == HttpStatusCode.BadRequest)
         {
             var result = JsonSerializer.Deserialize<ErrorResponseModel>(response.Content);
 
-            var resultModel = new LoginResultModel(){Succsess = false};
+            var resultModel = new LoginResultModel {Succsess = false};
             resultModel.Message = TranslateUtill.TranslateException(result.message, username, username);
 
             return resultModel;
@@ -72,10 +72,10 @@ public class UserRepository : IUserRepository
             ConnectionUtil.RemoveUserInfo();
             await ConnectionUtil.UpdateToken(result.token);
 
-            return new LoginResultModel() { Succsess = true };
+            return new LoginResultModel { Succsess = true };
         }
 
-        return new LoginResultModel() { Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong };
+        return new LoginResultModel { Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong };
     }
 
     public async Task<RegisterResultModel> Register(string username, string email, string password)
@@ -94,14 +94,14 @@ public class UserRepository : IUserRepository
         
         if (response.Content == null)
         {
-            return new RegisterResultModel(){Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong};
+            return new RegisterResultModel {Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong};
         }
         
         if (response.StatusCode == HttpStatusCode.BadRequest)
         {
             var result = JsonSerializer.Deserialize<ErrorResponseModel>(response.Content);
 
-            var resultModel = new RegisterResultModel(){Succsess = false};
+            var resultModel = new RegisterResultModel {Succsess = false};
             resultModel.Message = TranslateUtill.TranslateException(result.message, username, email);
 
             return resultModel;
@@ -111,17 +111,17 @@ public class UserRepository : IUserRepository
         {
             var result = JsonSerializer.Deserialize<SuccessRepositoryModel>(response.Content);
 
-            return new RegisterResultModel() { Succsess = result.status };
+            return new RegisterResultModel { Succsess = result.status };
         }
 
-        return new RegisterResultModel() { Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong };
+        return new RegisterResultModel { Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong };
     }
     
     public async Task<DeleteResultModel> Delete(string password)
     {
         var request = new RestRequest("User/delete", Method.Post);
 
-        var body = new DeleteRequestModel()
+        var body = new DeleteRequestModel
         {
             password = password
         };
@@ -133,14 +133,14 @@ public class UserRepository : IUserRepository
 
         if (response.Content == null)
         {
-            return new DeleteResultModel(){Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong};
+            return new DeleteResultModel {Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong};
         }
         
         if (response.StatusCode == HttpStatusCode.BadRequest)
         {
             var result = JsonSerializer.Deserialize<ErrorResponseModel>(response.Content);
 
-            var resultModel = new DeleteResultModel(){Succsess = false};
+            var resultModel = new DeleteResultModel {Succsess = false};
             resultModel.Message = TranslateUtill.TranslateException(result.message);
 
             return resultModel;
@@ -150,10 +150,10 @@ public class UserRepository : IUserRepository
         {
             var result = JsonSerializer.Deserialize<DeleteRepositoryModel>(response.Content);
 
-            return new DeleteResultModel() { Succsess = result.status };
+            return new DeleteResultModel { Succsess = result.status };
         }
 
-        return new DeleteResultModel() { Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong };
+        return new DeleteResultModel { Succsess = false, Message = ExceptionMessagesTranslated.SomethingWentWrong };
     }
 
     public async Task<bool> IsUserLoggedIn()

@@ -1,57 +1,55 @@
-using System;
 using priceapp.Events.Models;
+using priceapp.Services.Interfaces;
 using priceapp.ViewModels.Interfaces;
-using Xamarin.Essentials;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
-namespace priceapp.Views
+namespace priceapp.Views;
+
+public partial class LoginPage
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LoginPage
+    private readonly ILoginViewModel _loginViewModel;
+    private readonly IServiceProvider _serviceProvider;
+
+    public LoginPage(ILoginViewModel loginViewModel, IServiceProvider serviceProvider)
     {
-        private readonly ILoginViewModel _loginViewModel = DependencyService.Get<ILoginViewModel>(DependencyFetchTarget.NewInstance);
+        InitializeComponent();
+        _loginViewModel = loginViewModel;
+        _serviceProvider = serviceProvider;
 
-        public LoginPage()
-        {
-            InitializeComponent();
-            
-            _loginViewModel.LoginSuccess += LoginViewModelOnLoginSuccess;
-        }
+        _loginViewModel.LoginSuccess += LoginViewModelOnLoginSuccess;
+    }
 
-        private void LoginViewModelOnLoginSuccess(object sender, ProcessedArgs args)
+    private void LoginViewModelOnLoginSuccess(object sender, ProcessedArgs args)
+    {
+        if (args.Success)
         {
-            if (args.Success)
+            if (VersionTracking.IsFirstLaunchEver)
             {
-                if (VersionTracking.IsFirstLaunchEver)
-                {
-                    Application.Current.MainPage = new OnboardingPage();
-                }
-                else
-                {
-                    Application.Current.MainPage = new MainPage();
-                }
+                Application.Current.Windows[0].Page = new OnboardingPage(_serviceProvider.GetRequiredService<IOnboardingViewModel>(), _serviceProvider.GetRequiredService<IUserService>(), _serviceProvider);
             }
             else
             {
-                ProcessedFrame.IsVisible = true;
-                ProcessedLabel.Text = args.Message;
+                Application.Current.Windows[0].Page = new MainPage();
             }
         }
-
-        private async void Button_OnClicked(object sender, EventArgs e)
+        else
         {
-            await _loginViewModel.LoginUser(EntryEmail.Text, EntryPassword.Text);
+            ProcessedFrame.IsVisible = true;
+            ProcessedLabel.Text = args.Message;
         }
+    }
 
-        private async void ButtonLoginAsGuest_OnClicked(object sender, EventArgs e)
-        {
-            await _loginViewModel.LoginAsGuest();
-        }
+    private async void Button_OnClicked(object sender, EventArgs e)
+    {
+        await _loginViewModel.LoginUser(EntryEmail.Text, EntryPassword.Text);
+    }
 
-        private void ButtonRegistration_OnClicked(object sender, EventArgs e)
-        {
-            Application.Current.MainPage = new RegisterPage();
-        }
+    private async void ButtonLoginAsGuest_OnClicked(object sender, EventArgs e)
+    {
+        await _loginViewModel.LoginAsGuest();
+    }
+
+    private void ButtonRegistration_OnClicked(object sender, EventArgs e)
+    {
+        Application.Current.Windows[0].Page = new RegisterPage(_serviceProvider.GetRequiredService<IRegistrationViewModel>(), _serviceProvider);
     }
 }

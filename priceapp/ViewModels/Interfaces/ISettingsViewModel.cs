@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.ComponentModel;
-using Xamarin.Essentials;
 
 namespace priceapp.ViewModels.Interfaces;
 

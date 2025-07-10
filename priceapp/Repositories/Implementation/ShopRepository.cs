@@ -1,32 +1,38 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 using AutoMapper;
 using priceapp.Events.Delegates;
 using priceapp.Events.Models;
 using priceapp.LocalDatabase.Models;
 using priceapp.LocalDatabase.Repositories.Interfaces;
-using priceapp.Repositories.Implementation;
 using priceapp.Repositories.Interfaces;
 using priceapp.Repositories.Models;
 using priceapp.Utils;
 using RestSharp;
-using Xamarin.Forms;
 
-[assembly: Dependency(typeof(ShopRepository))]
 namespace priceapp.Repositories.Implementation;
 
 public class ShopRepository : IShopRepository
 {
-    public event ConnectionErrorHandler BadConnectEvent;
-    private readonly RestClient _client = ConnectionUtil.GetRestClient();
-    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
-    private readonly IShopsLocalRepository _shopsLocalRepository = DependencyService.Get<IShopsLocalRepository>();
-    private readonly IFilialsLocalRepository _filialsLocalRepository = DependencyService.Get<IFilialsLocalRepository>();
-    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
+    public event ConnectionErrorHandler? BadConnectEvent;
+    private readonly RestClient _client;
+    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository;
+    private readonly IShopsLocalRepository _shopsLocalRepository;
+    private readonly IFilialsLocalRepository _filialsLocalRepository;
+    private readonly IMapper _mapper;
+
+    public ShopRepository(
+        ICacheRequestsLocalRepository cacheRequestsLocalRepository,
+        IShopsLocalRepository shopsLocalRepository,
+        IFilialsLocalRepository filialsLocalRepository,
+        IMapper mapper,
+        HttpClient http) {
+        _cacheRequestsLocalRepository = cacheRequestsLocalRepository;
+        _shopsLocalRepository = shopsLocalRepository;
+        _filialsLocalRepository = filialsLocalRepository;
+        _mapper = mapper;
+        _client = ConnectionUtil.GetRestClient(http);
+    }
 
     public async Task<IList<ShopRepositoryModel>> GetShops()
     {
@@ -51,7 +57,7 @@ public class ShopRepository : IShopRepository
         var response = await _client.ExecuteAsync(request);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
-            BadConnectEvent?.Invoke(this, new ConnectionErrorArgs(){Success = false, StatusCode = (int) response.StatusCode});
+            BadConnectEvent?.Invoke(this, new ConnectionErrorArgs {Success = false, StatusCode = (int) response.StatusCode});
             return new List<ShopRepositoryModel>();
         }
 
@@ -98,7 +104,7 @@ public class ShopRepository : IShopRepository
         var response = await _client.ExecuteAsync(request);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
-            BadConnectEvent?.Invoke(this, new ConnectionErrorArgs(){Success = false, StatusCode = (int) response.StatusCode});
+            BadConnectEvent?.Invoke(this, new ConnectionErrorArgs {Success = false, StatusCode = (int) response.StatusCode});
             return new List<FilialRepositoryModel>();
         }
 
@@ -155,7 +161,7 @@ public class ShopRepository : IShopRepository
         var response = await _client.ExecuteAsync(request);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
-            BadConnectEvent?.Invoke(this, new ConnectionErrorArgs(){Success = false, StatusCode = (int) response.StatusCode});
+            BadConnectEvent?.Invoke(this, new ConnectionErrorArgs {Success = false, StatusCode = (int) response.StatusCode});
             return new List<FilialRepositoryModel>();
         }
 

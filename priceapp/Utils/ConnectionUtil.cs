@@ -1,9 +1,4 @@
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using priceapp.WebServices;
 using RestSharp;
-using Xamarin.Forms;
 
 namespace priceapp.Utils;
 
@@ -11,20 +6,15 @@ public static class ConnectionUtil
 {
     private static void SetToken(this RestClient client)
     {
-        var token = Xamarin.Essentials.SecureStorage.GetAsync("token").Result;
+        var token = SecureStorage.GetAsync("token").Result;
         if (!string.IsNullOrEmpty(token))
         {
             client.AddDefaultHeader("Authorization", $"Bearer {token}");
         }
     }
 
-    public static RestClient GetRestClient()
+    public static RestClient GetRestClient(HttpClient httpClient)
     {
-        var priceAppWebAccess = DependencyService.Get<IPriceAppWebAccess>();
-        var httpClient = new HttpClient(priceAppWebAccess.GetHttpClientHandler())
-        {
-            BaseAddress = new Uri(Constants.ApiUrl)
-        };
         RestClient client = new RestClient(httpClient);
 
         client.SetToken();
@@ -33,39 +23,39 @@ public static class ConnectionUtil
 
     public static async Task UpdateToken(string token)
     {
-        await Xamarin.Essentials.SecureStorage.SetAsync("token", token);
+        await SecureStorage.SetAsync("token", token);
     }
 
     public static void RemoveToken()
     {
-        Xamarin.Essentials.SecureStorage.Remove("token");
+        SecureStorage.Remove("token");
     }
 
     public static async Task<bool> IsTokenExists()
     {
-        return !string.IsNullOrEmpty(await Xamarin.Essentials.SecureStorage.GetAsync("token"));
+        return !string.IsNullOrEmpty(await SecureStorage.GetAsync("token"));
     }
     
     public static void RemoveUserInfo()
     {
-        Xamarin.Essentials.SecureStorage.Remove("username");
-        Xamarin.Essentials.SecureStorage.Remove("email");
+        SecureStorage.Remove("username");
+        SecureStorage.Remove("email");
     }
     
     public static async Task<bool> IsUserInfoExists()
     {
-        return !string.IsNullOrEmpty(await Xamarin.Essentials.SecureStorage.GetAsync("username"));
+        return !string.IsNullOrEmpty(await SecureStorage.GetAsync("username"));
     }
     
-    public static async Task UpdateUserInfo(string username, string email)
+    public static async Task UpdateUserInfo(string? username, string? email)
     {
-        await Xamarin.Essentials.SecureStorage.SetAsync("username", username);
-        await Xamarin.Essentials.SecureStorage.SetAsync("email", email);
+        await SecureStorage.SetAsync("username", username);
+        await SecureStorage.SetAsync("email", email);
     }
 
-    public static async Task<(string username, string email)> GetUserInfo()
+    public static async Task<(string username, string? email)> GetUserInfo()
     {
-        return (await Xamarin.Essentials.SecureStorage.GetAsync("username"),
-            await Xamarin.Essentials.SecureStorage.GetAsync("email"));
+        return (await SecureStorage.GetAsync("username"),
+            await SecureStorage.GetAsync("email"));
     }
 }

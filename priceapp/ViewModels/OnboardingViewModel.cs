@@ -3,16 +3,13 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using priceapp.Annotations;
 using priceapp.UI;
-using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
-
-[assembly: Xamarin.Forms.Dependency(typeof(OnboardingViewModel))]
 
 namespace priceapp.ViewModels;
 
 public class OnboardingViewModel : IOnboardingViewModel
 {
-    private string _nextButtonText;
+    private string? _nextButtonText;
     private int _position;
 
     public OnboardingViewModel()
@@ -70,7 +67,7 @@ public class OnboardingViewModel : IOnboardingViewModel
 
     public ObservableCollection<OnboardingItem> Items { get; set; }
 
-    public string NextButtonText
+    public string? NextButtonText
     {
         get => _nextButtonText;
         set
@@ -93,7 +90,7 @@ public class OnboardingViewModel : IOnboardingViewModel
         }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     [NotifyPropertyChangedInvocator]
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

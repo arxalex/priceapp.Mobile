@@ -1,22 +1,21 @@
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using priceapp.Annotations;
 using priceapp.Enums;
 using priceapp.Services.Interfaces;
-using priceapp.ViewModels;
 using priceapp.ViewModels.Interfaces;
-using Xamarin.Essentials;
-using Xamarin.Forms;
-
-[assembly: Xamarin.Forms.Dependency(typeof(SettingsViewModel))]
 
 namespace priceapp.ViewModels;
 
 public class SettingsViewModel : ISettingsViewModel
 {
-    private readonly ILocationService _locationService = DependencyService.Get<ILocationService>();
+    private readonly ILocationService _locationService;
+
+    public SettingsViewModel(ILocationService locationService)
+    {
+        _locationService = locationService;
+    }
+
     private Dictionary<CartProcessingType, string> CartProcessingTypesDictionary { get; set; } =
         new()
         {
@@ -83,7 +82,7 @@ public class SettingsViewModel : ISettingsViewModel
 
     public List<string> CartProcessingTypes => CartProcessingTypesDictionary.Values.ToList();
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     [NotifyPropertyChangedInvocator]
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

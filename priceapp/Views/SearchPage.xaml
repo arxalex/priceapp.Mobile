@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
              xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
              x:Class="priceapp.Views.SearchPage"
              x:DataType="viewModels:ISearchViewModel"
              x:Name="Page"
-             Style="{StaticResource PageStyle}">
+             >
     <ContentPage.Content>
         <StackLayout>
             <Grid Padding="15, 10">
@@ -26,21 +25,21 @@
                                          Color="{AppThemeBinding Dark={StaticResource ColorTextDark}, Light={StaticResource ColorText}, Default={StaticResource ColorText}}" />
                     </ImageButton.Source>
                 </ImageButton>
-                <ui:RdEntryBorderless Grid.Column="1"
-                                      x:Name="SearchEntry"
-                                      Placeholder="Пошук"
-                                      Margin="5,0,0,0"
-                                      HeightRequest="53"
-                                      Keyboard="Plain"
-                                      FontSize="18"
-                                      TextColor="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}"
-                                      TextChanged="SearchEntry_OnTextChanged"
-                                      Completed="SearchEntry_OnCompleted" />
+                <Entry Grid.Column="1"
+                       x:Name="SearchEntry"
+                       Placeholder="Пошук"
+                       Margin="5,0,0,0"
+                       HeightRequest="53"
+                       Keyboard="Plain"
+                       FontSize="18"
+                       TextColor="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}"
+                       TextChanged="SearchEntry_OnTextChanged"
+                       Completed="SearchEntry_OnCompleted" />
             </Grid>
             <BoxView HeightRequest="1" Color="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}" 
                      Margin="0, -7, 0, 10" />
             <ActivityIndicator x:Name="ActivityIndicator"
-                               Style="{StaticResource ActivityIndicatorStyle}" />
+                                />
             <controls:NotFound x:Name="NotFound"
                                Navigation="{Binding Source={x:Reference Page}, Path=Navigation}"
                                IsVisible="False"/>

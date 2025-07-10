@@ -1,33 +1,32 @@
-using System;
 using System.ComponentModel;
+using Microsoft.Maui.Maps;
 using priceapp.Events.Models;
 using priceapp.Models;
 using priceapp.Services.Interfaces;
 using priceapp.ViewModels.Interfaces;
-using Xamarin.Forms;
-using Xamarin.Forms.Maps;
-using Xamarin.Forms.Xaml;
 
 namespace priceapp.Views;
 
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class ItemPage
 {
-    private readonly IItemViewModel _itemViewModel = DependencyService.Get<IItemViewModel>(DependencyFetchTarget.NewInstance);
+    private readonly IItemViewModel _itemViewModel;
 
-    public ItemPage(Item item)
-    {
+    public ItemPage(
+        Item? item, 
+        IItemViewModel itemViewModel,
+        ILocationService locationService
+        ) {
         InitializeComponent();
+        _itemViewModel = itemViewModel;
         
         _itemViewModel.Loaded += ItemViewModelOnLoaded;
         _itemViewModel.BadConnectEvent += ItemViewModelOnBadConnectEvent;
         _itemViewModel.PropertyChanged += ItemViewModelOnPropertyChanged;
-        var locationService = DependencyService.Get<ILocationService>();
         var currentPosition = locationService.GetLocationAsync().Result;
         Map.MoveToRegion(
             MapSpan.FromCenterAndRadius(
-                new Position(currentPosition.Latitude, currentPosition.Longitude),
-                Distance.FromMeters(Xamarin.Essentials.Preferences.Get("locationRadius", 1000) + 100)
+                new Location(currentPosition.Latitude, currentPosition.Longitude),
+                Distance.FromMeters(Preferences.Get("locationRadius", 1000) + 100)
             )
         );
 

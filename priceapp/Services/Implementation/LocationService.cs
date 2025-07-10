@@ -1,12 +1,6 @@
-using System;
-using System.Threading.Tasks;
-using priceapp.Services.Implementation;
 using priceapp.Services.Interfaces;
-using Xamarin.Essentials;
-using Xamarin.Forms;
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-[assembly: Dependency(typeof(LocationService))]
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
 namespace priceapp.Services.Implementation;
 
@@ -121,7 +115,7 @@ public class LocationService : ILocationService
             }
         }
 
-        await Application.Current.MainPage.DisplayAlert("Неможливо отримати вашу геопозицію", message, "Закрити");
+        await Application.Current?.Windows[0].Page?.DisplayAlert("Неможливо отримати вашу геопозицію", message, "Закрити")!;
     }
 
     private static async Task RefreshLocationRequest()

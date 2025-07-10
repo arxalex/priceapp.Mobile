@@ -1,9 +1,6 @@
-using System.Net.Http;
+namespace priceapp.WebServices;
 
-namespace priceapp.WebServices
+public interface IPriceAppWebAccess
 {
-    public interface IPriceAppWebAccess
-    {
-        HttpClientHandler GetHttpClientHandler();
-    }
+    HttpClientHandler GetHttpClientHandler();
 }

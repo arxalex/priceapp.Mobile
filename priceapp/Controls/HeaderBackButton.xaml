@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="priceapp.Controls.HeaderBackButton"
              x:Name="Page">
@@ -22,7 +22,7 @@
               <Label Grid.Column="1"
                      Text="{Binding Source={x:Reference Page}, Path=Label}"
                      FontSize="20"
-                     Style="{StaticResource TextStyle}"
+                     
                      FontAttributes="Bold"
                      HeightRequest="35">
                      <Label.Margin>

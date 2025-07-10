@@ -1,20 +1,20 @@
-using System.Linq;
 using priceapp.Events.Models;
+using priceapp.Services.Interfaces;
 using priceapp.ViewModels.Interfaces;
-using Xamarin.Essentials;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+
 using MenuItem = priceapp.UI.MenuItem;
 
 namespace priceapp.Views;
 
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class AccountPage
 {
-    private readonly IAccountViewModel _accountViewModel = DependencyService.Get<IAccountViewModel>(DependencyFetchTarget.NewInstance);
-    public AccountPage()
+    private readonly IAccountViewModel _accountViewModel;
+    private readonly IServiceProvider _serviceProvider;
+    public AccountPage(IAccountViewModel accountViewModel, IServiceProvider serviceProvider)
     {
         InitializeComponent();
+        _accountViewModel = accountViewModel;
+        _serviceProvider = serviceProvider;
 
         _accountViewModel.Loaded += AccountViewModelOnLoaded;
         _accountViewModel.BadConnectEvent += AccountViewModelOnBadConnectEvent;
@@ -46,7 +46,7 @@ public partial class AccountPage
         switch (item.Label)
         {
             case "Налаштування":
-                Navigation.PushAsync(new SettingPage());
+                Navigation.PushAsync(new SettingPage(_serviceProvider.GetRequiredService<ISettingsViewModel>()));
                 break;
             case "Про додаток":
                 Navigation.PushAsync(new AboutPage());
@@ -55,7 +55,7 @@ public partial class AccountPage
                 _accountViewModel.ChangeAccount();
                 break;
             case "Підказки":
-                Application.Current.MainPage = new OnboardingPage();
+                if (Application.Current != null) Application.Current.Windows[0].Page = new OnboardingPage(_serviceProvider.GetRequiredService<IOnboardingViewModel>(), _serviceProvider.GetRequiredService<IUserService>(), _serviceProvider);
                 break;
             case "Питання та відповіді":
                 Browser.OpenAsync("https://priceapp.co/documents/faq", BrowserLaunchMode.SystemPreferred);
@@ -68,7 +68,7 @@ public partial class AccountPage
                 Browser.OpenAsync("https://t.me/price_app", BrowserLaunchMode.SystemPreferred);
                 break;
             case "Видалити акаунт":
-                Navigation.PushAsync(new DeleteAccountPage());
+                Navigation.PushAsync(new DeleteAccountPage(_serviceProvider.GetRequiredService<IDeleteAccountViewModel>(), _serviceProvider.GetRequiredService<IUserService>()));
                 break;
         }
 

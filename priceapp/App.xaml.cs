@@ -1,95 +1,85 @@
 ﻿using priceapp.Events.Models;
 using priceapp.Services.Interfaces;
-using priceapp.Utils;
+using priceapp.ViewModels.Interfaces;
 using priceapp.Views;
-using Xamarin.Essentials;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
-[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
+namespace priceapp;
 
-[assembly: ExportFont("MaterialIconsRegular.ttf", Alias = "Material")]
-[assembly: ExportFont("MaterialIconsOutlinedRegular.otf", Alias = "MaterialOutlined")]
-[assembly: ExportFont("MaterialIconsRoundRegular.otf", Alias = "MaterialRound")]
-[assembly: ExportFont("MaterialIconsSharpRegular.otf", Alias = "MaterialSharp")]
-[assembly: ExportFont("MaterialIconsTwoToneRegular.otf", Alias = "MaterialTwoTone")]
-
-namespace priceapp
+public partial class App
 {
-    public partial class App
+    private readonly IServiceProvider _serviceProvider;
+
+    public App(IServiceProvider serviceProvider)
     {
-        public App()
+        InitializeComponent();
+        _serviceProvider = serviceProvider;
+    }
+
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        return new Window(new MainPage());
+    }
+
+    public Page OnCreateWindow()
+    {
+        var connectionService = _serviceProvider.GetRequiredService<IConnectionService>();
+        var userService = _serviceProvider.GetRequiredService<IUserService>();
+        var locationService = _serviceProvider.GetRequiredService<ILocationService>();
+        
+        if (VersionTracking.IsFirstLaunchEver)
         {
-            InitializeComponent();
-            DependencyService.RegisterSingleton(MapperUtil.CreateMapper());
-            MainPage = new Page();
+            locationService.RefreshPermission().Wait();
         }
 
-        protected override async void OnStart()
+        locationService.RefreshLocation().Wait();
+
+        connectionService.BadConnectEvent += ConnectionServiceOnBadConnectEvent;
+
+        var isConnected = connectionService.IsConnectedAsync().Result;
+        if (!isConnected)
         {
-            var connectionService = DependencyService.Get<IConnectionService>(DependencyFetchTarget.NewInstance);
-            var userService = DependencyService.Get<IUserService>(DependencyFetchTarget.NewInstance);
-            var locationService = DependencyService.Get<ILocationService>(DependencyFetchTarget.NewInstance);
-            if (VersionTracking.IsFirstLaunchEver)
+            var isUserWasLoggedIn = userService.IsUserWasLoggedIn().Result;
+            if (isUserWasLoggedIn)
             {
-                await locationService.RefreshPermission();
+                return new MainPage();
             }
 
-            await locationService.RefreshLocation();
+            return new ConnectionErrorPage(new ConnectionErrorArgs
+                { Message = "Відсутнє зʼєднання з сервером", StatusCode = 404, Success = false });
+        }
 
-            connectionService.BadConnectEvent += ConnectionServiceOnBadConnectEvent;
+        var needUpdate = connectionService.IsAppNeedsUpdateAsync().Result;
+        switch (needUpdate)
+        {
+            case true:
+                return new UpdateAppPage();
+        }
 
-            var isConnected = await connectionService.IsConnectedAsync();
-            if (!isConnected)
+        var isLoggedIn = userService.IsUserLoggedIn().Result;
+        if (!isLoggedIn)
+        {
+            var loginResult = userService.LoginAsGuest().Result;
+            if (!loginResult.Success)
             {
-                var isUserWasLoggedIn = await userService.IsUserWasLoggedIn();
-                if (isUserWasLoggedIn)
+                return new ConnectionErrorPage(new ConnectionErrorArgs
                 {
-                    MainPage = new MainPage();
-                    return;
-                }
-                
-                MainPage = new ConnectionErrorPage(new ConnectionErrorArgs(){Message = "Відсутнє зʼєднання з сервером", StatusCode = 404, Success = false});
-                return;
+                    Message = loginResult.Message,
+                    StatusCode = 400,
+                    Success = loginResult.Success
+                });
             }
-
-            var needUpdate = await connectionService.IsAppNeedsUpdateAsync();
-            switch (needUpdate)
-            {
-                case null:
-                    return;
-                case true:
-                    MainPage = new UpdateAppPage();
-                    return;
-            }
-
-            var isLoggedIn = await userService.IsUserLoggedIn();
-            if (!isLoggedIn)
-            {
-                var loginResult = await userService.LoginAsGuest();
-                if (!loginResult.Success)
-                {
-                    MainPage = new ConnectionErrorPage(new ConnectionErrorArgs()
-                    {
-                        Message = loginResult.Message,
-                        StatusCode = 400,
-                        Success = loginResult.Success
-                    });
-                }
-            }
-            
-            if (VersionTracking.IsFirstLaunchEver)
-            {
-                MainPage = new OnboardingPage();
-                return;
-            }
-
-            MainPage = new MainPage();
         }
 
-        private void ConnectionServiceOnBadConnectEvent(object sender, ConnectionErrorArgs args)
+        if (VersionTracking.IsFirstLaunchEver)
         {
-            MainPage = new ConnectionErrorPage(args);
+            return new OnboardingPage(_serviceProvider.GetRequiredService<IOnboardingViewModel>(), _serviceProvider.GetRequiredService<IUserService>(), _serviceProvider);
         }
+
+        return new MainPage();
+    }
+
+    private void ConnectionServiceOnBadConnectEvent(object sender, ConnectionErrorArgs args)
+    {
+        Windows[0].Page = new ConnectionErrorPage(args);
     }
 }

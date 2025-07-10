@@ -1,12 +1,9 @@
-using System;
 using System.Windows.Input;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace priceapp.UI
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ContentButton : ContentView
+    
+    public partial class ContentButton
     {
         public ContentButton()
         {
@@ -15,12 +12,16 @@ namespace priceapp.UI
         
         public event EventHandler Tapped;
 
-        public static readonly BindableProperty CommandProperty = BindableProperty.Create<ContentButton, ICommand>(c => c.Command, null);
+        public static readonly BindableProperty CommandProperty = BindableProperty.Create(
+            nameof(Command),
+            typeof(ICommand),
+            typeof(ContentButton)
+        );
 
         public ICommand Command
         {
-            get { return (ICommand)GetValue(CommandProperty); }
-            set { SetValue(CommandProperty, value); }
+            get => (ICommand)GetValue(CommandProperty);
+            set => SetValue(CommandProperty, value);
         }
 
         private void TapGestureRecognizer_OnTapped(object sender, EventArgs e)

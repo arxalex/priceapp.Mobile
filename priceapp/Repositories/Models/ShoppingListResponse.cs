@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace priceapp.Repositories.Models;
 
 public class ShoppingListResponse

@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using priceapp.LocalDatabase.Models;
 using SQLite;
 

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:priceapp.UI;assembly=priceapp"
              xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
              xmlns:interfaces="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              x:Class="priceapp.Views.DeleteAccountPage"
              Title="Delete Account page"
              x:DataType="interfaces:IDeleteAccountViewModel"
              NavigationPage.HasNavigationBar="false"
-             Style="{StaticResource PageStyle}">
+             >
     <ContentPage.Content>
         <StackLayout>
             <controls:HeaderBackButton Label="Видалити акаунт"
@@ -18,36 +17,35 @@
             <StackLayout Padding="15, 0"
                          VerticalOptions="FillAndExpand">
                 <ActivityIndicator x:Name="ActivityIndicator"
-                                   Style="{StaticResource ActivityIndicatorStyle}" />
+                                    />
                 <Label Text="Дані про акаунт:"
-                       Style="{StaticResource TextStyle}" />
+                        />
                 <Label Text="{Binding Username}"
-                       Style="{StaticResource TextStyle}" />
+                        />
                 <Label Text="{Binding Email}"
-                       Style="{StaticResource TextStyle}" />
+                        />
                 <Label
                     Text="Видаляючи акаунт ви вже не зможете увійти в цей акаунт. Дані в додатку будуть очищені. Ви зможете знову зареєструватись використовуючи своє імʼя користувача та адресу електронної пошти."
-                    Style="{StaticResource TextStyle}" />
-                <local:RdEntryOutlined Keyboard="Default"
-                                       Placeholder="Пароль"
-                                       IsPassword="True"
-                                       ClearButtonVisibility="WhileEditing"
-                                       BorderColor="Red"
-                                       BackgroundColor="Transparent"
-                                       x:Name="EntryPassword" />
+                     />
+                <Entry Keyboard="Default"
+                       Placeholder="Пароль"
+                       IsPassword="True"
+                       ClearButtonVisibility="WhileEditing"
+                       BackgroundColor="Transparent"
+                       x:Name="EntryPassword" />
                 <Frame x:Name="ProcessedFrame"
                        IsVisible="False"
                        BackgroundColor="{AppThemeBinding Default=LightYellow, Light=LightYellow, Dark=#310}"
                        BorderColor="DarkOrange"
                        CornerRadius="5"
                        Margin="2"
-                       Style="{StaticResource FrameStyle}">
+                       >
                     <Frame.Content>
                         <Label x:Name="ProcessedLabel"
                                TextColor="DarkOrange" />
                     </Frame.Content>
                 </Frame>
-                <Button Style="{StaticResource ButtonStyle}"
+                <Button 
                         BackgroundColor="Red"
                         Text="Видалити акаунт"
                         Clicked="Button_OnClicked" />

@@ -1,20 +1,17 @@
-using System;
 using priceapp.Events.Models;
 using priceapp.ViewModels.Interfaces;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace priceapp.Views;
 
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class SearchItemsListPage
 {
-    private readonly ISearchItemsListViewModel _searchItemsListViewModel = DependencyService.Get<ISearchItemsListViewModel>(DependencyFetchTarget.NewInstance);
+    private readonly ISearchItemsListViewModel _searchItemsListViewModel;
     private bool _isBusy;
 
-    public SearchItemsListPage(string search)
+    public SearchItemsListPage(string? search, ISearchItemsListViewModel searchItemsListViewModel)
     {
         InitializeComponent();
+        _searchItemsListViewModel = searchItemsListViewModel;
         IsBusy = false;
         HeaderBackButton.Label = search;
 

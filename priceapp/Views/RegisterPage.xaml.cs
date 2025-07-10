@@ -1,19 +1,18 @@
-using System;
 using priceapp.Events.Models;
 using priceapp.ViewModels.Interfaces;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace priceapp.Views;
 
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class RegisterPage
 {
-    private readonly IRegistrationViewModel _registrationViewModel = DependencyService.Get<IRegistrationViewModel>(DependencyFetchTarget.NewInstance);
+    private readonly IRegistrationViewModel _registrationViewModel;
+    private readonly IServiceProvider _serviceProvider;
 
-    public RegisterPage()
+    public RegisterPage(IRegistrationViewModel registrationViewModel, IServiceProvider serviceProvider)
     {
         InitializeComponent();
+        _registrationViewModel = registrationViewModel;
+        _serviceProvider = serviceProvider;
         _registrationViewModel.RegisterSuccess += RegistrationViewModelOnRegisterSuccess;
     }
 
@@ -21,7 +20,7 @@ public partial class RegisterPage
     {
         if (args.Success)
         {
-            Application.Current.MainPage = new NavigationPage(new ConfirmEmailPage());
+            Application.Current.Windows[0].Page = new NavigationPage(new ConfirmEmailPage(_serviceProvider));
         }
         else
         {
@@ -37,6 +36,6 @@ public partial class RegisterPage
 
     private void ButtonLogin_OnClicked(object sender, EventArgs e)
     {
-        Application.Current.MainPage = new LoginPage();
+        Application.Current.Windows[0].Page = new LoginPage(_serviceProvider.GetRequiredService<ILoginViewModel>(), _serviceProvider);
     }
 }

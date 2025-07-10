@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
              x:Class="priceapp.Views.ConnectionErrorPage"
-             Style="{StaticResource PageStyle}">
+             >
     <ContentPage.Content>
         <StackLayout VerticalOptions="FillAndExpand">
             <controls:HeaderBackButton Label="Помилка"
@@ -12,19 +12,19 @@
                                        BackButtonClicked="HeaderBackButton_OnBackButtonClicked"
                                        IsVisible="False" />
             <Label Text="Упс, сало впало"
-                   TextColor="{ StaticResource ColorPrimary}"
-                   Style="{StaticResource PageTitle}"
+                   TextColor="{ StaticResource Primary}"
+                   Style="{StaticResource Headline}"
                    HorizontalTextAlignment="Center" />
             <Label Text="Щось пішло не так"
                    HorizontalTextAlignment="Center"
-                   Style="{StaticResource TextStyle}" />
+                    />
             <Label x:Name="StatusCodeLabel"
                    HorizontalTextAlignment="Center"
                    Style="{StaticResource TextSecondaryStyle}" />
             <Label x:Name="ErrorMessage"
                    HorizontalTextAlignment="Center"
                    Style="{StaticResource TextSecondaryStyle}" />
-            <Button Style="{StaticResource ButtonStyle}"
+            <Button 
                     Text="Перезавантажитись"
                     Margin="15, 5, 15,15"
                     Clicked="Button_OnClicked" />

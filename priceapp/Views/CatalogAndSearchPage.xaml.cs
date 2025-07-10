@@ -1,44 +1,41 @@
-using System;
 using priceapp.Events.Models;
+using priceapp.Services.Interfaces;
 using priceapp.ViewModels.Interfaces;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
-namespace priceapp.Views
+namespace priceapp.Views;
+
+public partial class CatalogAndSearchPage
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class CatalogAndSearchPage
+    private readonly IServiceProvider _serviceProvider;
+    public CatalogAndSearchPage(ICategoryViewModel categoryViewModel, IServiceProvider serviceProvider)
     {
-        public CatalogAndSearchPage()
-        {
-            InitializeComponent();
-            var categoryViewModel = DependencyService.Get<ICategoryViewModel>(DependencyFetchTarget.NewInstance);
-            categoryViewModel.Loaded += CategoryViewModelOnLoaded;
-            categoryViewModel.BadConnectEvent += CategoryViewModelOnBadConnectEvent;
+        InitializeComponent();
+        _serviceProvider = serviceProvider;
+        categoryViewModel.Loaded += CategoryViewModelOnLoaded;
+        categoryViewModel.BadConnectEvent += CategoryViewModelOnBadConnectEvent;
             
-            ActivityIndicator.IsRunning = true;
-            ActivityIndicator.IsVisible = true;
-            CollectionGrid.IsVisible = false;
-            categoryViewModel.LoadAsync(Navigation);
+        ActivityIndicator.IsRunning = true;
+        ActivityIndicator.IsVisible = true;
+        CollectionGrid.IsVisible = false;
+        categoryViewModel.LoadAsync(Navigation);
 
-            BindingContext = categoryViewModel;
-        }
+        BindingContext = categoryViewModel;
+    }
 
-        private void CategoryViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
-        {
-            Navigation.PushAsync(new ConnectionErrorPage(args));
-        }
+    private void CategoryViewModelOnBadConnectEvent(object sender, ConnectionErrorArgs args)
+    {
+        Navigation.PushAsync(new ConnectionErrorPage(args));
+    }
 
-        private void CategoryViewModelOnLoaded(object sender, LoadingArgs args)
-        {
-            ActivityIndicator.IsRunning = false;
-            ActivityIndicator.IsVisible = false;
-            CollectionGrid.IsVisible = true;
-        }
+    private void CategoryViewModelOnLoaded(object sender, LoadingArgs args)
+    {
+        ActivityIndicator.IsRunning = false;
+        ActivityIndicator.IsVisible = false;
+        CollectionGrid.IsVisible = true;
+    }
 
-        private void SearchButton_OnTapped(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new SearchPage());
-        }
+    private void SearchButton_OnTapped(object sender, EventArgs e)
+    {
+        Navigation.PushAsync(new SearchPage(_serviceProvider.GetRequiredService<ISearchViewModel>(), _serviceProvider));
     }
 }

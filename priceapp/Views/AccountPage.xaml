@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="priceapp.Views.AccountPage"
              xmlns:viewsModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
              x:DataType="viewsModels:IAccountViewModel"
              Padding="0"
-             Style="{StaticResource PageStyle}">
+             >
     <StackLayout>
         <Grid BackgroundColor="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}"
               Margin="0,0,0,0">
@@ -24,16 +24,16 @@
             <ActivityIndicator Grid.Row="0"
                                Grid.RowSpan="2"
                                x:Name="ActivityIndicator"
-                               Style="{StaticResource ActivityIndicatorStyle}" />
+                                />
             <Label Grid.Row="0"
                    Text="{Binding Username}"
                    FontSize="40"
                    Margin="0,0,0,-40"
-                   Style="{StaticResource TextStyle}" />
+                    />
             <Label Grid.Row="1"
                    Text="{Binding Email}"
                    Margin="0,40,0,-50"
-                   Style="{StaticResource TextStyle}" />
+                    />
         </Grid>
         <CollectionView x:Name="CollectionView"
                         ItemsSource="{Binding MenuItems}"
@@ -49,8 +49,8 @@
                         <Frame Grid.Column="0"
                                CornerRadius="14"
                                Padding="15, 5"
-                               BackgroundColor="{ StaticResource ColorPrimary}"
-                               Style="{StaticResource FrameStyle}">
+                               BackgroundColor="{ StaticResource Primary}"
+                               >
                             <Image>
                                 <Image.Source>
                                     <FontImageSource FontFamily="MaterialOutlined"
@@ -65,7 +65,7 @@
                                Text="{Binding Label}"
                                FontSize="Medium"
                                VerticalOptions="Center" 
-                               Style="{StaticResource TextStyle}"/>
+                               />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

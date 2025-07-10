@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using priceapp.Enums;
 using priceapp.Events.Delegates;
 using priceapp.Repositories.Models;
@@ -22,7 +20,7 @@ public interface IItemRepository
         double yCord,
         int radius, CartProcessingType type);
 
-    Task<IList<ItemRepositoryModel>> SearchItems(string search,
+    Task<IList<ItemRepositoryModel>> SearchItems(string? search,
         int from,
         int to,
         double? xCord = null,

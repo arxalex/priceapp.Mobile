@@ -1,24 +1,28 @@
-using System.Threading.Tasks;
 using priceapp.Events.Models;
 using priceapp.Repositories.Interfaces;
-using priceapp.Repositories.Models;
-using priceapp.Services.Implementation;
 using priceapp.Services.Interfaces;
 using priceapp.Services.Models;
 using priceapp.Utils;
+using priceapp.ViewModels.Interfaces;
 using priceapp.Views;
-using Xamarin.Forms;
-
-[assembly: Dependency(typeof(UserService))]
 
 namespace priceapp.Services.Implementation;
 
 public class UserService : IUserService
 {
-    private readonly IUserRepository _userRepository =
-        DependencyService.Get<IUserRepository>(DependencyFetchTarget.NewInstance);
+    private readonly IUserRepository _userRepository;
+    private readonly IConnectionService _connectionService;
+    private readonly IServiceProvider _serviceProvider;
 
-    private readonly IConnectionService _connectionService = DependencyService.Get<IConnectionService>();
+    public UserService(
+        IUserRepository userRepository,
+        IConnectionService connectionService, 
+        IServiceProvider serviceProvider
+        ) {
+        _userRepository = userRepository;
+        _connectionService = connectionService;
+        _serviceProvider = serviceProvider;
+    }
 
     public async Task<bool> IsUserLoggedIn()
     {
@@ -76,12 +80,12 @@ public class UserService : IUserService
     {
         if (username == null || password == null || email == null)
         {
-            return new ProcessedArgs() { Success = false, Message = "Усі поля обов'язкові до заповнення" };
+            return new ProcessedArgs { Success = false, Message = "Усі поля обов'язкові до заповнення" };
         }
 
         if (!StringUtil.IsValidUsername(username))
         {
-            return new ProcessedArgs()
+            return new ProcessedArgs
             {
                 Success = false,
                 Message =
@@ -91,7 +95,7 @@ public class UserService : IUserService
 
         if (!StringUtil.IsValidEmail(email))
         {
-            return new ProcessedArgs() { Success = false, Message = "E-mail вказано некорректно" };
+            return new ProcessedArgs { Success = false, Message = "E-mail вказано некорректно" };
         }
 
         var loginStatus = await _userRepository.Register(username, email, password);
@@ -139,7 +143,7 @@ public class UserService : IUserService
     {
         ConnectionUtil.RemoveToken();
         ConnectionUtil.RemoveUserInfo();
-        Application.Current.MainPage = new LoginPage();
+        if (Application.Current != null) Application.Current.Windows[0].Page = new LoginPage(_serviceProvider.GetRequiredService<ILoginViewModel>(), _serviceProvider);
     }
 
     public async Task<UserModel> GetUser()

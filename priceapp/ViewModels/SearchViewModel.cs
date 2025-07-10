@@ -1,6 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using priceapp.Controls.Models;
 using priceapp.Events.Delegates;
@@ -8,32 +6,34 @@ using priceapp.Events.Models;
 using priceapp.Models;
 using priceapp.Repositories.Interfaces;
 using priceapp.Services.Interfaces;
-using priceapp.ViewModels;
+using priceapp.Utils;
 using priceapp.ViewModels.Interfaces;
 using priceapp.Views;
-using Xamarin.Forms;
-using Xamarin.Forms.Internals;
-
-[assembly: Dependency(typeof(SearchViewModel))]
 
 namespace priceapp.ViewModels;
 
 public class SearchViewModel : ISearchViewModel
 {
     private const int PageSize = 5;
-    private readonly ILocationService _locationService = DependencyService.Get<ILocationService>();
-    private readonly IItemRepository _itemRepository = DependencyService.Get<IItemRepository>();
+    private readonly ILocationService _locationService;
+    private readonly IItemRepository _itemRepository;
+    private readonly IMapper _mapper;
+    private readonly IServiceProvider _serviceProvider;
 
-    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
-
-    public SearchViewModel()
-    {
+    public SearchViewModel(
+        ILocationService locationService,
+        IItemRepository itemRepository, 
+        IMapper mapper, IServiceProvider serviceProvider) {
+        _locationService = locationService;
+        _itemRepository = itemRepository;
+        _mapper = mapper;
+        _serviceProvider = serviceProvider;
         _itemRepository.BadConnectEvent += ItemRepositoryOnBadConnectEvent;
     }
 
-    public event LoadingHandler Loaded;
-    public event ConnectionErrorHandler BadConnectEvent;
-    public string Search { get; set; }
+    public event LoadingHandler? Loaded;
+    public event ConnectionErrorHandler? BadConnectEvent;
+    public string? Search { get; set; }
     public ObservableCollection<ImageButtonModel> ItemButtons { get; set; } = new();
 
     public async Task LoadAsync(INavigation navigation)
@@ -49,25 +49,25 @@ public class SearchViewModel : ISearchViewModel
                 PageSize,
                 location.Longitude,
                 location.Latitude,
-                Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius)
+                Preferences.Get("locationRadius", Constants.DefaultRadius)
             );
 
 
         items.Select(y =>
         {
             var x = _mapper.Map<Item>(y);
-            return new ImageButtonModel()
+            return new ImageButtonModel
             {
                 Id = x.Id,
                 Image = x.Image,
                 PrimaryText = x.Label,
                 SecondaryText = x.UnitsText,
                 AccentText = x.PriceText,
-                Command = new Command(() => { navigation.PushAsync(new ItemPage(x)); })
+                Command = new Command(() => { navigation.PushAsync(new ItemPage(x, _serviceProvider.GetRequiredService<IItemViewModel>(), _serviceProvider.GetRequiredService<ILocationService>())); })
             };
         }).ForEach(x => ItemButtons.Add(x));
 
-        Loaded?.Invoke(this, new LoadingArgs() {Success = true, Total = ItemButtons.Count, LoadedCount = items.Count});
+        Loaded?.Invoke(this, new LoadingArgs {Success = true, Total = ItemButtons.Count, LoadedCount = items.Count});
     }
 
     private void ItemRepositoryOnBadConnectEvent(object sender, ConnectionErrorArgs args)

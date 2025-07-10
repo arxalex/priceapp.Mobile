@@ -1,55 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:priceapp.UI;assembly=priceapp"
              x:Class="priceapp.Views.LoginPage"
              Title="Login page"
              Padding="10, 20"
              NavigationPage.HasNavigationBar="false"
-             Style="{StaticResource PageStyle}">
+             >
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Вхід"
-                   Style="{StaticResource PageTitle}"
+                   Style="{StaticResource Headline}"
                    Margin="0, 50"/>
-            <local:RdEntryOutlined Keyboard="Email"
-                                   Placeholder="E-mail"
-                                   ClearButtonVisibility="WhileEditing"
-                                   BackgroundColor="Transparent"
-                                   x:Name="EntryEmail" />
-            <local:RdEntryOutlined Keyboard="Default"
-                                   Placeholder="Пароль"
-                                   IsPassword="True"
-                                   ClearButtonVisibility="WhileEditing"
-                                   BackgroundColor="Transparent"
-                                   x:Name="EntryPassword" />
+            <Entry Keyboard="Email"
+                   Placeholder="E-mail"
+                   ClearButtonVisibility="WhileEditing"
+                   BackgroundColor="Transparent"
+                   x:Name="EntryEmail" />
+            <Entry Keyboard="Default"
+                   Placeholder="Пароль"
+                   IsPassword="True"
+                   ClearButtonVisibility="WhileEditing"
+                   BackgroundColor="Transparent"
+                   x:Name="EntryPassword" />
             <Frame x:Name="ProcessedFrame"
                    IsVisible="False"
                    BackgroundColor="{AppThemeBinding Default=LightYellow, Light=LightYellow, Dark=#310}"
                    BorderColor="DarkOrange"
                    CornerRadius="5"
                    Margin="2"
-                   Style="{StaticResource FrameStyle}">
+                   >
                 <Frame.Content>
                     <Label x:Name="ProcessedLabel"
                            TextColor="DarkOrange" />
                 </Frame.Content>
             </Frame>
-            <Button Style="{StaticResource ButtonStyle}"
+            <Button 
                     Text="Увійти"
                     Clicked="Button_OnClicked"/>
-            <Button Style="{StaticResource ButtonStyle}"
+            <Button 
                     BackgroundColor="{AppThemeBinding Light={StaticResource ColorBackground}, Dark=#222, Default={StaticResource ColorBackground}}"
-                    TextColor="{ StaticResource ColorPrimary}"
-                    BorderColor="{ StaticResource ColorPrimary}"
+                    TextColor="{ StaticResource Primary}"
+                    BorderColor="{ StaticResource Primary}"
                     BorderWidth="1"
                     Text="Реєстрація"
                     VerticalOptions="EndAndExpand"
                     Clicked="ButtonRegistration_OnClicked"/>
-            <Button Style="{StaticResource ButtonBottomStyle}"
+            <Button Style="{StaticResource Bottom}"
                     BackgroundColor="Transparent"
-                    TextColor="{ StaticResource ColorPrimary}"
+                    TextColor="{ StaticResource Primary}"
                     BorderColor="Transparent"
                     BorderWidth="1"
                     Text="Продовжити як гість"

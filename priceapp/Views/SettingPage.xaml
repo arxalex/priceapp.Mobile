@@ -1,37 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:ui="clr-namespace:priceapp.UI;assembly=priceapp"
              x:Class="priceapp.Views.SettingPage"
              xmlns:viewModels="clr-namespace:priceapp.ViewModels.Interfaces;assembly=priceapp"
              xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
-             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
-             x:DataType="viewModels:ISettingsViewModel"
-             Style="{StaticResource PageStyle}">
+             xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
+             x:DataType="viewModels:ISettingsViewModel">
     <ContentPage.Content>
         <StackLayout>
             <controls:HeaderBackButton BackButtonClicked="ImageButton_OnClicked"
-                                       Label="Налаштування"/>
+                                       Label="Налаштування" />
             <ScrollView>
                 <StackLayout Margin="20, 0">
                     <Label Text="Спосіб формування списку покупок"
                            FontSize="Medium"
-                           Style="{StaticResource TextStyle}"
+                           
                            FontAttributes="Bold"
                            Margin="0, 0, 0,5" />
-                    <Frame BorderColor="{ StaticResource ColorPrimary}"
-                           Style="{StaticResource FrameStyle}"
+                    <Frame BorderColor="{ StaticResource Primary}"
                            Padding="1"
                            BackgroundColor="Transparent">
-                        <Frame BorderColor="{ StaticResource ColorPrimary}"
-                               Style="{StaticResource FrameStyle}"
+                        <Frame BorderColor="{ StaticResource Primary}"
                                Padding="5"
                                BackgroundColor="Transparent">
-                            <ui:RdPickerBorderless ItemsSource="{Binding CartProcessingTypes}"
-                                                   SelectedItem="{Binding CartProcessingTypeSetting}"
-                                                   TextColor="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}"
-                                                   Margin="10,0" />
+                            <Picker ItemsSource="{Binding CartProcessingTypes}"
+                                    SelectedItem="{Binding CartProcessingTypeSetting}"
+                                    TextColor="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}"
+                                    Margin="10,0" />
                         </Frame>
                     </Frame>
                     <Grid Margin="0, 5, 0,0">
@@ -42,10 +38,10 @@
                         <Label Grid.Column="0"
                                Text="Відмічати бренди, що ще не вийшли з російського ринку"
                                FontSize="Medium"
-                               Style="{StaticResource TextStyle}"
+                               
                                FontAttributes="Bold" />
                         <Switch Grid.Column="1"
-                                IsToggled="{Binding ShowRussiaSupportBrandAlerts}"/>
+                                IsToggled="{Binding ShowRussiaSupportBrandAlerts}" />
                     </Grid>
                     <Grid Margin="0, 5, 0,0">
                         <Grid.ColumnDefinitions>
@@ -55,10 +51,10 @@
                         <Label Grid.Column="0"
                                Text="Використовувати власну геолокацію"
                                FontSize="Medium"
-                               Style="{StaticResource TextStyle}"
+                               
                                FontAttributes="Bold" />
                         <Switch Grid.Column="1"
-                                IsToggled="{Binding UseCustomLocation}"/>
+                                IsToggled="{Binding UseCustomLocation}" />
                     </Grid>
                     <maps:Map x:Name="Map"
                               HeightRequest="400"
@@ -68,7 +64,7 @@
                     </maps:Map>
                     <Label Text="Радіус пошуку (в метрах)"
                            FontSize="Medium"
-                           Style="{StaticResource TextStyle}"
+                           
                            FontAttributes="Bold" />
                     <Grid Margin="0, 0, 0,5">
                         <Grid.ColumnDefinitions>
@@ -76,21 +72,20 @@
                             <ColumnDefinition Width="60" />
                         </Grid.ColumnDefinitions>
                         <Frame Grid.Column="0"
-                               Style="{StaticResource FrameStyle}"
                                BackgroundColor="Transparent"
                                Padding="0"
                                Margin="0,0">
-                            <ui:RdSliderBorderless Maximum="10000"
-                                                   Minimum="0"
-                                                   ThumbColor="{AppThemeBinding Light={ StaticResource ColorPrimary}, Dark={ StaticResource ColorPrimaryDark}, Default={ StaticResource ColorPrimary}}"
-                                                   MinimumTrackColor="Gray"
-                                                   Value="{Binding Radius}" />
+                            <Slider Maximum="10000"
+                                    Minimum="0"
+                                    ThumbColor="{AppThemeBinding Light={ StaticResource Primary}, Dark={ StaticResource PrimaryDark}, Default={ StaticResource Primary}}"
+                                    MinimumTrackColor="Gray"
+                                    Value="{Binding Radius}" />
                         </Frame>
-                        <ui:RdEntryBorderless Grid.Column="1"
-                                              Keyboard="Numeric"
-                                              MaxLength="5"
-                                              Text="{Binding Radius}" 
-                                              TextColor="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}"/>
+                        <Entry Grid.Column="1"
+                               Keyboard="Numeric"
+                               MaxLength="5"
+                               Text="{Binding Radius}"
+                               TextColor="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}" />
                     </Grid>
                 </StackLayout>
             </ScrollView>

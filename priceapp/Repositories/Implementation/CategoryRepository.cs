@@ -1,32 +1,35 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
+using System.Text.Json;
 using AutoMapper;
 using priceapp.Events.Delegates;
 using priceapp.Events.Models;
 using priceapp.LocalDatabase.Models;
 using priceapp.LocalDatabase.Repositories.Interfaces;
-using priceapp.Repositories.Implementation;
 using priceapp.Repositories.Interfaces;
 using priceapp.Repositories.Models;
 using priceapp.Utils;
 using RestSharp;
-using Xamarin.Forms;
-using JsonSerializer = System.Text.Json.JsonSerializer;
-
-[assembly: Dependency(typeof(CategoryRepository))]
 
 namespace priceapp.Repositories.Implementation;
 
 public class CategoryRepository : ICategoryRepository
 {
-    public event ConnectionErrorHandler BadConnectEvent;
-    private readonly RestClient _client = ConnectionUtil.GetRestClient();
-    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
-    private readonly ICategoriesLocalRepository _categoriesLocalRepository = DependencyService.Get<ICategoriesLocalRepository>();
-    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
+    public event ConnectionErrorHandler? BadConnectEvent;
+    private readonly RestClient _client;
+    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository;
+    private readonly ICategoriesLocalRepository _categoriesLocalRepository;
+    private readonly IMapper _mapper;
+
+    public CategoryRepository(
+        ICacheRequestsLocalRepository cacheRequestsLocalRepository, 
+        ICategoriesLocalRepository categoriesLocalRepository, 
+        IMapper mapper,
+        HttpClient http) {
+        _cacheRequestsLocalRepository = cacheRequestsLocalRepository;
+        _categoriesLocalRepository = categoriesLocalRepository;
+        _mapper = mapper;
+        _client = ConnectionUtil.GetRestClient(http);
+    }
 
     public async Task<IList<CategoryRepositoryModel>> GetCategories(int? parent = null)
     {
@@ -53,7 +56,7 @@ public class CategoryRepository : ICategoryRepository
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
             BadConnectEvent?.Invoke(this,
-                new ConnectionErrorArgs() { Success = false, StatusCode = (int)response.StatusCode });
+                new ConnectionErrorArgs { Success = false, StatusCode = (int)response.StatusCode });
             return new List<CategoryRepositoryModel>();
         }
         var list = JsonSerializer.Deserialize<List<CategoryRepositoryModel>>(response.Content) ??

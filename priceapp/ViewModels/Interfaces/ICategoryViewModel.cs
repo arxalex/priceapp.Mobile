@@ -1,16 +1,14 @@
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using priceapp.Controls.Models;
 using priceapp.Events.Delegates;
-using Xamarin.Forms;
 
-namespace priceapp.ViewModels.Interfaces
+
+namespace priceapp.ViewModels.Interfaces;
+
+public interface ICategoryViewModel
 {
-    public interface ICategoryViewModel
-    {
-        ObservableCollection<ImageButtonModel> CategoryButtons { get; set; }
-        Task LoadAsync(INavigation Navigation);
-        event LoadingHandler Loaded;
-        event ConnectionErrorHandler BadConnectEvent;
-    }
+    ObservableCollection<ImageButtonModel> CategoryButtons { get; set; }
+    Task LoadAsync(INavigation Navigation);
+    event LoadingHandler Loaded;
+    event ConnectionErrorHandler BadConnectEvent;
 }

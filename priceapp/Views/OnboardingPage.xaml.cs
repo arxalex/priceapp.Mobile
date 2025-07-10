@@ -1,21 +1,20 @@
-using System;
 using priceapp.Services.Interfaces;
 using priceapp.ViewModels.Interfaces;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace priceapp.Views;
 
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class OnboardingPage
 {
-    private readonly IOnboardingViewModel _onboardingViewModel = DependencyService.Get<IOnboardingViewModel>(DependencyFetchTarget.NewInstance);
-    private readonly IUserService _userService = DependencyService.Get<IUserService>(DependencyFetchTarget.NewInstance);
+    private readonly IOnboardingViewModel _onboardingViewModel;
+    private readonly IUserService _userService;
+    private readonly IServiceProvider _serviceProvider;
 
-    public OnboardingPage()
+    public OnboardingPage(IOnboardingViewModel onboardingViewModel, IUserService userService, IServiceProvider serviceProvider)
     {
         InitializeComponent();
-
+        _onboardingViewModel = onboardingViewModel;
+        _userService = userService;
+        _serviceProvider = serviceProvider;
         BindingContext = _onboardingViewModel;
     }
 
@@ -24,11 +23,11 @@ public partial class OnboardingPage
         var isLoggedIn = await _userService.IsUserLoggedIn();
         if (isLoggedIn)
         {
-            Application.Current.MainPage = new MainPage();
+            Application.Current.Windows[0].Page = new MainPage();
         }
         else
         {
-            Application.Current.MainPage = new NavigationPage(new LoginPage());
+            Application.Current.Windows[0].Page = new NavigationPage(new LoginPage(_serviceProvider.GetRequiredService<ILoginViewModel>(), _serviceProvider));
         }
     }
 
@@ -39,11 +38,11 @@ public partial class OnboardingPage
             var isLoggedIn = await _userService.IsUserLoggedIn();
             if (isLoggedIn)
             {
-                Application.Current.MainPage = new MainPage();
+                Application.Current.Windows[0].Page = new MainPage();
             }
             else
             {
-                Application.Current.MainPage = new NavigationPage(new LoginPage());
+                Application.Current.Windows[0].Page = new NavigationPage(new LoginPage(_serviceProvider.GetRequiredService<ILoginViewModel>(), _serviceProvider));
             }
         }
         else

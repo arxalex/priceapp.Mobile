@@ -1,6 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using priceapp.Controls.Models;
 using priceapp.Events.Delegates;
@@ -8,26 +6,28 @@ using priceapp.Events.Models;
 using priceapp.Models;
 using priceapp.Repositories.Interfaces;
 using priceapp.Services.Interfaces;
-using priceapp.ViewModels;
+using priceapp.Utils;
 using priceapp.ViewModels.Interfaces;
 using priceapp.Views;
-using Xamarin.Forms;
-using Xamarin.Forms.Internals;
-
-[assembly: Dependency(typeof(SearchItemsListViewModel))]
 
 namespace priceapp.ViewModels;
 
 public class SearchItemsListViewModel : ISearchItemsListViewModel
 {
     private const int PageSize = 20;   
-    private readonly ILocationService _locationService = DependencyService.Get<ILocationService>();
-    private readonly IItemRepository _itemRepository = DependencyService.Get<IItemRepository>();
+    private readonly ILocationService _locationService;
+    private readonly IItemRepository _itemRepository;
+    private readonly IMapper _mapper;
+    private readonly IServiceProvider _serviceProvider;
 
-    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
-
-    public SearchItemsListViewModel()
-    {
+    public SearchItemsListViewModel(
+        ILocationService locationService, 
+        IItemRepository itemRepository, 
+        IMapper mapper, IServiceProvider serviceProvider) {
+        _locationService = locationService;
+        _itemRepository = itemRepository;
+        _mapper = mapper;
+        _serviceProvider = serviceProvider;
         CanLoadMode = true;
         ItemsLoadingNow = false;
 
@@ -36,9 +36,9 @@ public class SearchItemsListViewModel : ISearchItemsListViewModel
 
     private bool CanLoadMode { get; set; }
     private bool ItemsLoadingNow { get; set; }
-    public event LoadingHandler Loaded;
-    public event ConnectionErrorHandler BadConnectEvent;
-    public string Search { get; set; }
+    public event LoadingHandler? Loaded;
+    public event ConnectionErrorHandler? BadConnectEvent;
+    public string? Search { get; set; }
 
     public ObservableCollection<ImageButtonModel> ItemButtons { get; set; } = new();
 
@@ -46,7 +46,7 @@ public class SearchItemsListViewModel : ISearchItemsListViewModel
     {
         if (ItemsLoadingNow)
         {
-            Loaded?.Invoke(this, new LoadingArgs() {Success = false, Total = ItemButtons.Count});
+            Loaded?.Invoke(this, new LoadingArgs {Success = false, Total = ItemButtons.Count});
             return;
         }
 
@@ -55,7 +55,7 @@ public class SearchItemsListViewModel : ISearchItemsListViewModel
         if (!CanLoadMode)
         {
             ItemsLoadingNow = false;
-            Loaded?.Invoke(this, new LoadingArgs() {Success = false, Total = ItemButtons.Count});
+            Loaded?.Invoke(this, new LoadingArgs {Success = false, Total = ItemButtons.Count});
             return;
         }
 
@@ -68,7 +68,7 @@ public class SearchItemsListViewModel : ISearchItemsListViewModel
                 ItemButtons.Count + PageSize,
                 location.Longitude,
                 location.Latitude,
-                Xamarin.Essentials.Preferences.Get("locationRadius", Constants.DefaultRadius)
+                Preferences.Get("locationRadius", Constants.DefaultRadius)
             );
 
         if (items.Count > 0)
@@ -76,21 +76,21 @@ public class SearchItemsListViewModel : ISearchItemsListViewModel
             items.Select(y =>
             {
                 var x = _mapper.Map<Item>(y);
-                return new ImageButtonModel()
+                return new ImageButtonModel
                 {
                     Id = x.Id,
                     Image = x.Image,
                     PrimaryText = x.Label,
                     SecondaryText = x.UnitsText,
                     AccentText = x.PriceText,
-                    Command = new Command(() => { navigation.PushAsync(new ItemPage(x)); })
+                    Command = new Command(() => { navigation.PushAsync(new ItemPage(x, _serviceProvider.GetRequiredService<IItemViewModel>(), _serviceProvider.GetRequiredService<ILocationService>())); })
                 };
             }).ForEach(x => ItemButtons.Add(x));
         }
 
         CanLoadMode = items.Count >= PageSize;
         ItemsLoadingNow = false;
-        Loaded?.Invoke(this, new LoadingArgs() {Success = true, Total = ItemButtons.Count, LoadedCount = items.Count});
+        Loaded?.Invoke(this, new LoadingArgs {Success = true, Total = ItemButtons.Count, LoadedCount = items.Count});
     }
 
     private void ItemRepositoryOnBadConnectEvent(object sender, ConnectionErrorArgs args)

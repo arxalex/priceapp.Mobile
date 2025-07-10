@@ -1,8 +1,7 @@
-namespace priceapp.Models
+namespace priceapp.Models;
+
+public class User
 {
-    public class User
-    {
-        private string Username { get; set; }
-        private string Password { get; set; }
-    }
+    private string Username { get; set; }
+    private string Password { get; set; }
 }

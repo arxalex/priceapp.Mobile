@@ -1,22 +1,18 @@
-using System.Threading.Tasks;
 using priceapp.Events.Delegates;
 using priceapp.Events.Models;
 using priceapp.Repositories.Interfaces;
-using priceapp.Services.Implementation;
 using priceapp.Services.Interfaces;
-using Xamarin.Forms;
-
-[assembly: Dependency(typeof(ConnectionService))]
 
 namespace priceapp.Services.Implementation;
 
 public class ConnectionService : IConnectionService
 {
-    private readonly IInfoRepository _infoRepository = DependencyService.Get<IInfoRepository>();
-    public event ConnectionErrorHandler BadConnectEvent;
+    private readonly IInfoRepository _infoRepository;
+    public event ConnectionErrorHandler? BadConnectEvent;
 
-    public ConnectionService()
+    public ConnectionService(IInfoRepository infoRepository)
     {
+        _infoRepository = infoRepository;
         _infoRepository.BadConnectEvent += InfoRepositoryOnBadConnectEvent;
     }
 

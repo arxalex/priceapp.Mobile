@@ -1,10 +1,7 @@
 using System.Windows.Input;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace priceapp.Controls;
 
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class ImageButtonWideMini
 {
     public static readonly BindableProperty IdProperty = BindableProperty.Create("Id", typeof(int), typeof(ImageButtonLarge));

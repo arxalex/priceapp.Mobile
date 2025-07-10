@@ -1,33 +1,37 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 using AutoMapper;
 using priceapp.Events.Delegates;
 using priceapp.Events.Models;
 using priceapp.LocalDatabase.Models;
 using priceapp.LocalDatabase.Repositories.Interfaces;
-using priceapp.Repositories.Implementation;
 using priceapp.Repositories.Interfaces;
 using priceapp.Repositories.Models;
 using priceapp.Utils;
 using RestSharp;
-using Xamarin.Forms;
-
-[assembly: Dependency(typeof(BrandAlertRepository))]
 
 namespace priceapp.Repositories.Implementation;
 
 public class BrandAlertRepository : IBrandAlertRepository
 {
-    private readonly IBrandAlertsLocalRepository _brandAlertsLocalRepository = DependencyService.Get<IBrandAlertsLocalRepository>();
-    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository = DependencyService.Get<ICacheRequestsLocalRepository>();
-    private readonly RestClient _client = ConnectionUtil.GetRestClient();
-    private readonly IMapper _mapper = DependencyService.Get<IMapper>();
+    private readonly IBrandAlertsLocalRepository _brandAlertsLocalRepository;
+    private readonly ICacheRequestsLocalRepository _cacheRequestsLocalRepository;
+    private readonly RestClient _client;
+    private readonly IMapper _mapper;
 
-    public event ConnectionErrorHandler BadConnectEvent;
+    public BrandAlertRepository(
+        IBrandAlertsLocalRepository brandAlertsLocalRepository, 
+        ICacheRequestsLocalRepository cacheRequestsLocalRepository,
+        IMapper mapper,
+        HttpClient http
+        ) {
+        _brandAlertsLocalRepository = brandAlertsLocalRepository;
+        _cacheRequestsLocalRepository = cacheRequestsLocalRepository;
+        _mapper = mapper;
+        _client = ConnectionUtil.GetRestClient(http);
+    }
+
+    public event ConnectionErrorHandler? BadConnectEvent;
 
     public async Task<IList<BrandAlertRepositoryModel>> GetBrandAlerts(int brandId)
     {
@@ -54,7 +58,7 @@ public class BrandAlertRepository : IBrandAlertRepository
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
             BadConnectEvent?.Invoke(this,
-                new ConnectionErrorArgs() {Success = false, StatusCode = (int) response.StatusCode});
+                new ConnectionErrorArgs {Success = false, StatusCode = (int) response.StatusCode});
             return new List<BrandAlertRepositoryModel>();
         }
 

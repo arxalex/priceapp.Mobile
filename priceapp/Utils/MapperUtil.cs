@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using AutoMapper;
@@ -32,8 +30,8 @@ public static class MapperUtil
             cfg.CreateMap<ShoppingListRepositoryModel, ItemToBuy>()
                 .BeforeMap((s, d) =>
                 {
-                    d.Filial = s.filialId != null ? new Filial() { Id = s.filialId ?? 0 } : null;
-                    d.Item = new Item() { Id = s.itemId };
+                    d.Filial = s.filialId != null ? new Filial { Id = s.filialId ?? 0 } : null;
+                    d.Item = new Item { Id = s.itemId };
                 });
             cfg.CreateMap<PriceModel, PriceRepositoryModel>().ReverseMap();
             cfg.CreateMap<Shop, ShopRepositoryModel>().ReverseMap();
@@ -81,8 +79,8 @@ public static class MapperUtil
             cfg.CreateMap<ItemToBuyLocalDatabaseModel, ItemToBuy>()
                 .BeforeMap((s, d) =>
                 {
-                    d.Filial = s.FilialId != null ? new Filial() { Id = s.FilialId ?? 0 } : null;
-                    d.Item = new Item() { Id = s.ItemId };
+                    d.Filial = s.FilialId != null ? new Filial { Id = s.FilialId ?? 0 } : null;
+                    d.Item = new Item { Id = s.ItemId };
                 });
             cfg.CreateMap<ItemToBuy, ItemToBuyLocalDatabaseModel>()
                 .BeforeMap((s, d) =>

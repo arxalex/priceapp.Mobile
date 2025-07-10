@@ -1,16 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
 using priceapp.Controls.Models;
-using Xamarin.Forms;
-using Xamarin.Forms.Internals;
-using Xamarin.Forms.Xaml;
 
 namespace priceapp.Controls;
 
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class CollectionList
 {
     public CollectionList()
@@ -20,7 +12,7 @@ public partial class CollectionList
         CollectionView.RemainingItemsThresholdReached += CollectionViewOnRemainingThresholdReached;
     }
 
-    public event EventHandler RemainingItemsThresholdReached;
+    public event EventHandler? RemainingItemsThresholdReached;
 
     public static readonly BindableProperty ItemsSourceProperty =
         BindableProperty.Create(nameof(ItemsSource), typeof(ObservableCollection<ImageButtonModel>),
