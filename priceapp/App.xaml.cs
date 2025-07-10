@@ -8,37 +8,29 @@ namespace priceapp;
 public partial class App
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly IConnectionService _connectionService;
+    private readonly IUserService _userService;
 
-    public App(IServiceProvider serviceProvider)
+    public App(IServiceProvider serviceProvider, IConnectionService connectionService, IUserService userService)
     {
         InitializeComponent();
         _serviceProvider = serviceProvider;
+        _connectionService = connectionService;
+        _userService = userService;
+        _connectionService.BadConnectEvent += ConnectionServiceOnBadConnectEvent;
     }
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        return new Window(new MainPage());
+        return new Window(OnCreateWindow());
     }
 
-    public Page OnCreateWindow()
+    public async Page OnCreateWindow()
     {
-        var connectionService = _serviceProvider.GetRequiredService<IConnectionService>();
-        var userService = _serviceProvider.GetRequiredService<IUserService>();
-        var locationService = _serviceProvider.GetRequiredService<ILocationService>();
-        
-        if (VersionTracking.IsFirstLaunchEver)
-        {
-            locationService.RefreshPermission().Wait();
-        }
-
-        locationService.RefreshLocation().Wait();
-
-        connectionService.BadConnectEvent += ConnectionServiceOnBadConnectEvent;
-
-        var isConnected = connectionService.IsConnectedAsync().Result;
+        var isConnected = await _connectionService.IsConnectedAsync();
         if (!isConnected)
         {
-            var isUserWasLoggedIn = userService.IsUserWasLoggedIn().Result;
+            var isUserWasLoggedIn = await _userService.IsUserWasLoggedIn();
             if (isUserWasLoggedIn)
             {
                 return new MainPage();
@@ -48,17 +40,17 @@ public partial class App
                 { Message = "Відсутнє зʼєднання з сервером", StatusCode = 404, Success = false });
         }
 
-        var needUpdate = connectionService.IsAppNeedsUpdateAsync().Result;
+        var needUpdate = await _connectionService.IsAppNeedsUpdateAsync();
         switch (needUpdate)
         {
             case true:
                 return new UpdateAppPage();
         }
 
-        var isLoggedIn = userService.IsUserLoggedIn().Result;
+        var isLoggedIn = await _userService.IsUserLoggedIn();
         if (!isLoggedIn)
         {
-            var loginResult = userService.LoginAsGuest().Result;
+            var loginResult = await _userService.LoginAsGuest();
             if (!loginResult.Success)
             {
                 return new ConnectionErrorPage(new ConnectionErrorArgs

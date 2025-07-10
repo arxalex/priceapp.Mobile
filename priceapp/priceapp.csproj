@@ -39,4 +39,10 @@
       <Folder Include="Resources\Images\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="System.Private.CoreLib">
+        <HintPath>..\..\..\Library\Developer\CoreSimulator\Devices\BCDD2042-5C1D-4BCE-B785-98E04D4A015B\data\Containers\Bundle\Application\3A007FE8-E1EC-4BDF-8505-03B5F7849368\priceapp.app\System.Private.CoreLib.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

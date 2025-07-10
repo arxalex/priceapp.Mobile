@@ -1,6 +1,5 @@
 using priceapp.Events.Models;
 
-
 namespace priceapp.Views;
 
 
@@ -17,9 +16,9 @@ public partial class ConnectionErrorPage
         }
     }
 
-    private void Button_OnClicked(object sender, EventArgs e)
+    private async void Button_OnClicked(object sender, EventArgs e)
     {
-        Application.Current.Windows[0].Page = ((App)Application.Current).OnCreateWindow();
+        Application.Current.Windows[0].Page = await ((App)Application.Current).OnCreateWindow();
     }
 
     private void HeaderBackButton_OnBackButtonClicked(object sender, EventArgs e)

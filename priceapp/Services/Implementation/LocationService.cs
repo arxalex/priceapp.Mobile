@@ -47,6 +47,8 @@ public class LocationService : ILocationService
             {
                 return CustomLocation;
             }
+
+            RefreshPermission();
             
             var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(3));
             
@@ -60,22 +62,7 @@ public class LocationService : ILocationService
         }
     }
 
-    public async Task RefreshLocation()
-    {
-        if (!UseCustomLocation)
-        {
-            try
-            {
-                await RefreshLocationRequest();
-            }
-            catch (Exception)
-            {
-                await RefreshPermission();
-            }
-        }
-    }
-
-    public async Task RefreshPermission()
+    private async Task RefreshPermission()
     {
         var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
 
