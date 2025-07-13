@@ -24,7 +24,7 @@ public partial class LoginPage
         {
             if (VersionTracking.IsFirstLaunchEver)
             {
-                Application.Current.Windows[0].Page = new OnboardingPage(_serviceProvider.GetRequiredService<IOnboardingViewModel>(), _serviceProvider.GetRequiredService<IUserService>(), _serviceProvider);
+                Application.Current.Windows[0].Page = new OnboardingPage();
             }
             else
             {

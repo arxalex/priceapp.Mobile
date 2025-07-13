@@ -55,7 +55,7 @@ public partial class AccountPage
                 _accountViewModel.ChangeAccount();
                 break;
             case "Підказки":
-                if (Application.Current != null) Application.Current.Windows[0].Page = new OnboardingPage(_serviceProvider.GetRequiredService<IOnboardingViewModel>(), _serviceProvider.GetRequiredService<IUserService>(), _serviceProvider);
+                if (Application.Current != null) Application.Current.Windows[0].Page = new OnboardingPage();
                 break;
             case "Питання та відповіді":
                 Browser.OpenAsync("https://priceapp.co/documents/faq", BrowserLaunchMode.SystemPreferred);

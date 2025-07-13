@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:priceapp.Controls;assembly=priceapp"
              x:Class="priceapp.Views.ConnectionErrorPage"
+             x:Name="Page"
              >
     <ContentPage.Content>
         <StackLayout VerticalOptions="FillAndExpand">
@@ -18,12 +19,12 @@
             <Label Text="Щось пішло не так"
                    HorizontalTextAlignment="Center"
                     />
-            <Label x:Name="StatusCodeLabel"
-                   HorizontalTextAlignment="Center"
-                   Style="{StaticResource TextSecondaryStyle}" />
-            <Label x:Name="ErrorMessage"
-                   HorizontalTextAlignment="Center"
-                   Style="{StaticResource TextSecondaryStyle}" />
+            <Label HorizontalTextAlignment="Center"
+                   Style="{StaticResource TextSecondaryStyle}" 
+                   Text="{Binding Source={x:Reference Page}, Path=StatusCode, StringFormat='StatusCode: {0}'}"/>
+            <Label HorizontalTextAlignment="Center"
+                   Style="{StaticResource TextSecondaryStyle}" 
+                   Text="{Binding Source={x:Reference Page}, Path=ErrorMessage, StringFormat='Error: {0}'}"/>
             <Button 
                     Text="Перезавантажитись"
                     Margin="15, 5, 15,15"

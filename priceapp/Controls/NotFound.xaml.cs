@@ -6,16 +6,14 @@ namespace priceapp.Controls;
 public partial class NotFound
 {
     private readonly IServiceProvider _serviceProvider;
-    public NotFound(IServiceProvider serviceProvider)
-    {
-        InitializeComponent();
-        _serviceProvider = serviceProvider;
-    }
 
     public NotFound()
     {
-        throw new NotImplementedException();
+        InitializeComponent();
+        _serviceProvider = Application.Current!.Handler!.MauiContext!.Services
+            .GetRequiredService<IServiceProvider>();
     }
+
 
     public new static readonly BindableProperty NavigationProperty = BindableProperty.Create("Navigation", typeof(INavigation), typeof(NotFound), defaultValue:null);
     

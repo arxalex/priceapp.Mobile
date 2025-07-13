@@ -9,11 +9,7 @@ public class LocationService : ILocationService
     public bool UseCustomLocation
     {
         get => Preferences.Get("useCustomLocation", Constants.DefaultUseCustomLocation);
-        set
-        {
-            Preferences.Set("useCustomLocation", value);
-            RefreshLocation();
-        }
+        set => Preferences.Set("useCustomLocation", value);
     }
 
     /*

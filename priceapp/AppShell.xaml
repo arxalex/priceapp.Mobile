@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="priceapp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:priceapp.Views"
+    Title="priceapp">
+
+    <ShellContent
+        IsVisible="{Binding CurrentState, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Main}"
+        ContentTemplate="{DataTemplate views:MainPage}" />
+
+    <ShellContent
+        IsVisible="{Binding CurrentState, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=ConnectionError}">
+        <views:ConnectionErrorPage ErrorMessage="{Binding ErrorMessage}"
+                                 StatusCode="{Binding StatusCode}" />
+    </ShellContent>
+
+    <ShellContent
+        IsVisible="{Binding CurrentState, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Update}"
+        ContentTemplate="{DataTemplate views:UpdateAppPage}" />
+
+    <ShellContent
+        IsVisible="{Binding CurrentState, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Onboarding}"
+        ContentTemplate="{DataTemplate views:OnboardingPage}" />
+
+</Shell>

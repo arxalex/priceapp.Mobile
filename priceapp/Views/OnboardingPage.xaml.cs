@@ -9,12 +9,13 @@ public partial class OnboardingPage
     private readonly IUserService _userService;
     private readonly IServiceProvider _serviceProvider;
 
-    public OnboardingPage(IOnboardingViewModel onboardingViewModel, IUserService userService, IServiceProvider serviceProvider)
+    public OnboardingPage()
     {
         InitializeComponent();
-        _onboardingViewModel = onboardingViewModel;
-        _userService = userService;
-        _serviceProvider = serviceProvider;
+        _serviceProvider = Application.Current!.Handler!.MauiContext!.Services
+            .GetRequiredService<IServiceProvider>();
+        _onboardingViewModel = _serviceProvider.GetRequiredService<IOnboardingViewModel>();;
+        _userService = _serviceProvider.GetRequiredService<IUserService>();;
         BindingContext = _onboardingViewModel;
     }
 
