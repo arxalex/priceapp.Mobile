@@ -47,16 +47,5 @@ public partial class ImageButtonLarge
     public ImageButtonLarge()
     {
         InitializeComponent();
-        
-        GestureRecognizers.Add(new TapGestureRecognizer
-        {
-            Command = new Command(() =>
-            {
-                if (Command != null && Command.CanExecute(CommandParameter))
-                {
-                    Command.Execute(CommandParameter);
-                }
-            })
-        });
     }
 }

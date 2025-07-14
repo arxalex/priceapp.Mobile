@@ -11,16 +11,15 @@
            HasShadow="False"
            IsClippedToBounds="True"
            HeightRequest="150">
+        <Frame.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=Command}"
+                                  CommandParameter="{Binding Source={x:Reference Page}, Path=CommandParameter}"/>
+        </Frame.GestureRecognizers>
         <AbsoluteLayout>
             <Image AbsoluteLayout.LayoutFlags="All" 
                    AbsoluteLayout.LayoutBounds="0,0,1,1"
                    Aspect="AspectFill"
                    Source="{Binding Source={x:Reference Page}, Path=ImageSource}" />
-            <BoxView AbsoluteLayout.LayoutFlags="All" 
-                     AbsoluteLayout.LayoutBounds="0,0,1,1"
-                     Color="Black"
-                     Opacity="0.5" />
-
             <Label AbsoluteLayout.LayoutFlags="SizeProportional" 
                    AbsoluteLayout.LayoutBounds="0,0,1,1" 
                    Text="{Binding Source={x:Reference Page}, Path=PrimaryText}"

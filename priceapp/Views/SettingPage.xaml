@@ -15,21 +15,18 @@
                 <StackLayout Margin="20, 0">
                     <Label Text="Спосіб формування списку покупок"
                            FontSize="Medium"
-                           
                            FontAttributes="Bold"
                            Margin="0, 0, 0,5" />
-                    <Frame BorderColor="{ StaticResource Primary}"
-                           Padding="1"
-                           BackgroundColor="Transparent">
-                        <Frame BorderColor="{ StaticResource Primary}"
-                               Padding="5"
-                               BackgroundColor="Transparent">
-                            <Picker ItemsSource="{Binding CartProcessingTypes}"
-                                    SelectedItem="{Binding CartProcessingTypeSetting}"
-                                    TextColor="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}"
-                                    Margin="10,0" />
-                        </Frame>
-                    </Frame>
+                    <Border Stroke="{StaticResource Primary}"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 10"
+                            Padding="0"
+                            Margin="0,4">
+                        <Picker ItemsSource="{Binding CartProcessingTypes}"
+                                SelectedItem="{Binding CartProcessingTypeSetting}"
+                                TextColor="{AppThemeBinding Default={StaticResource ColorText}, Light={StaticResource ColorText}, Dark={StaticResource ColorTextDark}}"
+                                Margin="10,0" />
+                    </Border>
                     <Grid Margin="0, 5, 0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
