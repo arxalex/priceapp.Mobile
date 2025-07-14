@@ -12,30 +12,42 @@
             <Label Text="Вхід"
                    Style="{StaticResource Headline}"
                    Margin="0, 50"/>
-            <Entry Keyboard="Email"
-                   Placeholder="E-mail"
-                   ClearButtonVisibility="WhileEditing"
-                   BackgroundColor="Transparent"
-                   x:Name="EntryEmail" />
-            <Entry Keyboard="Default"
-                   Placeholder="Пароль"
-                   IsPassword="True"
-                   ClearButtonVisibility="WhileEditing"
-                   BackgroundColor="Transparent"
-                   x:Name="EntryPassword" />
+            <Border Stroke="{StaticResource Primary}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 10"
+                    Padding="0"
+                    Margin="0,4">
+                <Entry Keyboard="Email"
+                       Placeholder="E-mail"
+                       ClearButtonVisibility="WhileEditing"
+                       BackgroundColor="Transparent"
+                       x:Name="EntryEmail" />
+            </Border>
+            <Border Stroke="{StaticResource Primary}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 10"
+                    Padding="0"
+                    Margin="0,4">
+                <Entry Keyboard="Default"
+                       Placeholder="Пароль"
+                       IsPassword="True"
+                       ClearButtonVisibility="WhileEditing"
+                       BackgroundColor="Transparent"
+                       x:Name="EntryPassword" />
+            </Border>
             <Frame x:Name="ProcessedFrame"
                    IsVisible="False"
                    BackgroundColor="{AppThemeBinding Default=LightYellow, Light=LightYellow, Dark=#310}"
                    BorderColor="DarkOrange"
                    CornerRadius="5"
-                   Margin="2"
+                   Margin="2, 4"
                    >
                 <Frame.Content>
                     <Label x:Name="ProcessedLabel"
                            TextColor="DarkOrange" />
                 </Frame.Content>
             </Frame>
-            <Button 
+            <Button Margin="0,4"
                     Text="Увійти"
                     Clicked="Button_OnClicked"/>
             <Button 

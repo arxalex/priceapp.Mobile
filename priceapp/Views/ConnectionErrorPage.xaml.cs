@@ -1,4 +1,5 @@
 using priceapp.Events.Models;
+using priceapp.Services;
 
 namespace priceapp.Views;
 
@@ -43,9 +44,10 @@ public partial class ConnectionErrorPage : ContentPage
         HeaderBackButton.IsVisible = false;
     }
 
-    private async void Button_OnClicked(object sender, EventArgs e)
+    private void Button_OnClicked(object sender, EventArgs e)
     {
-        //Application.Current.Windows[0].Page = await ((App)Application.Current).OnCreateWindow();
+        InitService.OnStart(Application.Current!.Handler!.MauiContext!.Services
+            .GetRequiredService<IServiceProvider>());
     }
 
     private void HeaderBackButton_OnBackButtonClicked(object sender, EventArgs e)

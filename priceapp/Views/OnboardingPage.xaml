@@ -36,9 +36,11 @@
                                         JustifyContent="SpaceEvenly">
 
                                 <Image Source="{Binding ImageUrl}"
-                                       Aspect="AspectFill"
+                                       Aspect="AspectFit"
                                        HeightRequest="400"
-                                       FlexLayout.AlignSelf="Center" />
+                                       HorizontalOptions="Fill"
+                                       VerticalOptions="Fill"
+                                       FlexLayout.AlignSelf="Stretch"/>
 
                                 <Label Text="{Binding Title}"
                                        FontAttributes="Bold"

@@ -8,10 +8,10 @@
              xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
              x:Class="priceapp.Views.ItemPage"
              x:DataType="viewModels:IItemViewModel"
-             
-             Padding="0">
+             BackgroundColor="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}"
+             Padding="0, 64, 0, 0">
     <ContentPage.Content>
-        <ScrollView>
+        <ScrollView BackgroundColor="{AppThemeBinding Light={ StaticResource ColorBackground}, Dark={ StaticResource ColorBackgroundDark}, Default={ StaticResource ColorBackground}}">
             <StackLayout>
                 <BoxView BackgroundColor="{AppThemeBinding Light={ StaticResource ColorSecondary}, Dark={ StaticResource ColorSecondaryDark}, Default={ StaticResource ColorSecondary}}"
                          Margin="0, -100, 0, -6"

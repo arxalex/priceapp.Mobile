@@ -9,6 +9,7 @@
         <Image Aspect="AspectFit"
                WidthRequest="40"
                HeightRequest="40"
+               Margin="0,0,8,0"
                Source="{Binding Source={x:Reference Page}, Path=ImageSource}" />
         <StackLayout HorizontalOptions="FillAndExpand">
             <Label Text="{Binding Source={x:Reference Page}, Path=PrimaryText}"

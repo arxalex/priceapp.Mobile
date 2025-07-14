@@ -25,15 +25,12 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiMaps()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                fonts.AddFont("MaterialIconsRegular.ttf", "Material");
-                fonts.AddFont("MaterialIconsOutlinedRegular.ttf", "MaterialOutlined");
-                fonts.AddFont("MaterialIconsRoundRegular.ttf", "MaterialRound");
-                fonts.AddFont("MaterialIconsSharpRegular.ttf", "MaterialSharp");
-                fonts.AddFont("MaterialIconsTwoToneRegular.ttf", "MaterialTwoTone");
+                fonts.AddFont("MaterialIconsOutlinedRegular.otf", "MaterialOutlined");
             });
 
 #if DEBUG
